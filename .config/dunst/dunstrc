@@ -6,6 +6,7 @@ format = %s\n%b
 monitor = 0
 frame_width = 1
 transparency = 0
+#geometry = "600x20+50+50"
 geometry = "300x60-20+48"
 separator_height = 0
 padding = 8
