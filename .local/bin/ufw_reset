@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+sudo ufw --force disable \
+&& sudo ufw --force reset \
+&& sudo ufw default deny  \
+&& sudo ufw enable  \
+&& sudo systemctl enable ufw.service\
+&& sudo ufw --force enable

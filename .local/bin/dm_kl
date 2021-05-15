@@ -1,0 +1,11 @@
+#!/bin/sh
+pgrep -x dmenu && exit
+
+choice=$(printf "us\ngr"  | dmenu -c -g 1 -p "keymap:") || exit 1
+
+if [ -z $choice ]; then
+    setxkbmap us
+
+else
+    setxkbmap $choice
+fi

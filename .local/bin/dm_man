@@ -1,0 +1,5 @@
+#!/bin/sh
+#sudo mandb
+SELECTION="$(apropos . | dmenu -p "Man:" $@)" || exit 1
+MANPAGE="$(echo "$SELECTION" | grep -Eo '^\S+\s+\([0-9]\)' | sed -E 's/\s//g')"
+st -e /usr/bin/man -P "nvim -c 'set ft=man ts=8 nomod nolist noma'" "$MANPAGE"

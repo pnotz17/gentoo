@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cat ~/.mutt/aliases | sed '/#/d' | sed '/^[[:space:]]*$/d' | cut -d' ' -f3- | dmenu -c -g 1  -p "Alias""$@" | sed -z '$ s/\n$//'

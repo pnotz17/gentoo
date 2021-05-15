@@ -1,0 +1,20 @@
+#!/bin/bash
+link=$(xclip -selection clipboard -o)
+DMENU='dmenu -c -g 1'
+
+chosen=$(echo -e "Play\nPlaylist-audio-dl\nVideo-dl" | $DMENU -p "Mpv:")
+
+case "$chosen" in
+	Play)
+	mpv "$(xclip -o -sel clip)"
+	exit 1
+;;
+	Playlist-audio-dl)
+	xclip -o -sel clip | xargs youtube-dl --yes-playlist -x -o "~/downloads/%(title)s.%(ext)s"
+	exit 1
+;;
+	Video-dl)
+	xclip -o -sel clip | xargs youtube-dl -o "~/downloads/%(title)s.%(ext)s"
+	exit 1
+;;
+esac

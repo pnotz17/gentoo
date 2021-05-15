@@ -1,0 +1,11 @@
+#!/bin/sh
+CLIP="\
+$(xclip -selection primary -o)
+$(xclip -selection clipboard -o)
+$(xclip -selection secondary -o)
+$(xclip -selection buffer-cut -o)"
+CLIP="$(echo "$CLIP" | sed "/^$/d")"
+SELD="$(echo "$CLIP" | dmenu -c -g 1 -p "URL to play with mpv")" || exit 1
+SEL="$(echo "$SELD" | sed 's/!/ytdl:\/\/ytsearch:/g')"
+notify-send "📼 Playing clipboard content" "$SEL"
+mpv "$SEL"

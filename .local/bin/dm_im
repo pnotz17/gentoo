@@ -1,0 +1,8 @@
+#!/bin/sh
+# dmenu_run improved: if a commnad ends with "!", it is started in terminal
+
+cmd="$(dmenu_path | dmenu $@)" || exit
+case $cmd in
+*\!) ${TERMINAL:-st} -e "$(printf '%s' "${cmd}" | cut -d '!' -f 1)" & ;;
+*) ${cmd} &
+esac

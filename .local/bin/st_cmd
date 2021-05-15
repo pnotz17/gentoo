@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~/suckless/st && doas make clean install | xclip -selection clipboard
+notify-send "compiling st"
+

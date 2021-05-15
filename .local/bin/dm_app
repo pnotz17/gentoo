@@ -1,0 +1,26 @@
+#!/bin/sh
+
+list="\
+update:dm_pkg update -b
+install:dm_pkg  install -b
+remove:dm_pkg remove -b
+firefox:st
+browser:firefox
+feh:feh ~/pictures/wallpapers/*
+sxiv:sxiv -t  ~/pictures/wallpapers/*
+vim:st -e nvim
+geany:geany
+gimp:gimp
+mutt:st -e mutt
+transmission:transmission-gtk
+alsamixer:st -e alsamixer
+lxappearance:lxappearance
+htop:st -e htop"
+
+selection="$(echo "$list" |
+	grep -Eo '^[A-Za-z-]+' |
+	dmenu -c -g 1 -p "Open:"  $@)" || exit 1
+tosubstr="$(echo "$list" |
+	grep -F "$(echo "$selection" | grep -Eo "^\\S*"):")"
+
+sh -c "${tosubstr#*:}"

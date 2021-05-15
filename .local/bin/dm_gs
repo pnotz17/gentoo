@@ -1,0 +1,7 @@
+#!/bin/sh
+
+q=$(echo | dmenu -c -g 1 -p "Google")
+if [ ! -z "$q" ]
+then
+	firefox www.google.com/search?q="$q"
+fi

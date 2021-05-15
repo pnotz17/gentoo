@@ -1,0 +1,11 @@
+#!/bin/bash
+
+chosen=$(echo -e "Fullscreen\nSelected\nDelayed\nCancel" | dmenu -c -g 1 -p "Scrot:" )
+
+if [[ $chosen = "Fullscreen" ]]; then
+		scrot ~/media/screenshots/%b%d::%H%M%S.png
+elif [[ $chosen = "Selected" ]]; then
+		scrot -s ~/media/screenshots/%b%d::%H%M%S.png
+elif [[ $chosen = "Delayed" ]]; then
+		scrot -d 5 ~/media/screenshots/%b%d::%H%M%S.png
+fi

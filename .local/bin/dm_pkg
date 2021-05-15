@@ -1,0 +1,33 @@
+#!/bin/sh
+FIRST="$1"
+shift
+
+case "$FIRST" in
+	update)
+		 (doas pacman -Syu --noconfirm; notify-send "✅ Update finished") ;
+		notify-send "📦 Package update" "Updating all packages..."
+		;;
+	install)
+		notify-send --urgency=low "🔃 Loading packages"
+		PKGNAME="$(pacman -Ss | grep -Eo '^\S+' |
+			dmenu -p "Package to install:" $@)" || exit 1
+		 (doas pacman -Su --noconfirm $PKGNAME &&
+			notify-send "✅ $PKGNAME installed!" ||
+			notify-send "❌ Installation of $PKGNAME failed") ;
+		notify-send "📦 Package installation" "Installing $PKGNAME..."
+		;;
+	remove)
+		notify-send --urgency=low "🔃 Loading packages"
+		PKGNAME="$(pacman -Qs | grep -Eo '^\S+' |
+			dmenu -p "Package to remove:" $@)" || exit 1
+		 (doas pacman -Su --noconfirm $PKGNAME &&
+			notify-send "✅ $PKGNAME removed!" ||
+			notify-send "❌ Removing $PKGNAME failed") ;
+		notify-send "📦 Package removal" "Removing $PKGNAME..."
+		;;
+	*)
+		notify-send "😥 Unknown option:" "$FIRST"
+		exit 1
+		;;
+esac
+

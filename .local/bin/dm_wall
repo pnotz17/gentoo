@@ -1,0 +1,10 @@
+#!/bin/sh
+
+DMENU="dmenu -c -g 1"
+WALLPAPER_DIR="$HOME/media/wallpapers"
+WALLPAPER=`ls $WALLPAPER_DIR \
+	| $DMENU -p "Choose:"`
+
+FEH="feh --bg-fill"
+
+$FEH $WALLPAPER_DIR/$WALLPAPER	

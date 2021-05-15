@@ -1,0 +1,12 @@
+#!/bin/sh
+
+conntype=$(ip route | awk '/default/ { print substr($5,1,1) }')
+	if [ -z "$conntype" ]; then
+echo "diss"
+	elif [ "$conntype" = "e" ]; then
+echo "up"
+	elif [ "$conntype" = "w" ]; then
+echo "up"  
+fi
+printf "%s%s\n" "$icon"
+

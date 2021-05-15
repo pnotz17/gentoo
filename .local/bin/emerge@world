@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# update portage and world if needed
+
+source /etc/profile;
+
+stamp="/usr/portage/metadata/timestamp.x"
+if [ -f "$stamp" ]
+then
+rm /usr/portage/metadata/timestamp.x
+fi
+
+emerge-webrsync &&
+emerge --update --deep --with-bdeps=y @world -a &&
+emerge --depclean -a &&
+revdep-rebuild -a &&
+eclean -d distfiles -a &&
+
+exit 0 

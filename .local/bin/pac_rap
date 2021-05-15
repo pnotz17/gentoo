@@ -1,0 +1,30 @@
+#!/bin/sh
+# package manager wrapper
+
+usage() {
+echo "usage: ${0##*/} [-a|-u|-d|-s|-i|-l] [arguments ...]" >&2
+exit 1
+}
+
+hascmd() {
+command -v "$1" >/dev/null 2>&1
+}
+
+[ -n "$1" ] && {
+flag=${1#-}
+shift
+}
+ 
+if hascmd pacman; then 
+case "$flag" in
+i) doas pacman -S  "$@" ;;
+u) doas pacman -Syu  "$@" ;;
+r) doas pacman -Rns $(pacman -Qtdq) "$@" ;;
+s) doas pacman -Ss"$@" ;;
+l) doas pacman -Qqe ;;
+*) usage
+esac
+ else
+echo "no supported package manager found" >&2
+exit 1
+fi

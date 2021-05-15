@@ -1,0 +1,13 @@
+#!/bin/sh
+NF="#7D9734" 
+NB="#000000" 
+SF="#000000" 
+SB="#DE5833" 
+prompt="DuckduckGo:"
+
+action=firefox
+index=`echo | dmenu -c -g 1 -nb ${NB} -nf ${NF} -sb ${SB} -sf ${SF} -p "${prompt}:" | sed s/\ /+/g`
+[ -z "${index}" ]
+if [ ${?} = 1 ]; then
+  $action https://duckduckgo.com/?q=${index}
+fi

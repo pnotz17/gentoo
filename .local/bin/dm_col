@@ -1,0 +1,27 @@
+#!/bin/bash
+# a simple dmenu script to quickly copy the color to your clip board 
+# helps during configuring new applications
+# edit the colors array to match your palette
+# dependency xclip
+
+declare -A colors
+colors[Pure Black]="#000000"
+colors[My Black]="#080808"
+colors[Mine Shaft Grey]="#222222"
+colors[Dark Grey]="#121213"
+colors[Red]="#FF0000"
+colors[Green]="#5AF78E"
+colors[Yellow]="#FFA500"
+colors[Blue]="#005577"
+colors[Steel Blue]="#4682b4"
+colors[Magenta]="#FF6AC1"
+colors[Cyan]="#8BE9FD"
+colors[White]="#F1F1F0"
+colors[Chatelle White]="#B3AFC2"
+colors[Cadet Blue]="#ACB7C2"
+colors[Orange]="#FF4900"
+colors[Purple]="#BD9CF9"
+
+selected="$(printf '%s\n' "${!colors[@]}" | dmenu -c -g 1 -p "Color:")"
+[ -z "${selected}" ] && exit
+echo "${colors["${selected}"]}" | xclip -r -selection clipboard

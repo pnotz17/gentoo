@@ -1,0 +1,17 @@
+#!/bin/sh
+# vim:ft=sh
+
+BASE="rs=0:di=m📁 [01;34:ln=m🔗 [01;36:mh=m📃 [00:pi=m🌊 [40;33:so=m📃 [01;35:do=m📃 [01;35:bd=m📃 [40;33;01:cd=m📃 [40;33;01:or=m📃 [40;31;01:mi=m📃 [00:su=m📃 [37;41:sg=m📃 [30;43:ca=m📃 [30;41:tw=m📃 [30;42:ow=m📃 [34;42:st=m📃 [37;44:ex=m💻 [01;32"
+UTIL="*=m📃 ["
+DIFFS="*.rej=m❌ [40;31:*.orig=m✅ [40;32:*.diff=m🧻 [40;33"
+CODE="*.c=m📄 [40;34:*.h=m🔧 [40;36:*.mk=m📃 [40;36:*.asm=m📃 [40;34:*.cpp=m📃 [40;34:*.py=m🐍 [40;34:*.go=m📃 [40;34:*.nc=m🏜️ [40;34"
+DOCUMENTATION="*LICENSE=m📓 [01;93:*COPYING=m📓 [01;93:*README=m📓 [01;93:*README.md=m📓 [01;93:*COPYRIGHT=m📓 [01;93"
+DOCUMENTS="*.pdf=m📓 [01;93:*.md=m📓 [01;93"
+SCRIPTS="*Makefile=m📃 [01;32"
+DATA="*.o=m💻 [40;94:*.so=m💻 [40;94:*.a=m💻 [40;94:*bzImage=m🐧 [40;94:*a.out=m📃 [40;94:*.iso=m💿 [01;33:*linux=m🐧 [40;94"
+ARCHIVES="*.tar=m📂 [01;36:*.tar.gz=m📂 [01;36:*.tgz=m📂 [01;36:*.tar.bz2=m📂 [01;36:*.tar.xz=m📂 [01;36:*.tar.zst=m📂 [01;36:*.nar=m📂 [01;36:*.nar.bz2=m📂 [01;36"
+PICS="*.png=m📷 [01;97:*.jpg=m📷 [01;97:*.gif=m📷 [01;97:*.xcf=m📷 [01;97:*.ngf=m📷 [01;97"
+VIDS="*.mp4=m🎥 [01;97:*.mkv=m🎥 [01;97:*.wmv=m🎥 [01;97:*.mov=m🎥 [01;97:*.webm=m🎥 [01;97"
+MUSIC="*.mp2=m🎹 [01;97:*.mp3=m🎹 [01;97:*.wav=m🎹 [01;97:*.naw=m🎹 [01;97:*.naf=m🎹 [01;97:*.opus=m🎹 [01;97:*.f32le=m🎹 [01;97:*.f32be=m🎹 [01;97"
+LS_COLORS="$BASE:$UTIL:$DIFFS:$CODE:$DOCUMENTATION:$DOCUMENTS:$SCRIPTS:$DATA:$ARCHIVES:$PICS:$VIDS:$MUSIC:";
+export LS_COLORS

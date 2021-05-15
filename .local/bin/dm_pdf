@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# location of directory containing pdfs
+pdf_dir="$HOME/dox/pdf"
+
+# get choice of pdf
+choice=$(ls $pdf_dir | dmenu -c -g 1 -p "View:") || exit
+
+# open pdf using zathura
+xdg-open "$pdf_dir/$choice"

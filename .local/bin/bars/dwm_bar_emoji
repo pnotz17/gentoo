@@ -1,0 +1,112 @@
+#!/bin/sh
+
+linux() {
+	linux=$(uname -r)
+	echo  "🏛️ $linux"
+}
+ 
+disk1() {
+	disk1=$(df -Ph | grep "/dev/sda2" | awk {'print $5'})
+	echo  "💾️ $disk1"
+}
+
+mail() {
+	mail=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
+	echo  "📬️ $mail"
+}
+
+updates() {
+	updates=$(checkupdates 2> /dev/null | wc -l )  
+	echo "⁉️️ $updates"
+}
+
+pkgs() {
+	pkgs=$(pacman -Q  |  wc -l)
+	echo "📦 $pkgs"
+}
+
+weather() {
+	weather=$(curl 'https://wttr.in/YOURCITY,YOURCOUNTRY?format=%t')
+	echo "🌈 $weather"
+}
+
+cputemp() {
+	cputemp=$(sensors | grep Core | awk '{print substr($3, 2, length($3)-5)}' | tr "\\n" " " | sed 's/ /°C  /g' | sed 's/  $//')
+	echo "🔥 $cputemp"
+}
+
+cpufrequency() {
+	cpu=$(awk '{u=$2+$4; t=$2+$4+$5;if (NR==1){u1=u; t1=t;} else printf("%d%%", ($2+$4-u1) * 100 / (t-t1) "%");}' <(grep 'cpu ' /proc/stat) <(sleep 0.5; grep 'cpu ' /proc/stat))
+	echo "🖥️ $cpu"%
+}
+
+ram() {
+	mem=$(free | awk '/^Mem/ { printf("%.2f%\n", $3/$2 * 100.0) }')
+	echo "💻 $mem"
+}
+
+clock() {
+	time=$(date +"%b %d, %R")
+	echo "📆 $time"
+}
+
+alsa() {
+	mono=$(amixer -M sget Master | grep Mono: | awk '{ print $2 }')
+	if [ -z "$mono" ]; then
+		muted=$(amixer -M sget Master | awk 'FNR == 6 { print $7 }' | sed 's/[][]//g')
+		vol=$(amixer -M sget Master | awk 'FNR == 6 { print $5 }' | sed 's/[][]//g; s/%//g')
+	else
+		muted=$(amixer -M sget Master | awk 'FNR == 5 { print $6 }' | sed 's/[][]//g')
+		vol=$(amixer -M sget Master | awk 'FNR == 5 { print $4 }' | sed 's/[][]//g; s/%//g')
+	fi
+
+	if [ "$muted" = "off" ]; then
+		echo "🔇 muted"
+	else
+		if [ "$vol" -ge 65 ]; then
+			echo "🔊 $vol%"
+		elif [ "$vol" -ge 40 ]; then
+			echo "🔉 $vol%"
+		elif [ "$vol" -ge 0 ]; then
+			echo "🔈 $vol%"	
+		fi
+	fi
+}
+
+network() {
+	conntype=$(ip route | awk '/default/ { print substr($5,1,1) }')
+	if [ -z "$conntype" ]; then
+	echo "‼️"
+	elif [ "$conntype" = "e" ]; then
+	echo "✔️"
+	elif [ "$conntype" = "w" ]; then
+	echo "📶"  
+	fi
+	printf "%s%s\n" "$icon"
+}
+
+upspeed() {
+	T1=`cat /sys/class/net/enp2s0/statistics/tx_bytes`
+	sleep 1
+	T2=`cat /sys/class/net/enp2s0/statistics/tx_bytes`
+	TBPS=`expr $T2 - $T1`
+	TKBPS=`expr $TBPS / 1024`
+	printf  "🔺 $TKBPS kb"
+}
+
+downspeed() {
+	R1=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
+	sleep 1
+	R2=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
+	RBPS=`expr $R2 - $R1`
+	RKBPS=`expr $RBPS / 1024`
+	printf  "🔻 $RKBPS kb"
+}
+
+while true; do
+	xsetroot -name "|  $(mail)  |  $(updates)  |  $(disk1)  |  $(cpufrequency)  |  $(ram)  |  $(alsa)  |  $(upspeed)  |  $(downspeed)  |  $(clock)  |"
+	sleep 2
+done &
+
+

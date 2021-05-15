@@ -1,0 +1,15 @@
+#!/bin/sh
+# A dmenu wrapper script for system functions.
+
+cmds="\
+🔒Lock		slock
+⚡KillX	${Kill:-pkill -KILL -u $USER }
+🔄RestartX	kill -HUP $(pidof -s dwm)
+🌒Hibernate	${Hib:-systemctl suspend}
+🔃Reboot	${Reb:-systemctl reboot}
+⛔Shutdown	${Shut:-systemctl poweroff}"
+
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -c -g 1 -fn NotoColorEmoji)" || exit 1
+
+`echo "$cmds" | grep "^$choice	" | cut -d '	' -f2-`
+

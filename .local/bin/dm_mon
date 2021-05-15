@@ -1,0 +1,9 @@
+#!/bin/sh
+
+CHOICE=$(echo -e "PC\nTV\nDual" | dmenu -p Monitor)
+
+case "$CHOICE" in
+	PC) xrandr --output MONITORNAME --primary --mode 1920x1080 --output MONITORNAME --off & ;;
+	TV) xrandr --output MONITORNAME --primary --mode 1360x768 --output MONITORNAME --off & ;;
+	Dual) xrandr --output MONITORNAME --primary --mode 1920x1080 --output MONITORNAME --mode 1360x768 --left-of WHICHMONITOR & ;;
+esac	>

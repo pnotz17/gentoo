@@ -1,0 +1,6 @@
+#!/bin/sh
+#press v  in mutt to view in firefox
+file="$1"
+tmpfile="$(mktemp --suffix=.html)"
+cp "$file" "$tmpfile"
+firefox "$tmpfile"

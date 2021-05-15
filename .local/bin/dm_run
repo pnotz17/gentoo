@@ -1,0 +1,2 @@
+#!/bin/sh
+dmenu_run -p "Run:" -b -fn 'System UI' -nf '#505050' -nb '#000000' -sf '#ffb964' -sb '#000000'

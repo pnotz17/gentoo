@@ -1,0 +1,5 @@
+media-libs/mesa -llvm 
+x11-base/xorg-server -suid
+media-video/mpv cli libmpv libglvnd cairo 
+net-p2p/transmission gtk
+app-text/xmlto text
