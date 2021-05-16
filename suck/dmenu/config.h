@@ -16,10 +16,10 @@ static const unsigned int border_width 	 = 1;	/*  Size of the window border */
 static const char *colors[SchemeLast][2] = {
 /*     			     fg         bg       */
 [SchemeNorm] 		= { "#bbbbbb", "#000000" },
-[SchemeSel] 		= { "#eeeeee", "#666666" },
+[SchemeSel] 		= { "#eeeeee", "#000000" },
 [SchemeSelHighlight] 	= { "#00FF00", "#000000" },
 [SchemeNormHighlight] 	= { "#FF0000", "#000000" },
 [SchemeOut] 		= { "#000000", "#00ffff" },
 [SchemeOutHighlight] 	= { "#ffc978", "#00ffff" },
-[SchemeMid] 		= { "#C0C0C0", "#222222" },
+[SchemeMid] 		= { "#C0C0C0", "#FF00FF" },
 };
