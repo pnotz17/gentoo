@@ -1,7 +1,7 @@
 #!/bin/bash
 
 while true; do
-    open=$(ls -1a --group-directories-first --file-type | dmenu -c -g 1 -p 'Navigate:' "$@")
+    open=$(ls -1a --group-directories-first --file-type | dmenu  -c -g 1 -p 'Navigate:' "$@")
     if [[ -d "$open" ]]; then
         cd "$open"
     else

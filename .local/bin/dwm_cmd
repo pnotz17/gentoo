@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd ~/suckless/dwm && doas make clean install | xclip -selection clipboard
+cd ~/suck/dwm && doas make clean install | xclip -selection clipboard
 notify-send "compiling dwm"
 

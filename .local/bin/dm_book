@@ -44,7 +44,7 @@ declare -a options=(
 
 # Picking a search engine.
 while [ -z "$engine" ]; do
-enginelist=$(printf '%s\n' "${options[@]}" | dmenu -nb black -nf white -sb "dark blue" -sf yellow -c -g 1 -p '🌐 Search:') || exit
+enginelist=$(printf '%s\n' "${options[@]}" | dmenu -c -g 1 -p '🌐 Search:') || exit
 engineurl=$(echo "$enginelist" | awk '{print $NF}')
 engine=$(echo "$enginelist" | awk '{print $1}')
 done

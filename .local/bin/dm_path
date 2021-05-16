@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
-
-dmenu_path | dmenu -b -p "Run" -nf '#505050' -nb '#000000' -sf '#ffb964' -sb '#000000' $@ | ${SHELL:-"/bin/sh"}
+dmenu_path | dmenu -b -p "Run" $@ | ${SHELL:-"/bin/sh"}
