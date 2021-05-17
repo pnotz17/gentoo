@@ -94,6 +94,11 @@ alias ec='doas emerge --clean'
 alias cc='ccache -s'
 alias ue='doas env-update && source /etc/profile'
 alias dt='doas cat /var/log/dmesg > file.txt'
+alias dc='eclean-dist -d'
+alias ll='doas layman -L'
+alias la='doas layman -a'
+alias ld='doas layman -d'
 
+neofetch
 
  

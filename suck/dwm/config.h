@@ -7,9 +7,9 @@ static const int topbar 	      = 1;		/* 0 means bottom bar */
 static const char normbgcolor[]       = "#000000";	/* bar backround color */
 static const char normfgcolor[]       = "#C0C0C0";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#000000";	/* highlighted tag // tasklist // focused window background color*/
-static const char selfgcolor[] 	      = "#FF00FF";	/* focused tag and tasklist foreground color*/
+static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
 static const char unselbordercolor[]  = "#B3AFC2";	/* unfocused window border color*/
-static const char selbordercolor[]    = "#FF00FF";	/* focused window border color*/
+static const char selbordercolor[]    = "#000000";	/* focused window border color*/
 static const unsigned int baralpha    = 221;		/* OPAQUE is defined to be 0xFF, same as 255. Choose your values between 0 and 255 where 255 is not transparent at all */
 static const unsigned int borderalpha = 221;		/* OPAQUE is defined to be 0xFF, same as 255. Choose your values between 0 and 255 where 255 is not transparent at all */
 static const char *colors[][3] = {
@@ -96,15 +96,15 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,	        XK_u,	   spawn,	   SHCMD("~/.local/bin/dm_umnt") },
 	{ ControlMask,			XK_d,      spawn,          SHCMD("~/.local/bin/dm_ytdl") },
 	{ ControlMask,			XK_e,      spawn,          SHCMD("~/.local/bin/dm_uni") },
-	{ MODKEY,		        XK_w,      spawn,          SHCMD("~/.local/bin/ran_wall") },
+	{ ControlMask,		        XK_w,      spawn,          SHCMD("~/.local/bin/ran_wall") },
+	{ ControlMask,		        XK_b,	   spawn,	   SHCMD("~/.local/bin/dm_book") },
+	{ ControlMask,		        XK_c,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
+	{ ControlMask,		        XK_x,      spawn, 	   SHCMD("~/.local/bin/dm_exit") },
+	{ ControlMask,	                XK_h,	   spawn,	   SHCMD("~/.local/bin/dm_hist") },
+	{ ControlMask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/picom_deploy") },
+	{ ControlMask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },
+	{ ControlMask,		        XK_n,	   spawn,	   SHCMD("~/.local/bin/dm_nerd") },
 	{ MODKEY,			XK_p,	   spawn,          SHCMD("~/.local/bin/dm_path") },
-	{ Mod1Mask,		        XK_b,	   spawn,	   SHCMD("~/.local/bin/dm_book") },
-	{ Mod1Mask,		        XK_c,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
-	{ Mod1Mask,		        XK_e,      spawn, 	   SHCMD("~/.local/bin/dm_exit") },
-	{ Mod1Mask,	                XK_h,	   spawn,	   SHCMD("~/.local/bin/dm_hist") },
-	{ Mod1Mask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/picom_deploy") },
-	{ Mod1Mask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },
-	{ Mod1Mask,		        XK_n,	   spawn,	   SHCMD("~/.local/bin/dm_nerd") },
 	{ 0,                            XK_F7,	   spawn,          SHCMD("~/.local/bin/dm_cmd") },
 	{ 0,                            XK_F8,	   spawn,          SHCMD("~/.local/bin/st_cmd") },
 	{ 0,                            XK_F9,	   spawn,          SHCMD("~/.local/bin/dwm_cmd") },
