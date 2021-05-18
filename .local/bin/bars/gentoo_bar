@@ -2,7 +2,7 @@
 
 function get_disk {
 	disk1=$(df -Ph | grep "/dev/sdd" | awk {'print $5'})
-	echo  " ️$disk1"
+	echo  "O: ️$disk1"
 }
 
 function get_uptime {
@@ -72,7 +72,7 @@ function get_up {
 	T2=`cat /sys/class/net/eth0/statistics/tx_bytes`
 	TBPS=`expr $T2 - $T1`
 	TKBPS=`expr $TBPS / 1024`
-	echo   "U $TKBPS kb"
+	echo   "U: $TKBPS kb"
 }
 
 function get_down {
