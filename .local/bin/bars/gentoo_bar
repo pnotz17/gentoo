@@ -1,13 +1,17 @@
 #!/bin/sh
 
+function get_uptime {
+upt="$(uptime --pretty | sed -e 's/up //g' -e 's/ days/d/g' -e 's/ day/d/g' -e 's/ hours/h/g' -e 's/ hour/h/g' -e 's/ minutes/m/g' -e 's/, / /g')"
+printf "%s $upt"
+}
+
+function get_time {
+	date +'%Y-%m-%d %R'
+}
+
 function get_disk {
 	disk1=$(df -Ph | grep "/dev/sdd" | awk {'print $5'})
 	echo  "H: ️$disk1"
-}
-
-function get_uptime {
-upt="$(uptime --pretty | sed -e 's/up //g' -e 's/ days/d/g' -e 's/ day/d/g' -e 's/ hours/h/g' -e 's/ hour/h/g' -e 's/ minutes/m/g' -e 's/, / /g')"
-printf "O: %s $upt"
 }
 
 function get_mail {
@@ -33,8 +37,13 @@ function get_mem {
 echo "M:$(df --output=pcent /dev/sdd1 | sed '2!d')"
 }
 
-function get_time {
-	date +'%Y-%m-%d %R'
+function get_net {
+
+    if [ -d /sys/class/net/eth? ]; then
+        if [ "$(cat /sys/class/net/eth?/carrier)" == "1" ]; then
+            echo "LINK"
+        fi
+    fi
 }
 
 function get_audio {
@@ -57,15 +66,6 @@ function get_audio {
 	fi
 }
 
-function get_net {
-
-    if [ -d /sys/class/net/eth? ]; then
-        if [ "$(cat /sys/class/net/eth?/carrier)" == "1" ]; then
-            echo "LINK"
-        fi
-    fi
-}
-
 function get_up {
 	T1=`cat /sys/class/net/eth0/statistics/tx_bytes`
 	sleep 1
@@ -85,6 +85,6 @@ function get_down {
 }
 
 while true; do
-	xsetroot -name "$(get_uptime) | $(get_mail) | $(get_cpuload) | $(get_ram) | $(get_up) | $(get_down) | $(get_audio) |"
+	xsetroot -name "$(get_uptime) | $(get_time) | $(get_disk) | $(get_mail) | $(get_cpuload) | $(get_ram) | $(get_mem) | $(get_up) | $(get_down) | $(get_audio) |"
 	sleep 3
 done
