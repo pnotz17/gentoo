@@ -136,13 +136,13 @@ xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 		die("no font specified.");
 	}
 
-	///* Do not allow using color fonts. This is a workaround for a BadLength
-	 //* error from Xft with color glyphs. Modelled on the Xterm workaround. See
-	 //* https://bugzilla.redhat.com/show_bug.cgi?id=1498269
-	 //* https://lists.suckless.org/dev/1701/30932.html
-	 //* https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=916349
-	 //* and lots more all over the internet.
-	 //*/
+	/* Do not allow using color fonts. This is a workaround for a BadLength
+	 * error from Xft with color glyphs. Modelled on the Xterm workaround. See
+	 * https://bugzilla.redhat.com/show_bug.cgi?id=1498269
+	 * https://lists.suckless.org/dev/1701/30932.html
+	 * https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=916349
+	 * and lots more all over the internet.
+	 */
 	//FcBool iscol;
 	//if(FcPatternGetBool(xfont->pattern, FC_COLOR, 0, &iscol) == FcResultMatch && iscol) {
 		//XftFontClose(drw->dpy, xfont);
@@ -197,18 +197,6 @@ drw_fontset_free(Fnt *font)
 }
 
 void
-s2d_drw_clr_create(Drw *drw, Clr *dest, const char *clrname)
-{
-	if (!drw || !dest || !clrname)
-		return;
-
-    if (!XftColorAllocName(drw->dpy, DefaultVisual(drw->dpy, drw->screen),
-	                       DefaultColormap(drw->dpy, drw->screen),
-	                       clrname, dest))
-		die("error, cannot allocate color '%s'", clrname);
-}
-
-void
 drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha)
 {
 	if (!drw || !dest || !clrname)
@@ -223,21 +211,6 @@ drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha)
 
 /* Wrapper to create color schemes. The caller has to call free(3) on the
  * returned color scheme when done using it. */
-Clr *
-s2d_drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount)
-{
-	size_t i;
-	Clr *ret;
-
-	/* need at least two colors for a scheme */
-	if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
-		return NULL;
-
-	for (i = 0; i < clrcount; i++)
-		s2d_drw_clr_create(drw, &ret[i], clrnames[i]);
-	return ret;
-}
-
 Clr *
 drw_scm_create(Drw *drw, const char *clrnames[], const unsigned int alphas[], size_t clrcount)
 {

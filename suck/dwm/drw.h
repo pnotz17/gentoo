@@ -41,8 +41,6 @@ unsigned int drw_fontset_getwidth(Drw *drw, const char *text);
 void drw_font_getexts(Fnt *font, const char *text, unsigned int len, unsigned int *w, unsigned int *h);
 
 /* Colorscheme abstraction */
-void s2d_drw_clr_create(Drw *drw, Clr *dest, const char *clrname);
-Clr *s2d_drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount);
 void drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha);
 Clr *drw_scm_create(Drw *drw, const char *clrnames[], const unsigned int alphas[], size_t clrcount);
 

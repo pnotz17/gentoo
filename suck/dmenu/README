@@ -1,6 +1,6 @@
-dmenu - dynamic menu patched with border caseinsensitive center fuzzyhighlight fuzzymatch grid highlight lineheight morecolor numbers and emoji support
+dmenu - dynamic menu
 ====================
-dmenu is an efficient dynamic menu for X.
+dmenu is an efficient dynamic menu for X patched with border center fuzzyhighlight fuzzymatch grid highlight numbers pipeout 
 
 
 Requirements
