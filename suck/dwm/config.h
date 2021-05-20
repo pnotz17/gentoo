@@ -105,7 +105,7 @@ static Key keys[] = {
 	{ ControlMask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/picom_deploy") },
 	{ ControlMask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },
 	{ ControlMask,		        XK_n,	   spawn,	   SHCMD("~/.local/bin/dm_nerd") },
-	{ Mod1Mask|ControlMask,		XK_c,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
+	{ MODKEY, 					XK_c,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
 	{ MODKEY,			XK_p,	   spawn,          SHCMD("~/.local/bin/dm_path") },
 	{ 0,                            XK_F7,	   spawn,          SHCMD("~/.local/bin/dm_cmd") },
 	{ 0,                            XK_F8,	   spawn,          SHCMD("~/.local/bin/st_cmd") },
