@@ -1,0 +1,42 @@
+###############################################################################
+# pop-punk.muttrc by Jeff Auriemma
+#
+# based on Dracula Theme by Paul Townsend
+
+# general ------------ foreground ---- background -----------------------------
+color error		color161	color16
+color indicator		color231	color165
+color markers		color231	default
+color message		default		default
+color normal		default		default
+color prompt		default	        default
+color search		color80		default
+color status 		bold color103	default
+color tilde		color214	default
+color tree		color165	default
+
+# message index ------ foreground ---- background -----------------------------
+color index		color161	default 	~D # deleted messages
+color index		color226		default 	~F # flagged messages
+color index		color80	default 	~N # new messages
+color index		color165	default 	~Q # messages which have been replied to
+color index		color214	default 	~T # tagged messages
+color index		color103	default		~v # messages part of a collapsed thread
+
+# message headers ---- foreground ---- background -----------------------------
+color hdrdefault	color80	default
+color header		color226	default		^Subject:.*
+
+# message body ------- foreground ---- background -----------------------------
+color attachment	color76	default
+color body		color231	default		[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+               # email addresses
+color body		color33	default		(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+        # URLs
+color body		color231	default		(^|[[:space:]])\\*[^[:space:]]+\\*([[:space:]]|$) # *bold* text
+color body		color231	default		(^|[[:space:]])_[^[:space:]]+_([[:space:]]|$)     # _underlined_ text
+color body		color231	default		(^|[[:space:]])/[^[:space:]]+/([[:space:]]|$)     # /italic/ text
+color quoted		color103		default
+color quoted1		color225	default
+color quoted2		color103		default
+color quoted3		color225	default
+color quoted4		color103	default
+color signature		color214	default

@@ -2,7 +2,7 @@ static struct Config config = {.font = "Ubuntu Nerd Font:style=Book:size=7",
 
 #
 /* colors */
-.background_color 	    = "#080808",
+.background_color 	    = "#000000",
 .foreground_color 	    = "#808080",
 .selbackground_color 	    = "#121213",
 .selforeground_color 	    = "#ffffff",

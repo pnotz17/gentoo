@@ -29,7 +29,7 @@ call plug#end()
 
 " Theme
 " put colorscheme files in ~/.config//nvim/colors/
-colorscheme minimalist
+colorscheme monochrome
 
 " NerdTree
 let NERDTreeShowHidden=1

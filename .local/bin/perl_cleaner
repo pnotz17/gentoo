@@ -1,0 +1,13 @@
+#!/bin/sh
+
+emerge -C perl
+emerge --oneshot perl
+perl-cleaner --all
+emerge -uUD @world --complete-graph=y --with-bdeps=y 
+
+#rm -rf /usr/lib/perl5/vendor_perl
+#emerge --unmerge perl
+#emerge perl
+#emerge --unmerge dev-perl/XML-Parser
+#emerge dev-perl/XML-Parser
+#perl-cleaner all
