@@ -2,6 +2,8 @@ app-admin/doas
 app-admin/pass
 app-arch/unzip
 app-editors/neovim
+app-portage/eix
+app-portage/gentoolkit
 app-portage/layman
 app-shells/zsh
 dev-util/geany
@@ -18,9 +20,7 @@ net-misc/netifrc
 net-misc/youtube-dl
 net-p2p/transmission
 sys-apps/pciutils
-sys-boot/grub
 sys-devel/bc
-sys-kernel/gentoo-sources
 sys-process/htop
 www-client/firefox-bin
 x11-apps/xinit
