@@ -31,7 +31,7 @@ git_branch_test_color() {
 
 # prompt
 setopt prompt_subst
-PROMPT='%F{none}%n@%F{#FF00FF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
+PROMPT='%F{#FFFF00}%n@%F{#5C5CFF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
 
 # plugins
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
@@ -54,14 +54,17 @@ ls --color=auto &> /dev/null
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
 alias ew='doas emerge -avuDN --keep-going --with-bdeps=y @world'
 alias pa='doas nvim /etc/portage/package.accept_keywords'
+alias de='doas emerge -p --changed-deps --deep @world '
 alias e='doas env-update && source /etc/profile'
 alias pm='doas nvim /etc/portage/package.mask'
+alias ap='doas ls /var/db/pkg/* > pkglist.txt'
 alias pu='doas nvim /etc/portage/package.use'
 alias c='git commit -m "changes in dotfiles"'
 alias pr='doas nvim /etc/portage/repos.conf'
 alias sf='doas emerge --resume --skipfirst'
 alias mk='doas nvim /etc/portage/make.conf'
 alias build='doas make clean install'
+alias w='cat /var/lib/portage/world'
 alias sd='doas emerge --searchdesk'
 alias lu='ls -l /dev/disk/by-uuid'
 alias en='doas emerge --noreplace'
@@ -74,6 +77,7 @@ alias ec='doas emerge --clean'
 alias dc='doas eclean-dist -d'
 alias pc='perl-cleaner --all'
 alias es='doas emerge --sync'
+alias r='doas chmod -R 777'
 alias er='doas emerge -cav'
 alias eu='doas etc-update'
 alias ls='ls --color=auto'
@@ -84,7 +88,6 @@ alias la='doas layman -a'
 alias ld='doas layman -d'
 alias ei='emerge --info'
 alias ss='doas spacefm'
-alias r='doas chown -R'
 alias t='doas touch'
 alias ef='emerge -s'
 alias cc='ccache -s'
@@ -99,3 +102,4 @@ alias p='git push'
 alias a='git add'
 alias un='unzip'
 alias d='doas '
+
