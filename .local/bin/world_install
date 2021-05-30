@@ -1,0 +1,3 @@
+#!/bin/bash
+world="`sed -e 's/#.*$//' -e '/^$/d' world.txt | tr '\n' ' '`"
+emerge -qn $world
