@@ -1,3 +1,0 @@
-dev-lang/rust
-#gnome-base/*
-#gnome-extra/* 
