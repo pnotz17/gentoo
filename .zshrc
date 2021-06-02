@@ -1,3 +1,4 @@
+
 # variables
 export TERM=st-256color
 export EDITOR=nvim
