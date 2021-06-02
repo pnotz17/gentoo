@@ -1,4 +1,3 @@
-
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 #
@@ -10,14 +9,12 @@
 # their associated values.
 
 GRUB_DISTRIBUTOR="Gentoo"
-GRUB_CMDLINE_LINUX="root=/dev/sdd1 rootwait rootfstype=ext4"
-GRUB_DISABLE_OS_PROBER=false
-GRUB_CMDLINE_LINUX="quiet splash"
+
 # Default menu entry
 #GRUB_DEFAULT=0
 
 # Boot the default entry this many seconds after the menu is displayed
-#GRUB_TIMEOUT=5
+GRUB_TIMEOUT=0
 #GRUB_TIMEOUT_STYLE=menu
 
 # Append parameters to the linux kernel command line
@@ -33,6 +30,9 @@ GRUB_CMDLINE_LINUX="quiet splash"
 
 # Append parameters to the linux kernel command line for non-recovery entries
 #GRUB_CMDLINE_LINUX_DEFAULT=""
+GRUB_CMDLINE_LINUX="root=/dev/sdc2 rootwait rootfstype=ext4"
+GRUB_CMDLINE_LINUX="quiet splash"
+GRUB_DISABLE_OS_PROBER=false
 
 # Uncomment to disable graphical terminal (grub-pc only)
 #GRUB_TERMINAL=console
