@@ -2,7 +2,6 @@ package fzf
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -14,6 +13,9 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/mattn/go-runewidth"
+	"github.com/rivo/uniseg"
 
 	"github.com/junegunn/fzf/src/tui"
 	"github.com/junegunn/fzf/src/util"
@@ -282,6 +284,7 @@ const (
 	actEnableSearch
 	actSelect
 	actDeselect
+	actUnbind
 )
 
 type placeholderFlags struct {
@@ -673,11 +676,8 @@ func (t *Terminal) sortSelected() []selectedItem {
 }
 
 func (t *Terminal) displayWidth(runes []rune) int {
-	l := 0
-	for _, r := range runes {
-		l += util.RuneWidth(r, l, t.tabstop)
-	}
-	return l
+	width, _ := util.RunesWidth(runes, 0, t.tabstop, 0)
+	return width
 }
 
 const (
@@ -831,16 +831,33 @@ func (t *Terminal) resizeWindows() {
 		createPreviewWindow := func(y int, x int, w int, h int) {
 			pwidth := w
 			pheight := h
-			if t.previewOpts.border != tui.BorderNone {
-				previewBorder := tui.MakeBorderStyle(t.previewOpts.border, t.unicode)
-				t.pborder = t.tui.NewWindow(y, x, w, h, true, previewBorder)
+			var previewBorder tui.BorderStyle
+			if t.previewOpts.border == tui.BorderNone {
+				previewBorder = tui.MakeTransparentBorder()
+			} else {
+				previewBorder = tui.MakeBorderStyle(t.previewOpts.border, t.unicode)
+			}
+			t.pborder = t.tui.NewWindow(y, x, w, h, true, previewBorder)
+			switch t.previewOpts.border {
+			case tui.BorderSharp, tui.BorderRounded:
 				pwidth -= 4
 				pheight -= 2
 				x += 2
 				y += 1
-			} else {
-				previewBorder := tui.MakeTransparentBorder()
-				t.pborder = t.tui.NewWindow(y, x, w, h, true, previewBorder)
+			case tui.BorderLeft:
+				pwidth -= 2
+				x += 2
+			case tui.BorderRight:
+				pwidth -= 2
+			case tui.BorderTop:
+				pheight -= 1
+				y += 1
+			case tui.BorderBottom:
+				pheight -= 1
+			case tui.BorderHorizontal:
+				pheight -= 2
+				y += 1
+			case tui.BorderVertical:
 				pwidth -= 4
 				x += 2
 			}
@@ -848,9 +865,13 @@ func (t *Terminal) resizeWindows() {
 		}
 		verticalPad := 2
 		minPreviewHeight := 3
-		if t.previewOpts.border == tui.BorderNone {
+		switch t.previewOpts.border {
+		case tui.BorderNone, tui.BorderVertical, tui.BorderLeft, tui.BorderRight:
 			verticalPad = 0
 			minPreviewHeight = 1
+		case tui.BorderTop, tui.BorderBottom:
+			verticalPad = 1
+			minPreviewHeight = 2
 		}
 		switch t.previewOpts.position {
 		case posUp:
@@ -1120,28 +1141,18 @@ func (t *Terminal) printItem(result Result, line int, i int, current bool) {
 	t.prevLines[i] = newLine
 }
 
-func (t *Terminal) trimRight(runes []rune, width int) ([]rune, int) {
+func (t *Terminal) trimRight(runes []rune, width int) ([]rune, bool) {
 	// We start from the beginning to handle tab characters
-	l := 0
-	for idx, r := range runes {
-		l += util.RuneWidth(r, l, t.tabstop)
-		if l > width {
-			return runes[:idx], len(runes) - idx
-		}
+	width, overflowIdx := util.RunesWidth(runes, 0, t.tabstop, width)
+	if overflowIdx >= 0 {
+		return runes[:overflowIdx], true
 	}
-	return runes, 0
+	return runes, false
 }
 
 func (t *Terminal) displayWidthWithLimit(runes []rune, prefixWidth int, limit int) int {
-	l := 0
-	for _, r := range runes {
-		l += util.RuneWidth(r, l+prefixWidth, t.tabstop)
-		if l > limit {
-			// Early exit
-			return l
-		}
-	}
-	return l
+	width, _ := util.RunesWidth(runes, prefixWidth, t.tabstop, limit)
+	return width
 }
 
 func (t *Terminal) trimLeft(runes []rune, width int) ([]rune, int32) {
@@ -1341,9 +1352,9 @@ func (t *Terminal) renderPreviewText(height int, lines []string, lineNo int, unc
 			prefixWidth := 0
 			_, _, ansi = extractColor(line, ansi, func(str string, ansi *ansiState) bool {
 				trimmed := []rune(str)
-				trimmedLen := 0
+				isTrimmed := false
 				if !t.previewOpts.wrap {
-					trimmed, trimmedLen = t.trimRight(trimmed, maxWidth-t.pwindow.X())
+					trimmed, isTrimmed = t.trimRight(trimmed, maxWidth-t.pwindow.X())
 				}
 				str, width := t.processTabs(trimmed, prefixWidth)
 				prefixWidth += width
@@ -1353,7 +1364,7 @@ func (t *Terminal) renderPreviewText(height int, lines []string, lineNo int, unc
 				} else {
 					fillRet = t.pwindow.CFill(tui.ColPreview.Fg(), tui.ColPreview.Bg(), tui.AttrRegular, str)
 				}
-				return trimmedLen == 0 &&
+				return !isTrimmed &&
 					(fillRet == tui.FillContinue || t.previewOpts.wrap && fillRet == tui.FillNextLine)
 			})
 			t.previewer.scrollable = t.previewer.scrollable || t.pwindow.Y() == height-1 && t.pwindow.X() == t.pwindow.Width()
@@ -1409,16 +1420,21 @@ func (t *Terminal) printPreviewDelayed() {
 }
 
 func (t *Terminal) processTabs(runes []rune, prefixWidth int) (string, int) {
-	var strbuf bytes.Buffer
+	var strbuf strings.Builder
 	l := prefixWidth
-	for _, r := range runes {
-		w := util.RuneWidth(r, l, t.tabstop)
-		l += w
-		if r == '\t' {
+	gr := uniseg.NewGraphemes(string(runes))
+	for gr.Next() {
+		rs := gr.Runes()
+		str := string(rs)
+		var w int
+		if len(rs) == 1 && rs[0] == '\t' {
+			w = t.tabstop - l%t.tabstop
 			strbuf.WriteString(strings.Repeat(" ", w))
 		} else {
-			strbuf.WriteRune(r)
+			w = runewidth.StringWidth(str)
+			strbuf.WriteString(str)
 		}
+		l += w
 	}
 	return strbuf.String(), l
 }
@@ -1968,6 +1984,7 @@ func (t *Terminal) Loop() {
 						}()
 
 						// Goroutine 2 periodically requests rendering
+						rendered := util.NewAtomicBool(false)
 						go func(version int64) {
 							lines := []string{}
 							spinner := makeSpinner(t.unicode)
@@ -1982,6 +1999,7 @@ func (t *Terminal) Loop() {
 										if spinnerIndex >= 0 {
 											spin := spinner[spinnerIndex%len(spinner)]
 											t.reqBox.Set(reqPreviewDisplay, previewResult{version, lines, offset, spin})
+											rendered.Set(true)
 											offset = -1
 										}
 										spinnerIndex++
@@ -2001,6 +2019,7 @@ func (t *Terminal) Loop() {
 									}
 									if err != nil {
 										t.reqBox.Set(reqPreviewDisplay, previewResult{version, lines, offset, ""})
+										rendered.Set(true)
 										break Loop
 									}
 								}
@@ -2022,7 +2041,13 @@ func (t *Terminal) Loop() {
 										util.KillCommand(cmd)
 										t.eventBox.Set(EvtQuit, code)
 									} else {
-										timer := time.NewTimer(previewCancelWait)
+										// We can immediately kill a long-running preview program
+										// once we started rendering its partial output
+										delay := previewCancelWait
+										if rendered.Get() {
+											delay = 0
+										}
+										timer := time.NewTimer(delay)
 										select {
 										case <-timer.C:
 											util.KillCommand(cmd)
@@ -2632,6 +2657,11 @@ func (t *Terminal) Loop() {
 				if valid {
 					command := t.replacePlaceholder(a.a, false, string(t.input), list)
 					newCommand = &command
+				}
+			case actUnbind:
+				keys := parseKeyChords(a.a, "PANIC")
+				for key := range keys {
+					delete(t.keymap, key)
 				}
 			}
 			return true

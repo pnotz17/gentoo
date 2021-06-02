@@ -10,7 +10,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/junegunn/fzf/src/util"
+	"github.com/mattn/go-runewidth"
+	"github.com/rivo/uniseg"
 
 	"golang.org/x/term"
 )
@@ -50,7 +51,7 @@ func (r *LightRenderer) stderrInternal(str string, allowNLCR bool) {
 		}
 		bytes = bytes[sz:]
 	}
-	r.queued += string(runes)
+	r.queued.WriteString(string(runes))
 }
 
 func (r *LightRenderer) csi(code string) {
@@ -58,9 +59,9 @@ func (r *LightRenderer) csi(code string) {
 }
 
 func (r *LightRenderer) flush() {
-	if len(r.queued) > 0 {
-		fmt.Fprint(os.Stderr, r.queued)
-		r.queued = ""
+	if r.queued.Len() > 0 {
+		fmt.Fprint(os.Stderr, r.queued.String())
+		r.queued.Reset()
 	}
 }
 
@@ -82,7 +83,7 @@ type LightRenderer struct {
 	escDelay      int
 	fullscreen    bool
 	upOneLine     bool
-	queued        string
+	queued        strings.Builder
 	y             int
 	x             int
 	maxHeightFunc func(int) int
@@ -693,13 +694,17 @@ func (w *LightWindow) drawBorder() {
 }
 
 func (w *LightWindow) drawBorderHorizontal(top, bottom bool) {
+	color := ColBorder
+	if w.preview {
+		color = ColPreviewBorder
+	}
 	if top {
 		w.Move(0, 0)
-		w.CPrint(ColBorder, repeat(w.border.horizontal, w.width))
+		w.CPrint(color, repeat(w.border.horizontal, w.width))
 	}
 	if bottom {
 		w.Move(w.height-1, 0)
-		w.CPrint(ColBorder, repeat(w.border.horizontal, w.width))
+		w.CPrint(color, repeat(w.border.horizontal, w.width))
 	}
 }
 
@@ -708,14 +713,18 @@ func (w *LightWindow) drawBorderVertical(left, right bool) {
 	if !left || !right {
 		width++
 	}
+	color := ColBorder
+	if w.preview {
+		color = ColPreviewBorder
+	}
 	for y := 0; y < w.height; y++ {
 		w.Move(y, 0)
 		if left {
-			w.CPrint(ColBorder, string(w.border.vertical))
+			w.CPrint(color, string(w.border.vertical))
 		}
-		w.CPrint(ColBorder, repeat(' ', width))
+		w.CPrint(color, repeat(' ', width))
 		if right {
-			w.CPrint(ColBorder, string(w.border.vertical))
+			w.CPrint(color, string(w.border.vertical))
 		}
 	}
 }
@@ -881,20 +890,26 @@ func wrapLine(input string, prefixLength int, max int, tabstop int) []wrappedLin
 	lines := []wrappedLine{}
 	width := 0
 	line := ""
-	for _, r := range input {
-		w := util.RuneWidth(r, prefixLength+width, 8)
-		width += w
-		str := string(r)
-		if r == '\t' {
+	gr := uniseg.NewGraphemes(input)
+	for gr.Next() {
+		rs := gr.Runes()
+		str := string(rs)
+		var w int
+		if len(rs) == 1 && rs[0] == '\t' {
+			w = tabstop - (prefixLength+width)%tabstop
 			str = repeat(' ', w)
+		} else {
+			w = runewidth.StringWidth(str)
 		}
+		width += w
+
 		if prefixLength+width <= max {
 			line += str
 		} else {
 			lines = append(lines, wrappedLine{string(line), width - w})
 			line = str
 			prefixLength = 0
-			width = util.RuneWidth(r, prefixLength, 8)
+			width = w
 		}
 	}
 	lines = append(lines, wrappedLine{string(line), width})

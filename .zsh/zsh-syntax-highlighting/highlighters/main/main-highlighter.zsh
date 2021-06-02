@@ -362,6 +362,7 @@ _zsh_highlight_highlighter_main_paint()
     'env' u:i
     'ionice' cn:t:pPu # util-linux 2.33.1-0.1
     'strace' IbeaosXPpEuOS:ACdfhikqrtTvVxyDc # strace 4.26-0.2
+    'proxychains' q:f # proxychains 4.4.0
 
     # As of OpenSSH 8.1p1
     'ssh-agent' aEPt:csDd:k
@@ -601,16 +602,19 @@ _zsh_highlight_main_highlighter_highlight_list()
       (( in_alias[1]-- ))
       # Remove leading 0 entries
       in_alias=($in_alias[$in_alias[(i)<1->],-1])
-      (){
-        local alias_name
-        for alias_name in ${(k)seen_alias[(R)<$#in_alias->]}; do
-          unset "seen_alias[$alias_name]"
-        done
-      }
       if (( $#in_alias == 0 )); then
         seen_alias=()
         # start_pos and end_pos are of the alias (previous $arg) here
         _zsh_highlight_main_add_region_highlight $start_pos $end_pos $alias_style
+      else
+        # We can't unset keys that contain special characters (] \ and some others).
+        # More details: https://www.zsh.org/workers/43269
+        (){
+          local alias_name
+          for alias_name in ${(k)seen_alias[(R)<$#in_alias->]}; do
+            seen_alias=("${(@kv)seen_alias[(I)^$alias_name]}")
+          done
+        }
       fi
     fi
     if (( in_param )); then
@@ -890,7 +894,9 @@ _zsh_highlight_main_highlighter_highlight_list()
         (){
           local alias_name
           for alias_name in ${(k)seen_alias[(R)<$#in_alias->]}; do
-            unset "seen_alias[$alias_name]"
+            # We can't unset keys that contain special characters (] \ and some others).
+            # More details: https://www.zsh.org/workers/43269
+            seen_alias=("${(@kv)seen_alias[(I)^$alias_name]}")
           done
         }
         if [[ $arg != '|' && $arg != '|&' ]]; then
@@ -916,8 +922,8 @@ _zsh_highlight_main_highlighter_highlight_list()
         next_word=${next_word//:regular:/}
         next_word+=':sudo_opt:'
         next_word+=':start:'
-        if [[ $arg == 'exec' ]]; then
-          # To allow "exec 2>&1;" where there's no command word
+        if [[ $arg == 'exec' || $arg == 'env' ]]; then
+          # To allow "exec 2>&1;" and "env | grep" where there's no command word
           next_word+=':regular:'
         fi
       else

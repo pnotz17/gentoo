@@ -1,6 +1,52 @@
 CHANGELOG
 =========
 
+0.27.2
+------
+- 16 base ANSI colors can be specified by their names
+  ```sh
+  fzf --color fg:3,fg+:11
+  fzf --color fg:yellow,fg+:bright-yellow
+  ```
+- Fix bug where `--read0` not properly displaying long lines
+
+0.27.1
+------
+- Added `unbind` action. In the following Ripgrep launcher example, you can
+  use `unbind(reload)` to switch to fzf-only filtering mode.
+    - See https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-to-fzf-only-search-mode
+- Vim plugin
+    - Vim plugin will stop immediately even when the source command hasn't finished
+      ```vim
+      " fzf will read the stream file while allowing other processes to append to it
+      call fzf#run({'source': 'cat /dev/null > /tmp/stream; tail -f /tmp/stream'})
+      ```
+    - It is now possible to open popup window relative to the currrent window
+      ```vim
+      let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+      ```
+
+0.27.0
+------
+- More border options for `--preview-window`
+  ```sh
+  fzf --preview 'cat {}' --preview-window border-left
+  fzf --preview 'cat {}' --preview-window border-left --border horizontal
+  fzf --preview 'cat {}' --preview-window top:border-bottom
+  fzf --preview 'cat {}' --preview-window top:border-horizontal
+  ```
+- Automatically set `/dev/tty` as STDIN on execute action
+  ```sh
+  # Redirect /dev/tty to suppress "Vim: Warning: Input is not from a terminal"
+  # ls | fzf --bind "enter:execute(vim {} < /dev/tty)"
+
+  # "< /dev/tty" part is no longer needed
+  ls | fzf --bind "enter:execute(vim {})"
+  ```
+- Bug fixes and improvements
+- Signed and notarized macOS binaries
+  (Huge thanks to [BACKERS.md](https://github.com/junegunn/junegunn/blob/main/BACKERS.md)!)
+
 0.26.0
 ------
 - Added support for fixed header in preview window

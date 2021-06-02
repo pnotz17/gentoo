@@ -204,15 +204,15 @@ function _p9k_fetch_cwd() {
   _p9k__cwd_a=${${_p9k__cwd:A}:-.}
 
   case $_p9k__cwd in
-    ~|/|.)
+    /|.)
       _p9k__parent_dirs=()
       _p9k__parent_mtimes=()
       _p9k__parent_mtimes_i=()
       _p9k__parent_mtimes_s=
       return
     ;;
-    ~/*)
-      local parent=~/
+    ~|~/*)
+      local parent=${${${:-~/..}:a}%/}/
       local parts=(${(s./.)_p9k__cwd#$parent})
     ;;
     *)
@@ -255,7 +255,7 @@ function _p9k_glob() {
 #
 # Returns index within _p9k__parent_dirs or 0 if there is no match.
 #
-# Pattern cannot have slashes. Never matches in / or ~. Search stops before reaching / or ~.
+# Search stops before reaching ~/../ or / and never matches in those directories.
 #
 # Example: _p9k_upglob '*.csproj'
 function _p9k_upglob() {
@@ -734,8 +734,8 @@ _p9k_left_prompt_segment() {
       fi
     fi
 
-    p+="\${_p9k__c::=$content_exp_}"
-    p+='${_p9k__e::=${${_p9k__'${_p9k__line_index}l${${1#prompt_}%%[A-Z_]#}'+00}:-'
+    p+='${_p9k__c::='$content_exp_'}${_p9k__c::=${_p9k__c//'$'\r''}}'
+    p+='${_p9k__e::=${${_p9k__'${_p9k__line_index}l${${1#prompt_}%%[A-Z0-9_]#}'+00}:-'
     if (( has_icon == -1 )); then
       p+='${${(%):-$_p9k__c%1(l.1.0)}[-1]}${${(%):-$_p9k__v%1(l.1.0)}[-1]}}'
     else
@@ -961,8 +961,8 @@ _p9k_right_prompt_segment() {
       fi
     fi
 
-    p+="\${_p9k__c::=$content_exp_}"
-    p+='${_p9k__e::=${${_p9k__'${_p9k__line_index}r${${1#prompt_}%%[A-Z_]#}'+00}:-'
+    p+='${_p9k__c::='$content_exp_'}${_p9k__c::=${_p9k__c//'$'\r''}}'
+    p+='${_p9k__e::=${${_p9k__'${_p9k__line_index}r${${1#prompt_}%%[A-Z0-9_]#}'+00}:-'
     if (( has_icon == -1 )); then
       p+='${${(%):-$_p9k__c%1(l.1.0)}[-1]}${${(%):-$_p9k__v%1(l.1.0)}[-1]}}'
     else
@@ -1082,8 +1082,24 @@ function _p9k_prompt_segment() { "_p9k_${_p9k__prompt_side}_prompt_segment" "$@"
 function p9k_prompt_segment() { p10k segment "$@" }
 
 function _p9k_python_version() {
-  _p9k_cached_cmd 1 python --version || return
-  [[ $_p9k__ret == (#b)Python\ ([[:digit:].]##)* ]] && _p9k__ret=$match[1]
+  case $commands[python] in
+    "")
+      return 1
+    ;;
+    ${PYENV_ROOT:-~/.pyenv}/shims/python)
+      local P9K_PYENV_PYTHON_VERSION _p9k__pyenv_version
+      local -i _POWERLEVEL9K_PYENV_PROMPT_ALWAYS_SHOW=1 _POWERLEVEL9K_PYENV_SHOW_SYSTEM=1
+      local _POWERLEVEL9K_PYENV_SOURCES=(shell local global)
+      if _p9k_pyenv_compute && [[ $P9K_PYENV_PYTHON_VERSION == ([[:digit:].]##)* ]]; then
+        _p9k__ret=$P9K_PYENV_PYTHON_VERSION
+        return 0
+      fi
+    ;&  # fall through
+    *)
+      _p9k_cached_cmd 1 python --version || return
+      [[ $_p9k__ret == (#b)Python\ ([[:digit:].]##)* ]] && _p9k__ret=$match[1]
+    ;;
+  esac
 }
 
 ################################################################
@@ -1111,18 +1127,62 @@ _p9k_prompt_anaconda_init() {
   typeset -g "_p9k__segment_cond_${_p9k__prompt_side}[_p9k__segment_index]"='${CONDA_PREFIX:-$CONDA_ENV_PATH}'
 }
 
+# Populates array `reply` with "$#profile:$profile:$region" where $profile and $region
+# come from the AWS config (~/.aws/config).
+function _p9k_parse_aws_config() {
+  local cfg=$1
+  typeset -ga reply=()
+  [[ -f $cfg && -r $cfg ]] || return
+
+  local -a lines
+  lines=(${(f)"$(<$cfg)"}) || return
+
+  local line profile
+  local -a match mbegin mend
+  for line in $lines; do
+    if [[ $line == [[:space:]]#'[default]'[[:space:]]#(|'#'*) ]]; then
+      # example: [default]
+      profile=default
+    elif [[ $line == (#b)'[profile'[[:space:]]##([^[:space:]]|[^[:space:]]*[^[:space:]])[[:space:]]#']'[[:space:]]#(|'#'*) ]]; then
+      # example: [profile prod]
+      profile=${(Q)match[1]}
+    elif [[ $line == (#b)[[:space:]]#region[[:space:]]#=[[:space:]]#([^[:space:]]|[^[:space:]]*[^[:space:]])[[:space:]]# ]]; then
+      # example: region = eu-west-1
+      if [[ -n $profile ]]; then
+        reply+=$#profile:$profile:$match[1]
+        profile=
+      fi
+    fi
+  done
+}
+
 ################################################################
 # AWS Profile
 prompt_aws() {
-  local aws_profile="${AWS_VAULT:-${AWSUME_PROFILE:-${AWS_PROFILE:-$AWS_DEFAULT_PROFILE}}}"
+  typeset -g P9K_AWS_PROFILE="${AWS_VAULT:-${AWSUME_PROFILE:-${AWS_PROFILE:-$AWS_DEFAULT_PROFILE}}}"
   local pat class
   for pat class in "${_POWERLEVEL9K_AWS_CLASSES[@]}"; do
-    if [[ $aws_profile == ${~pat} ]]; then
+    if [[ $P9K_AWS_PROFILE == ${~pat} ]]; then
       [[ -n $class ]] && state=_${${(U)class}//İ/I}
       break
     fi
   done
-  _p9k_prompt_segment "$0$state" red white 'AWS_ICON' 0 '' "${aws_profile//\%/%%}"
+
+  if [[ -n $AWS_DEFAULT_REGION ]]; then
+    typeset -g P9K_AWS_REGION=$AWS_DEFAULT_REGION
+  else
+    local cfg=${AWS_CONFIG_FILE:-~/.aws/config}
+    if ! _p9k_cache_stat_get $0 $cfg; then
+      local -a reply
+      _p9k_parse_aws_config $cfg
+      _p9k_cache_stat_set $reply
+    fi
+    local prefix=$#P9K_AWS_PROFILE:$P9K_AWS_PROFILE:
+    local kv=$_p9k__cache_val[(r)${(b)prefix}*]
+    typeset -g P9K_AWS_REGION=${kv#$prefix}
+  fi
+
+  _p9k_prompt_segment "$0$state" red white 'AWS_ICON' 0 '' "${P9K_AWS_PROFILE//\%/%%}"
 }
 
 _p9k_prompt_aws_init() {
@@ -1341,10 +1401,10 @@ _p9k_prompt_battery_set_args() {
         if _p9k_read_file $dir/(power|current)_now(N) && (( $#_p9k__ret < 9 )); then
           (( power_now += ${pow::=$_p9k__ret} ))
         fi
-        if _p9k_read_file $dir/(energy|charge)_now(N); then
-          (( energy_now += _p9k__ret ))
-        elif _p9k_read_file $dir/capacity(N); then
+        if _p9k_read_file $dir/capacity(N); then
           (( energy_now += _p9k__ret * full / 100. + 0.5 ))
+        elif _p9k_read_file $dir/(energy|charge)_now(N); then
+          (( energy_now += _p9k__ret ))
         fi
         _p9k_read_file $dir/status(N) && local bat_status=$_p9k__ret || continue
         [[ $bat_status != Full                                ]] && is_full=0
@@ -1768,9 +1828,12 @@ prompt_dir() {
       fi
     ;;
     truncate_to_last)
-      if [[ $#parts -gt 2 || $p[1] != / && $#parts -gt 1 ]]; then
+      shortenlen=${_POWERLEVEL9K_SHORTEN_DIR_LENGTH:-1}
+      (( shortenlen > 0 )) || shortenlen=1
+      local -i i='shortenlen+1'
+      if [[ $#parts -gt i || $p[1] != / && $#parts -gt shortenlen ]]; then
         fake_first=1
-        parts[1,-2]=()
+        parts[1,-i]=()
       fi
     ;;
     truncate_to_first_and_last)
@@ -2236,9 +2299,9 @@ prompt_load() {
   _p9k_read_file /proc/loadavg || return
   local load=${${(A)=_p9k__ret}[_POWERLEVEL9K_LOAD_WHICH]//,/.}
   local -F pct='100. * load / _p9k_num_cpus'
-  if (( pct > 70 )); then
+  if (( pct > _POWERLEVEL9K_LOAD_CRITICAL_PCT )); then
     _p9k_prompt_segment $0_CRITICAL red    "$_p9k_color1" LOAD_ICON 0 '' $load
-  elif (( pct > 50 )); then
+  elif (( pct > _POWERLEVEL9K_LOAD_WARNING_PCT )); then
     _p9k_prompt_segment $0_WARNING  yellow "$_p9k_color1" LOAD_ICON 0 '' $load
   else
     _p9k_prompt_segment $0_NORMAL   green  "$_p9k_color1" LOAD_ICON 0 '' $load
@@ -2271,9 +2334,9 @@ _p9k_prompt_load_async() {
   _p9k__load_warning=
   _p9k__load_critical=
   local -F pct='100. * _p9k__load_value / _p9k_num_cpus'
-  if (( pct > 70 )); then
+  if (( pct > _POWERLEVEL9K_LOAD_CRITICAL_PCT )); then
     _p9k__load_critical=1
-  elif (( pct > 50 )); then
+  elif (( pct > _POWERLEVEL9K_LOAD_WARNING_PCT )); then
     _p9k__load_warning=1
   else
     _p9k__load_normal=1
@@ -4135,7 +4198,7 @@ function _p9k_read_pyenv_like_version_file() {
       [[ -n $fd ]] && exec {fd}>&-
     }
     local MATCH
-    local versions=(${(@)${(f)content}/(#m)*/${MATCH[(w)1]#$2}})
+    local versions=(${${${${(f)content}/(#m)*/${MATCH[(w)1]}}##\#*}#$2})
     _p9k__ret=${(j.:.)versions}
     _p9k__read_pyenv_like_version_file_cache[$1:$2]=$stat[1]:$_p9k__ret
   fi
@@ -4146,10 +4209,7 @@ function _p9k_pyenv_global_version() {
   _p9k_read_pyenv_like_version_file ${PYENV_ROOT:-$HOME/.pyenv}/version python- || _p9k__ret=system
 }
 
-################################################################
-# Segment to display pyenv information
-# https://github.com/pyenv/pyenv#choosing-the-python-version
-prompt_pyenv() {
+function _p9k_pyenv_compute() {
   unset P9K_PYENV_PYTHON_VERSION _p9k__pyenv_version
 
   local v=${(j.:.)${(@)${(s.:.)PYENV_VERSION}#python-}}
@@ -4191,24 +4251,34 @@ prompt_pyenv() {
 
   if (( !_POWERLEVEL9K_PYENV_PROMPT_ALWAYS_SHOW )); then
     _p9k_pyenv_global_version
-    [[ $v == $_p9k__ret ]] && return
+    [[ $v == $_p9k__ret ]] && return 1
   fi
 
   if (( !_POWERLEVEL9K_PYENV_SHOW_SYSTEM )); then
-    [[ $v == system ]] && return
+    [[ $v == system ]] && return 1
   fi
 
   local versions=${PYENV_ROOT:-$HOME/.pyenv}/versions
   versions=${versions:A}
-  local version=$versions/$v
-  version=${version:A}
-  if [[ $version == (#b)$versions/([^/]##)* ]]; then
-    typeset -g P9K_PYENV_PYTHON_VERSION=$match[1]
-  fi
+  local name version
+  for name in ${(s.:.)v}; do
+    version=$versions/$name
+    version=${version:A}
+    if [[ $version(#qN/) == (#b)$versions/([^/]##)* ]]; then
+      typeset -g P9K_PYENV_PYTHON_VERSION=$match[1]
+      break
+    fi
+  done
 
   typeset -g _p9k__pyenv_version=$v
+}
 
-  _p9k_prompt_segment "$0" "blue" "$_p9k_color1" 'PYTHON_ICON' 0 '' "${v//\%/%%}"
+################################################################
+# Segment to display pyenv information
+# https://github.com/pyenv/pyenv#choosing-the-python-version
+prompt_pyenv() {
+  _p9k_pyenv_compute || return
+  _p9k_prompt_segment "$0" "blue" "$_p9k_color1" 'PYTHON_ICON' 0 '' "${_p9k__pyenv_version//\%/%%}"
 }
 
 _p9k_prompt_pyenv_init() {
@@ -4385,7 +4455,7 @@ prompt_kubecontext() {
         fi
       done
     fi
-    _p9k_cache_stat_set "$name" "$namespace" "$cluster" "$user" "$cloud_name" "$cloud_account" "$cloud_zone" "$cloud_cluster" "$text" "$state"
+    _p9k_cache_stat_set "${(g::)name}" "${(g::)namespace}" "${(g::)cluster}" "${(g::)user}" "${(g::)cloud_name}" "${(g::)cloud_account}" "${(g::)cloud_zone}" "${(g::)cloud_cluster}" "${(g::)text}" "$state"
   fi
 
   typeset -g P9K_KUBECONTEXT_NAME=$_p9k__cache_val[1]
@@ -4459,8 +4529,15 @@ prompt_azure() {
     fi
     _p9k_cache_stat_set "$name"
   fi
+  local pat class
+  for pat class in "${_POWERLEVEL9K_AZURE_CLASSES[@]}"; do
+    if [[ $name == ${~pat} ]]; then
+      [[ -n $class ]] && state=_${${(U)class}//İ/I}
+      break
+    fi
+  done
   [[ -n $_p9k__cache_val[1] ]] || return
-  _p9k_prompt_segment "$0" "blue" "white" "AZURE_ICON" 0 '' "${_p9k__cache_val[1]//\%/%%}"
+  _p9k_prompt_segment "$0$state" "blue" "white" "AZURE_ICON" 0 '' "${_p9k__cache_val[1]//\%/%%}"
 }
 
 _p9k_prompt_azure_init() {
@@ -4743,6 +4820,20 @@ function instant_prompt_nnn() {
   _p9k_prompt_segment prompt_nnn 6 $_p9k_color1 NNN_ICON 1 '${NNNLVL:#0}' '$NNNLVL'
 }
 
+function prompt_xplr() {
+  local -i len=$#_p9k__prompt _p9k__has_upglob
+  _p9k_prompt_segment $0 6 $_p9k_color1 XPLR_ICON 0 '' ''
+  (( _p9k__has_upglob )) || typeset -g "_p9k__segment_val_${_p9k__prompt_side}[_p9k__segment_index]"=$_p9k__prompt[len+1,-1]
+}
+
+_p9k_prompt_xplr_init() {
+  typeset -g "_p9k__segment_cond_${_p9k__prompt_side}[_p9k__segment_index]"='$XPLR_PID'
+}
+
+function instant_prompt_xplr() {
+  _p9k_prompt_segment prompt_xplr 6 $_p9k_color1 XPLR_ICON 0 '$XPLR_PID' ''
+}
+
 function prompt_vim_shell() {
   local -i len=$#_p9k__prompt _p9k__has_upglob
   _p9k_prompt_segment $0 green $_p9k_color1 VIM_ICON 0 '' ''
@@ -4898,7 +4989,7 @@ function _p9k_taskwarrior_init_meta() {
   local last_sig=$_p9k_taskwarrior_meta_sig
   {
     local cfg
-    cfg="$(command task show data.location </dev/null 2>/dev/null)" || return
+    cfg="$(command task show data.location rc.color=0 rc._forcecolor=0 </dev/null 2>/dev/null)" || return
     local lines=(${(@M)${(f)cfg}:#data.location[[:space:]]##[^[:space:]]*})
     (( $#lines == 1 )) || return
     local dir=${lines[1]##data.location[[:space:]]#}
@@ -4954,7 +5045,7 @@ function _p9k_taskwarrior_init_data() {
 
   local name val
   for name in PENDING OVERDUE; do
-    val="$(command task +$name count </dev/null 2>/dev/null)" || continue
+    val="$(command task +$name count rc.color=0 rc._forcecolor=0 </dev/null 2>/dev/null)" || continue
     [[ $val == <1-> ]] || continue
     _p9k_taskwarrior_counters[$name]=$val
   done
@@ -4963,7 +5054,7 @@ function _p9k_taskwarrior_init_data() {
 
   if (( _p9k_taskwarrior_counters[PENDING] > _p9k_taskwarrior_counters[OVERDUE] )); then
     local -a ts
-    ts=($(command task +PENDING -OVERDUE list rc.verbose=nothing \
+    ts=($(command task +PENDING -OVERDUE list rc.verbose=nothing rc.color=0 rc._forcecolor=0 \
       rc.report.list.labels= rc.report.list.columns=due.epoch </dev/null 2>/dev/null)) || ts=()
     if (( $#ts )); then
       _p9k_taskwarrior_next_due=${${(on)ts}[1]}
@@ -5303,10 +5394,14 @@ function prompt_asdf() {
 
   local -A versions
   local -a stat
-  zstat -A stat +mtime ~ 2>/dev/null || return
-  local dirs=($_p9k__parent_dirs ~)
-  local mtimes=($_p9k__parent_mtimes $stat[1])
   local -i has_global
+  local dirs=($_p9k__parent_dirs)
+  local mtimes=($_p9k__parent_mtimes)
+  if [[ $dirs[-1] != ~ ]]; then
+    zstat -A stat +mtime ~ 2>/dev/null || return
+    dirs+=(~)
+    mtimes+=($stat[1])
+  fi
 
   local elem
   for elem in ${(@)${:-{1..$#dirs}}/(#m)*/${${:-$MATCH:$_p9k__asdf_dir2files[$dirs[MATCH]]}#$MATCH:$mtimes[MATCH]:}}; do
@@ -5458,6 +5553,8 @@ function _p9k_prompt_net_iface_init() {
   typeset -g P9K_IP_INTERFACE=
   typeset -g P9K_IP_TX_BYTES=
   typeset -g P9K_IP_RX_BYTES=
+  typeset -g P9K_IP_TX_BYTES_DELTA=
+  typeset -g P9K_IP_RX_BYTES_DELTA=
   typeset -g P9K_IP_TX_RATE=
   typeset -g P9K_IP_RX_RATE=
   typeset -g _p9__ip_timestamp=
@@ -5588,6 +5685,16 @@ function _p9k_prompt_net_iface_async() {
   _p9k__public_ip_not_vpn=$public_ip_not_vpn
   P9K_IP_IP=$ip_ip
   P9K_IP_INTERFACE=$ip_interface
+  if [[ -n $ip_tx_bytes && -n $P9K_IP_TX_BYTES ]]; then
+    P9K_IP_TX_BYTES_DELTA=$((ip_tx_bytes - P9K_IP_TX_BYTES))
+  else
+    P9K_IP_TX_BYTES_DELTA=
+  fi
+  if [[ -n $ip_rx_bytes && -n $P9K_IP_RX_BYTES ]]; then
+    P9K_IP_RX_BYTES_DELTA=$((ip_rx_bytes - P9K_IP_RX_BYTES))
+  else
+    P9K_IP_RX_BYTES_DELTA=
+  fi
   P9K_IP_TX_BYTES=$ip_tx_bytes
   P9K_IP_RX_BYTES=$ip_rx_bytes
   P9K_IP_TX_RATE=$ip_tx_rate
@@ -5601,6 +5708,8 @@ function _p9k_prompt_net_iface_async() {
     P9K_IP_INTERFACE        \
     P9K_IP_TX_BYTES         \
     P9K_IP_RX_BYTES         \
+    P9K_IP_TX_BYTES_DELTA   \
+    P9K_IP_RX_BYTES_DELTA   \
     P9K_IP_TX_RATE          \
     P9K_IP_RX_RATE          \
     _p9__ip_timestamp       \
@@ -7173,7 +7282,7 @@ _p9k_init_params() {
   _p9k_declare -s POWERLEVEL9K_IP_INTERFACE ""
   : ${_POWERLEVEL9K_IP_INTERFACE:='.*'}
   _p9k_segment_in_use ip || _POWERLEVEL9K_IP_INTERFACE=
-  _p9k_declare -s POWERLEVEL9K_VPN_IP_INTERFACE "(gpd|wg|(.*tun))[0-9]*"
+  _p9k_declare -s POWERLEVEL9K_VPN_IP_INTERFACE "(gpd|wg|(.*tun)|tailscale)[0-9]*"
   : ${_POWERLEVEL9K_VPN_IP_INTERFACE:='.*'}
   _p9k_segment_in_use vpn_ip || _POWERLEVEL9K_VPN_IP_INTERFACE=
   _p9k_declare -b POWERLEVEL9K_VPN_IP_SHOW_ALL 0
@@ -7183,6 +7292,8 @@ _p9k_init_params() {
     15) _POWERLEVEL9K_LOAD_WHICH=3;;
     *) _POWERLEVEL9K_LOAD_WHICH=2;;
   esac
+  _p9k_declare -F POWERLEVEL9K_LOAD_WARNING_PCT 50
+  _p9k_declare -F POWERLEVEL9K_LOAD_CRITICAL_PCT 70
   _p9k_declare -b POWERLEVEL9K_NODE_VERSION_PROJECT_ONLY 0
   _p9k_declare -b POWERLEVEL9K_PHP_VERSION_PROJECT_ONLY 0
   _p9k_declare -b POWERLEVEL9K_DOTNET_VERSION_PROJECT_ONLY 1
@@ -7312,6 +7423,7 @@ _p9k_init_params() {
   #   POWERLEVEL9K_KUBECONTEXT_OTHER_BACKGROUND=yellow
   _p9k_declare -a POWERLEVEL9K_KUBECONTEXT_CLASSES --
   _p9k_declare -a POWERLEVEL9K_AWS_CLASSES --
+  _p9k_declare -a POWERLEVEL9K_AZURE_CLASSES --
   _p9k_declare -a POWERLEVEL9K_TERRAFORM_CLASSES --
   _p9k_declare -b POWERLEVEL9K_TERRAFORM_SHOW_DEFAULT 0
   _p9k_declare -a POWERLEVEL9K_GOOGLE_APP_CRED_CLASSES -- 'service_account:*' SERVICE_ACCOUNT
@@ -7584,9 +7696,15 @@ function _p9k_wrap_widgets() {
     if (( ! $+functions[_p9k_widget_$widget] )); then
       functions[_p9k_widget_$widget]='_p9k_widget '${(q)widget}' "$@"'
     fi
-    # The leading dot is to work around bugs in zsh-syntax-highlighting.
-    zle -A $widget ._p9k_orig_$widget
-    zle -N $widget _p9k_widget_$widget
+    if [[ $widget == zle-* &&
+          $widgets[$widget] == user:azhw:* &&
+          $functions[add-zle-hook-widget] ]]; then
+      add-zle-hook-widget $widget _p9k_widget_$widget
+    else
+      # The leading dot is to work around bugs in zsh-syntax-highlighting.
+      zle -A $widget ._p9k_orig_$widget
+      zle -N $widget _p9k_widget_$widget
+    fi
   done 2>/dev/null  # `zle -A` fails for inexisting widgets and complains to stderr
 }
 
@@ -7976,7 +8094,7 @@ _p9k_must_init() {
     [[ $sig == $_p9k__param_sig ]] && return 1
     _p9k_deinit
   fi
-  _p9k__param_pat=$'v114\1'${(q)ZSH_VERSION}$'\1'${(q)ZSH_PATCHLEVEL}$'\1'
+  _p9k__param_pat=$'v122\1'${(q)ZSH_VERSION}$'\1'${(q)ZSH_PATCHLEVEL}$'\1'
   _p9k__param_pat+=$'${#parameters[(I)POWERLEVEL9K_*]}\1${(%):-%n%#}\1$GITSTATUS_LOG_LEVEL\1'
   _p9k__param_pat+=$'$GITSTATUS_ENABLE_LOGGING\1$GITSTATUS_DAEMON\1$GITSTATUS_NUM_THREADS\1'
   _p9k__param_pat+=$'$GITSTATUS_CACHE_DIR\1$GITSTATUS_AUTO_INSTALL\1${ZLE_RPROMPT_INDENT:-1}\1'
