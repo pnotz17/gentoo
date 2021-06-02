@@ -9,11 +9,6 @@ function get_time {
 	date +'%Y-%m-%d %R'
 }
 
-function get_disk {
-	disk1=$(df -Ph | grep "/dev/sdd" | awk {'print $5'})
-	echo  "H: ️$disk1"
-}
-
 function get_mail {
 	mail=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
@@ -31,10 +26,6 @@ function get_ram {
 	sed '2!d' |
 	awk '{usage=$3*100/$2}
 		END {print "R: " int(usage) "%"}'
-}
-
-function get_mem {
-echo "M:$(df --output=pcent /dev/sdd1 | sed '2!d')"
 }
 
 function get_net {
@@ -85,6 +76,6 @@ function get_down {
 }
 
 while true; do
-	xsetroot -name "$(get_uptime) | $(get_time) | $(get_disk) | $(get_mail) | $(get_cpuload) | $(get_ram) | $(get_mem) | $(get_up) | $(get_down) | $(get_audio) |"
+	xsetroot -name "$(get_uptime) | $(get_time) | $(get_mail) | $(get_cpuload) | $(get_ram) | $(get_up) | $(get_down) | $(get_audio) |"
 	sleep 3
 done

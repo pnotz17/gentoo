@@ -10,10 +10,12 @@ then
 rm /usr/portage/metadata/timestamp.x
 fi
 
-emerge-webrsync &&
-emerge --update --deep --with-bdeps=y @world -a &&
-emerge --depclean -a &&
-revdep-rebuild -a &&
-eclean -d distfiles -a &&
+emerge --sync &&
+emerge --update --deep --with-bdeps=y @world -av &&
+perl-cleaner --all -av &&
+emerge @changed-deps -av &&
+emerge --depclean -av &&
+revdep-rebuild -av &&
+eclean-dist -d && eclean-pkg -d
 
 exit 0 
