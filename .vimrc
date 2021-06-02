@@ -16,37 +16,22 @@ set wildmenu                            " Display all matches when tab complete.
 set nobackup                            " No auto backups
 set noswapfile                          " No swap
 
-" Load plugins 
-call plug#begin()
-Plug 'scrooloose/nerdtree'              " Nerdtree
-Plug 'preservim/nerdcommenter'          " Comment functions
-Plug 'ryanoasis/vim-devicons'           " Icons for Nerdtree
-Plug 'ap/vim-css-color'                 " Color previews for CSS
-Plug 'junegunn/vim-emoji'               " Vim needs emojis!
-Plug 'itchyny/lightline.vim'            " statusline/tabline plugin for Vim
-Plug 'vim-python/python-syntax'         " Python highlighting
-call plug#end()
 
 " Theme
-" put colorscheme files in ~/.config//nvim/colors/
+" put colorscheme files in ~/.vim/colors/
 colorscheme monochrome
 
-" NerdTree
-let NERDTreeShowHidden=1
-map <C-n> :NERDTreeToggle<CR>
-
-" Enable/Disable Python Syntax Highlighting
-let g:python_highlight_all = 1
-
-" Recompile Suckless Programs Automatically
-autocmd BufWritePost ~/suckless/dmenu/config.h !cd ~/suckless/dmenu/; doas make clean install 
-autocmd BufWritePost ~/suckless/dwm/config.h !cd ~/suckless/dwm/; doas make clean install 
-autocmd BufWritePost ~/suckless/st/config.h !cd ~/suckless/st/; doas make clean install 
-":au! BufWritePost *config.h ! doas make clean install %
+" Load plugins 
+call plug#begin()
+Plug 'preservim/nerdtree'
+Plug 'preservim/nerdcommenter'
+Plug 'ap/vim-css-color'
+Plug 'ryanoasis/vim-devicons'
+Plug 'itchyny/lightline.vim'
+call plug#end()
 
 " Set Leader Key
 let mapleader=","
-set timeout timeoutlen=1500
 
 " Navigate around splits with a single key combo.
 map <C-h> <C-w>h
@@ -54,5 +39,12 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" NerdTree
+map <C-n> :NERDTreeToggle<CR>
+
+" Recompile Suckless Programs Automatically
+autocmd BufWritePost *config.h !doas make clean install %
+
 " Location of viminfo
-set viminfo+=n~/.config/nvim/viminfo
+set viminfo+=n~/.vim/viminfo
+

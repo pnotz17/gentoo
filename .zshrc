@@ -1,7 +1,6 @@
-
 # variables
 export TERM=st-256color
-export EDITOR=nvim
+export EDITOR=vim
 export BROWSER=firefox-bin
 export PATH=$HOME/.local/bin:$PATH
 

@@ -11,6 +11,6 @@ static const Pair pairs[] = {
 	{ "\\.(html|svg)$",                         "firefox-bin %s"          }, // local html and svg
 	{ "^(http://|https://)?(www\\.)",           "firefox-bin %s"          }, // web URI link
 	{ "^magnet:\?",                             "transmission-gtk %s" }, // magnet URI link
-	{ "^file:\?",                               "st -e nvim %s"       }, // file URI link
-	{ ".",                                      "st -e nvim %s"       }, // catch-all default
+	{ "^file:\?",                               "st -e vim %s"       }, // file URI link
+	{ ".",                                      "st -e vim %s"       }, // catch-all default
 };
