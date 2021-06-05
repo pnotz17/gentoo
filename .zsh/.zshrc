@@ -114,7 +114,7 @@ _setup_ps1() {
 vcs_info
 GLYPH=" "
 [ "x$KEYMAP" = "xvicmd" ] && GLYPH="▼"
-PS1=" %(?.%F{#ffffff}.%F{red})$GLYPH%f %(1j.%F{cyan}[%j]%f .)%F{#7A5ADA}%~%f %(!.%F{red}#%f .)"
+PS1=" %(?.%F{#ffffff}.%F{red})$GLYPH%f %(1j.%F{cyan}[%j]%f .)%F{green}%~%f %(!.%F{red}#%f .)"
 RPROMPT="$vcs_info_msg_0_"
 }
 _setup_ps1
