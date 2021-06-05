@@ -14,23 +14,23 @@ autoload -U colors && colors
 autoload -U compinit  vcs_info 
 compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 
-# plugins
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
-source ~/.zsh/.fzf/shell/completion.zsh 2> /dev/null
-source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
+# autocompletion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 # fzf
 if [[ ! "$PATH" == *~/.zsh/.fzf/bin* ]]; then
   export PATH="${PATH:+${PATH}:}/$HOME/.zsh/.fzf/bin"
 fi
 
-# autocompletion
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-
 # ls - colors
 export CLICOLOR=1
 ls --color=auto &> /dev/null 
+
+# plugins
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+source ~/.zsh/.fzf/shell/completion.zsh 2> /dev/null
+source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 
 # aliases
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
@@ -89,32 +89,10 @@ alias a='git add'
 alias un='unzip'
 alias d='doas '
 
-# Git settings
-zstyle ':vcs_info:*' enable git
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr '!'
-zstyle ':vcs_info:*' stagedstr '+'
-zstyle ':vcs_info:*' formats "%u%c"
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-
-+vi-git-untracked(){
-    if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-        git status --porcelain | grep '??' &> /dev/null ; then
-        # This will show the marker if there are any untracked files in repo.
-        # If instead you want to show the marker only if there are untracked
-        # files in $PWD, use:
-        #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
-        hook_com[staged]+='T'
-    fi
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
-# Prompt
-_setup_ps1() {
-vcs_info
-GLYPH=" "
-[ "x$KEYMAP" = "xvicmd" ] && GLYPH="▼"
-PS1=" %(?.%F{#ffffff}.%F{red})$GLYPH%f %(1j.%F{cyan}[%j]%f .)%F{green}%~%f %(!.%F{red}#%f .)"
-RPROMPT="$vcs_info_msg_0_"
-}
-_setup_ps1
+setopt PROMPT_SUBST
+PROMPT='%9c%{%F{green}%}$(parse_git_branch)%{%F{none}%} $ '
+
