@@ -14,24 +14,17 @@ autoload -U colors && colors
 autoload -U compinit  vcs_info 
 compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 
-# git settings
-git_branch_test_color() {
-  local ref=$(git symbolic-ref --short HEAD 2> /dev/null)
-  if [ -n "${ref}" ]; then
-    if [ -n "$(git status --porcelain)" ]; then
-      local gitstatuscolor='%F{red}**M**'
-    else
-      local gitstatuscolor='%F{green}'
-    fi
-    echo "${gitstatuscolor} (${ref})"
-  else
-    echo ""
-  fi
-}
+# autocompletion
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
-# prompt
-setopt prompt_subst
-PROMPT='%F{#FFFF00}%n@%F{#5C5CFF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
+# fzf
+if [[ ! "$PATH" == *~/.zsh/.fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/$HOME/.zsh/.fzf/bin"
+fi
+
+# ls - colors
+export CLICOLOR=1
+ls --color=auto &> /dev/null 
 
 # plugins
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
@@ -39,33 +32,23 @@ source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 source ~/.zsh/.fzf/shell/completion.zsh 2> /dev/null
 source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 
-if [[ ! "$PATH" == *~/.zsh/.fzf/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}/$HOME/.zsh/.fzf/bin"
-fi
-
-# autocompletion
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-
-# ls - colors
-export CLICOLOR=1
-ls --color=auto &> /dev/null 
-
 # aliases
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
 alias ew='doas emerge -avuDN --keep-going --with-bdeps=y @world'
 alias pa='doas vim /etc/portage/package.accept_keywords'
 alias dc='doas emerge -p --changed-deps --deep @world '
 alias e='doas env-update && source /etc/profile'
-alias pm='doas vim /etc/portage/package.mask'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
-alias pu='doas vim /etc/portage/package.use'
+alias pm='doas vim /etc/portage/package.mask'
 alias c='git commit -m "changes in dotfiles"'
+alias pu='doas vim /etc/portage/package.use'
 alias pr='doas vim /etc/portage/repos.conf'
 alias sf='doas emerge --resume --skipfirst'
+alias ds='doas rm /usr/portage/distfiles/*'
 alias mk='doas vim /etc/portage/make.conf'
+alias rt='doas rm -rf /var/tmp/portage/*'
 alias build='doas make clean install'
 alias w='cat /var/lib/portage/world'
-alias sd='emerge --searchdesc'
 alias lu='ls -l /dev/disk/by-uuid'
 alias en='doas emerge --noreplace'
 alias mf='fc-list | grep ".local"'
@@ -75,7 +58,7 @@ alias dc='doas emerge --depclean'
 alias de='doas emerge --deselect'
 alias ep='doas emerge --prune'
 alias ec='doas emerge --clean'
-alias ds='doas eclean-dist -d'
+alias sd='emerge --searchdesc'
 alias poweroff='doas poweroff'
 alias pc='perl-cleaner --all'
 alias es='doas emerge --sync'
@@ -107,3 +90,22 @@ alias a='git add'
 alias un='unzip'
 alias d='doas '
 
+# git prompt
+setopt prompt_subst
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' stagedstr 'M' 
+zstyle ':vcs_info:*' unstagedstr 'M' 
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' actionformats '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats \ '%F{5}[%F{2}%b%F{5}] %F{2}%c%F{3}%u%f'
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+zstyle ':vcs_info:*' enable git 
++vi-git-untracked() {
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+  [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
+  hook_com[unstaged]+='%F{1}??%f'
+fi
+}
+
+precmd () { vcs_info }
+PROMPT='%F{5}[%F{2}%n%F{5}] %F{3}%3~ ${vcs_info_msg_0_} %f%# '
