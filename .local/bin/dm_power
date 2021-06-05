@@ -5,9 +5,9 @@ cmds="\
 🔒Lock		slock
 ⚡KillX	${Kill:-pkill -KILL -u $USER }
 🔄RestartX	kill -HUP $(pidof -s dwm)
-🌒Hibernate	${Hib:-systemctl suspend}
-🔃Reboot	${Reb:-systemctl reboot}
-⛔Shutdown	${Shut:-systemctl poweroff}"
+🌒Hibernate	${Hib:-doas suspend}
+🔃Reboot	${Reb:-doas reboot}
+⛔Shutdown	${Shut:-doas poweroff}"
 
 choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -c -g 1 -fn NotoColorEmoji)" || exit 1
 
