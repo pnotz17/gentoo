@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DMBROWSER="firefox"
+DMBROWSER="waterfox"
 
 declare -a options=(
 "youtube - https://www.youtube.com/results?search_query="

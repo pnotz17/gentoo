@@ -100,7 +100,7 @@ static Key keys[] = {
 	{ ControlMask,			XK_e,      spawn,          SHCMD("~/.local/bin/dm_uni") },
 	{ ControlMask,		        XK_w,      spawn,          SHCMD("~/.local/bin/ran_wall") },
 	{ ControlMask,		        XK_b,	   spawn,	   SHCMD("~/.local/bin/dm_book") },
-	{ ControlMask,		        XK_x,      spawn, 	   SHCMD("~/.local/bin/dm_exit") },
+	{ ControlMask,		        XK_x,      spawn, 	   SHCMD("~/.local/bin/dm_power") },
 	{ ControlMask,	                XK_h,	   spawn,	   SHCMD("~/.local/bin/dm_hist") },
 	{ ControlMask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/compton_deploy") },
 	{ ControlMask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },

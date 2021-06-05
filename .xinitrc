@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# X settings
+# x settings
 xrandr --output VGA1 --mode 1408x792_60.00 --scale-from 1920x1080 &
 xset r rate 400 100
 
@@ -10,7 +10,7 @@ if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
  echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 fi
 
-# Autostart
+# autostart
 ~/.local/bin/bars/gentoo_bar &
 ~/.local/bin/xsession_destroyah &
 ~/.fehbg &
@@ -19,6 +19,7 @@ dunst &
 
 #dwm start loop
 while true; do
-	exec dbus-launch --exit-with-session dwm >/tmp/wm.log 2>&1
+    /usr/local/bin/dwm 2> /dev/null
 done
+
 

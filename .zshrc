@@ -1,7 +1,7 @@
 # variables
 export TERM=st-256color
 export EDITOR=vim
-export BROWSER=firefox-bin
+export BROWSER=waterfox
 export PATH=$HOME/.local/bin:$PATH
 
 # history
