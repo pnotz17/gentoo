@@ -91,21 +91,21 @@ alias un='unzip'
 alias d='doas '
 
 # git prompt
-setopt prompt_subst
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' stagedstr 'M' 
-zstyle ':vcs_info:*' unstagedstr 'M' 
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' actionformats '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats \ '%F{5}[%F{2}%b%F{5}] %F{2}%c%F{3}%u%f'
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-zstyle ':vcs_info:*' enable git 
-+vi-git-untracked() {
-  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-  [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
-  hook_com[unstaged]+='%F{1}??%f'
-fi
+git_branch_test_color() {
+  local ref=$(git symbolic-ref --short HEAD 2> /dev/null)
+  if [ -n "${ref}" ]; then
+    if [ -n "$(git status --porcelain)" ]; then
+      local gitstatuscolor='%F{red}'
+    else
+      local gitstatuscolor='%F{green}'
+    fi
+    echo "${gitstatuscolor} (${ref})"
+  else
+    echo ""
+  fi
 }
 
-precmd () { vcs_info }
-PROMPT='%F{5}[%F{2}%n%F{5}] %F{3}%3~ ${vcs_info_msg_0_} %f%# '
+setopt PROMPT_SUBST
+PROMPT='%9c$(git_branch_test_color)%F{none} %# '
+RPROMPT='%D{%k:%M:%S}'
+
