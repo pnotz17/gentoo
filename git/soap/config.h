@@ -8,8 +8,8 @@ static const Pair pairs[] = {
 	{ "\\.pdf$",                                "mupdf-x11 %s"        }, // pdf
 	{ "\\.(jpg|png|tiff|gif)$",                 "feh -a %s"           }, // image
 	{ "\\.(avi|mp4|mkv|mp3|ogg|flac|mov|wav)$", "mpv %s"           	  }, // video
-	{ "\\.(html|svg)$",                         "firefox-bin %s"          }, // local html and svg
-	{ "^(http://|https://)?(www\\.)",           "firefox-bin %s"          }, // web URI link
+	{ "\\.(html|svg)$",                         "waterfox %s"          }, // local html and svg
+	{ "^(http://|https://)?(www\\.)",           "waterfox %s"          }, // web URI link
 	{ "^magnet:\?",                             "transmission-gtk %s" }, // magnet URI link
 	{ "^file:\?",                               "st -e vim %s"       }, // file URI link
 	{ ".",                                      "st -e vim %s"       }, // catch-all default

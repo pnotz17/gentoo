@@ -1,11 +1,7 @@
 app-admin/doas
 app-admin/pass
 app-editors/vim
-app-portage/eix
-app-portage/gentoolkit
-app-portage/layman
 app-shells/zsh
-app-text/mupdf
 dev-util/geany
 dev-vcs/git
 lxde-base/lxappearance
@@ -24,7 +20,6 @@ sys-process/htop
 x11-apps/xinit
 x11-apps/xkill
 x11-apps/xrandr
-x11-apps/xset
 x11-apps/xsetroot
 x11-base/xorg-server
 x11-drivers/xf86-video-intel
@@ -33,4 +28,3 @@ x11-misc/dunst
 x11-misc/spacefm
 x11-misc/xclip
 x11-misc/xdg-utils
-x11-misc/xsel

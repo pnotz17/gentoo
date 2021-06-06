@@ -67,6 +67,6 @@ int main(int argc, char *argv[])
 	act = "xdg-open_ %s";
 run:
 	snprintf(cmd, sizeof(cmd), act, sharg); // NOLINT
-	//system(cmd);
+	system(cmd);
 	return EXIT_SUCCESS;
 }
