@@ -2,7 +2,7 @@
 source ~/.mutt/a1
 
 # Theme
-source ~/.mutt/themes/neowolf
+source ~/.mutt/themes/pop
 
 # Aliases
 set alias_file="~/.mutt/aliases"
