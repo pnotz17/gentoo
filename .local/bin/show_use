@@ -1,0 +1,7 @@
+#!/bin/bash
+echo $(
+    gcc -v -march=native -x c /dev/null 2>&1 \
+        | fgrep -- '-march' \
+        | egrep -o ' (-m|--param )\S+' \
+        | fgrep -v -- '-mno-'
+)	
