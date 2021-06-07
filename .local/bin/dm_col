@@ -20,7 +20,7 @@ colors[White]="#F1F1F0"
 colors[Chatelle White]="#B3AFC2"
 colors[Cadet Blue]="#ACB7C2"
 colors[Orange]="#FF4900"
-colors[Purple]="#BD9CF9"
+colors[Purple]="#FF00FF"
 
 selected="$(printf '%s\n' "${!colors[@]}" | dmenu -c -g 1 -p "Color:")"
 [ -z "${selected}" ] && exit
