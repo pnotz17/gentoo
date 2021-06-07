@@ -16,8 +16,8 @@ function get_mail {
 }
 
 function get_cputemp {
-cputemp=$(sensors | grep Core | awk '{print substr($3, 2, length($3)-5)}' | tr "\\n" " " | sed 's/ /°C  /g' | sed 's/  $//')
-echo "TEMP: $cputemp"
+cputemp=`sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}'`"C"
+echo "CORE: $cputemp"
 }
 
 function get_cpuload {
