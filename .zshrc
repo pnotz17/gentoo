@@ -44,9 +44,9 @@ alias c='git commit -m "changes in dotfiles"'
 alias pu='doas vim /etc/portage/package.use'
 alias pr='doas vim /etc/portage/repos.conf'
 alias sf='doas emerge --resume --skipfirst'
-alias ds='doas rm /usr/portage/distfiles/*'
+alias rb='doas rm -rf /var/cache/binpkgs/*'
 alias mk='doas vim /etc/portage/make.conf'
-alias rt='doas rm -rf /var/tmp/portage/*'
+alias rt='doas rm /var/cache/distfiles/*'
 alias build='doas make clean install'
 alias w='cat /var/lib/portage/world'
 alias lu='ls -l /dev/disk/by-uuid'
@@ -91,21 +91,21 @@ alias un='unzip'
 alias d='doas '
 
 # git prompt
-git_branch_test_color() {
-  local ref=$(git symbolic-ref --short HEAD 2> /dev/null)
-  if [ -n "${ref}" ]; then
-    if [ -n "$(git status --porcelain)" ]; then
-      local gitstatuscolor='%F{red}'
-    else
-      local gitstatuscolor='%F{green}'
-    fi
-    echo "${gitstatuscolor} (${ref})"
-  else
-    echo ""
-  fi
+setopt prompt_subst
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' stagedstr 'M' 
+zstyle ':vcs_info:*' unstagedstr 'M' 
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' actionformats '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats \ '%F{5}[%F{2}%b%F{5}] %F{2}%c%F{3}%u%f'
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+zstyle ':vcs_info:*' enable git 
++vi-git-untracked() {
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+  [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
+  hook_com[unstaged]+='%F{1}??%f'
+fi
 }
 
-setopt PROMPT_SUBST
-PROMPT='%9c$(git_branch_test_color)%F{none} %# '
-RPROMPT='%D{%k:%M:%S}'
-
+precmd () { vcs_info }
+PROMPT='%F{5}[%F{2}%n%F{5}] %F{3}%3~ ${vcs_info_msg_0_} %f%# '
