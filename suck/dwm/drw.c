@@ -197,6 +197,18 @@ drw_fontset_free(Fnt *font)
 }
 
 void
+s2d_drw_clr_create(Drw *drw, Clr *dest, const char *clrname)
+{
+	if (!drw || !dest || !clrname)
+		return;
+
+    if (!XftColorAllocName(drw->dpy, DefaultVisual(drw->dpy, drw->screen),
+	                       DefaultColormap(drw->dpy, drw->screen),
+	                       clrname, dest))
+		die("error, cannot allocate color '%s'", clrname);
+}
+
+void
 drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha)
 {
 	if (!drw || !dest || !clrname)
@@ -210,7 +222,22 @@ drw_clr_create(Drw *drw, Clr *dest, const char *clrname, unsigned int alpha)
 }
 
 /* Wrapper to create color schemes. The caller has to call free(3) on the
- * returned color scheme when done using it. */
+* returned color scheme when done using it. */
+Clr *
+s2d_drw_scm_create(Drw *drw, const char *clrnames[], size_t clrcount)
+{
+	size_t i;
+	Clr *ret;
+
+	/* need at least two colors for a scheme */
+	if (!drw || !clrnames || clrcount < 2 || !(ret = ecalloc(clrcount, sizeof(XftColor))))
+		return NULL;
+
+	for (i = 0; i < clrcount; i++)
+		s2d_drw_clr_create(drw, &ret[i], clrnames[i]);
+	return ret;
+}
+
 Clr *
 drw_scm_create(Drw *drw, const char *clrnames[], const unsigned int alphas[], size_t clrcount)
 {
