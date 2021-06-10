@@ -1,5 +1,6 @@
 app-admin/doas
 app-admin/pass
+app-arch/unzip
 app-editors/vim
 app-shells/zsh
 dev-util/geany
@@ -8,6 +9,7 @@ lxde-base/lxappearance
 mail-client/mutt
 media-gfx/feh
 media-gfx/scrot
+media-libs/fontconfig
 media-libs/libcanberra
 media-sound/alsa-utils
 media-video/mpv
@@ -15,14 +17,16 @@ net-misc/dhcpcd
 net-misc/netifrc
 net-misc/youtube-dl
 net-p2p/transmission
-sys-devel/bc
+sys-apps/lm-sensors
 sys-process/htop
 x11-apps/xinit
 x11-apps/xkill
 x11-apps/xrandr
+x11-apps/xset
 x11-apps/xsetroot
 x11-base/xorg-server
 x11-drivers/xf86-video-intel
+x11-libs/libXft
 x11-misc/compton
 x11-misc/dunst
 x11-misc/spacefm

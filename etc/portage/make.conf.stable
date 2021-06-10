@@ -4,7 +4,7 @@ CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"
 FFLAGS="${COMMON_FLAGS}"
 CHOST="x86_64-pc-linux-gnu" 
-ACCEPT_KEYWORDS="~amd64" 
+ACCEPT_KEYWORDS="amd64" 
 ACCEPT_LICENSE="* -@EULA"
 LANG="en_US.UTF-8 UTF-8" 
 MAKEOPTS="-j3"
@@ -14,8 +14,8 @@ DARKELF_FEATURES="postmerge_distclean"
 PORTAGE_NICENESS=1
 VIDEO_CARDS="intel i965" 
 PYTHON_TARGETS="python3_9"
-USE="-systemd -xfce -kde -gnome -wayland -cups -java -perl -webkit -qt -qt4 -qt5 -gtk -policykit -conselkit -pulseaudio -multilib\ 
-     -emacs -xemacs -aqua -llvm -doc  -geoloc -geoip -boost -ldap\
+USE="-systemd -xfce -kde -gnome -wayland -cups -java -perl -doc -qt -qt4 -qt5 -gtk -policykit -conselkit -pulseaudio \ 
+     -emacs -xemacs -aqua \
       elogind alsa x xinerama"
 PORTDIR="/var/db/repos/gentoo"
 DISTDIR="/var/cache/distfiles"
