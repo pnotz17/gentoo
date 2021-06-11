@@ -14,8 +14,7 @@ DARKELF_FEATURES="postmerge_distclean"
 PORTAGE_NICENESS=1
 VIDEO_CARDS="intel i965" 
 PYTHON_TARGETS="python3_9"
-USE="-systemd -xfce -kde -gnome -wayland -cups -java -perl -doc -qt -qt4 -qt5 -gtk -policykit -conselkit -pulseaudio \ 
-     -emacs -xemacs -aqua \
+USE="-systemd -xfce -kde -gnome -wayland -cups -llvm -doc -qt -qt4 -qt5 -gtk -policykit -conselkit -pulseaudio \ 
       elogind alsa x xinerama"
 PORTDIR="/var/db/repos/gentoo"
 DISTDIR="/var/cache/distfiles"
