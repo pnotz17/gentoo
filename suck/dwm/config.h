@@ -1,5 +1,5 @@
 static const unsigned int borderpx  = 1;                /* border pixel of windows */
-static const unsigned int gappx     = 5;                /* gaps between windows */
+static const unsigned int gappx     = 1;                /* gaps between windows */
 static const unsigned int snap      = 32;               /* snap pixel */
 static const int showbar            = 1;                /* 0 means no bar */
 static const int topbar             = 1;                /* 0 means bottom bar */
@@ -8,7 +8,7 @@ static const char normbgcolor[]       = "#000000";	/* bar backround color */
 static const char normfgcolor[]       = "#FFFFFF";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#000000";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
-static const char unselbordercolor[]  = "#B3AFC2";	/* unfocused window border color*/
+static const char unselbordercolor[]  = "#FF0000";	/* unfocused window border color*/
 static const char selbordercolor[]    = "#000000";	/* focused window border color*/
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
@@ -86,26 +86,23 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("st") },
-	{ MODKEY|ShiftMask,		XK_b,	   spawn,	   SHCMD("waterfox") },
+	{ MODKEY|ShiftMask,		XK_b,	   spawn,	   SHCMD("firefox-bin") },
 	{ MODKEY|ShiftMask,		XK_f,	   spawn,	   SHCMD("spacefm") },
 	{ MODKEY|ShiftMask,		XK_m,	   spawn,	   SHCMD("st -e mutt") },
 	{ MODKEY|ControlMask,           XK_r,      quit,           {0} },
 	{ MODKEY|ControlMask,		XK_c,      spawn,          SHCMD("~/.local/bin/dm_calc") },
 	{ MODKEY|ControlMask,		XK_d,      spawn, 	   SHCMD("~/.local/bin/dm_fm") },
 	{ MODKEY|ControlMask,		XK_e,      spawn, 	   SHCMD("~/.local/bin/dm_ed")},
-	{ MODKEY|ControlMask,	        XK_m,	   spawn,	   SHCMD("~/.local/bin/dm_mnt") },
 	{ MODKEY|ControlMask,		XK_p,      spawn,          SHCMD("~/.local/bin/dm_pass") },
-	{ MODKEY|ControlMask,	        XK_u,	   spawn,	   SHCMD("~/.local/bin/dm_umnt") },
-	{ ControlMask,			XK_d,      spawn,          SHCMD("~/.local/bin/dm_ytdl") },
-	{ ControlMask,			XK_e,      spawn,          SHCMD("~/.local/bin/dm_uni") },
-	{ ControlMask,		        XK_w,      spawn,          SHCMD("~/.local/bin/ran_wall") },
-	{ ControlMask,		        XK_b,	   spawn,	   SHCMD("~/.local/bin/dm_book") },
-	{ ControlMask,		        XK_q,      spawn, 	   SHCMD("~/.local/bin/dm_power") },
-	{ ControlMask,	                XK_h,	   spawn,	   SHCMD("~/.local/bin/dm_hist") },
-	{ ControlMask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/compton_deploy") },
-	{ ControlMask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },
-	{ ControlMask,		        XK_n,	   spawn,	   SHCMD("~/.local/bin/dm_nerd") },
-	{ ControlMask, 	                XK_k,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
+	{ Mod1Mask,			XK_d,      spawn,          SHCMD("~/.local/bin/dm_ytdl") },
+	{ Mod1Mask,			XK_e,      spawn,          SHCMD("~/.local/bin/dm_uni") },
+	{ Mod1Mask,		        XK_b,	   spawn,	   SHCMD("~/.local/bin/dm_book") },
+	{ Mod1Mask,		        XK_q,      spawn, 	   SHCMD("~/.local/bin/dm_power") },
+	{ Mod1Mask,	                XK_h,	   spawn,	   SHCMD("~/.local/bin/dm_hist") },
+	{ Mod1Mask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/compton_deploy") },
+	{ Mod1Mask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },
+	{ Mod1Mask,		        XK_n,	   spawn,	   SHCMD("~/.local/bin/dm_nerd") },
+	{ Mod1Mask, 	                XK_k,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
 	{ MODKEY,			XK_p,	   spawn,          SHCMD("~/.local/bin/dm_path") },
 	{ 0,                            XK_F7,	   spawn,          SHCMD("~/.local/bin/dm_cmd") },
 	{ 0,                            XK_F8,	   spawn,          SHCMD("~/.local/bin/st_cmd") },
