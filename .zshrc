@@ -1,7 +1,7 @@
 # variables
 export TERM=st-256color
 export EDITOR=vim
-export BROWSER=waterfox
+export BROWSER=firefox-bin
 export PATH=$HOME/.local/bin:$PATH
 
 # history
@@ -36,7 +36,7 @@ source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
 alias ew='doas emerge -avuDN --keep-going --with-bdeps=y @world'
 alias pa='doas vim /etc/portage/package.accept_keywords'
-alias dc='doas emerge -p --changed-deps --deep @world '
+alias ds='doas emerge -p --changed-deps --deep @world '
 alias e='doas env-update && source /etc/profile'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
 alias pm='doas vim /etc/portage/package.mask'
@@ -79,7 +79,7 @@ alias dg='doas geany'
 alias t='doas touch'
 alias ef='emerge -s'
 alias cc='ccache -s'
-alias v='doas vim'
+alias v='doas nvim'
 alias ex='tar -xpvf'
 alias co='tar -zcvf'
 alias u='git add -u'
@@ -91,22 +91,21 @@ alias a='git add'
 alias un='unzip'
 alias d='doas '
 
-# git prompt
-setopt prompt_subst
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' stagedstr 'M' 
-zstyle ':vcs_info:*' unstagedstr 'M' 
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' actionformats '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats \ '%F{5}[%F{2}%b%F{5}] %F{2}%c%F{3}%u%f'
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-zstyle ':vcs_info:*' enable git 
-+vi-git-untracked() {
-  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-  [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
-  hook_com[unstaged]+='%F{1}??%f'
-fi
+# Git settings
+git_branch_test_color() {
+  local ref=$(git symbolic-ref --short HEAD 2> /dev/null)
+  if [ -n "${ref}" ]; then
+    if [ -n "$(git status --porcelain)" ]; then
+      local gitstatuscolor='%F{red}**M**'
+    else
+      local gitstatuscolor='%F{green}'
+    fi
+    echo "${gitstatuscolor} (${ref})"
+  else
+    echo ""
+  fi
 }
 
-precmd () { vcs_info }
-PROMPT='%F{5}[%F{2}%n%F{5}] %F{3}%3~ ${vcs_info_msg_0_} %f%# '
+# Prompt
+setopt prompt_subst
+PROMPT='%F{none}%n@%F{red}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
