@@ -7,7 +7,7 @@
  */
 static char *font = "monospace:pixelsize=20";
 static char *font2[] = {
-	"EmojiOne:pixelsize=16:antialias=true:autohint=true",
+	"EmojiOne:pixelsize=20:antialias=true:autohint=true",
 };
 
 static int borderpx = 2;
