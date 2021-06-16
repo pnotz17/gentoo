@@ -1,4 +1,4 @@
-static struct Config config = {.font = "Ubuntu Nerd Font:style=Book:size=7",
+static struct Config config = {.font = "system UI:size=8",
 
 #
 /* colors */
@@ -11,7 +11,7 @@ static struct Config config = {.font = "Ubuntu Nerd Font:style=Book:size=7",
 
 /* sizes in pixels */
 .width_pixels 		    = 105,        	/* minimum width of a menu */
-.height_pixels 		    = 25,        	/* height of a single menu item */
+.height_pixels 		    = 28,        	/* height of a single menu item */
 .border_pixels 		    = 0,         	/* menu border */
 .separator_pixels 	    = 3,      		/* space around separator */
 .gap_pixels 		    = 0,            	/* gap between menus */

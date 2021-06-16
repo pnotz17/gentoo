@@ -4,7 +4,7 @@
 cat <<EOF | xmenu -r | sh &
 File manager	spacefm
 Terminal 	st
-Web browser	waterfox	
+Web browser	firefox-bin	
 Accessories
 	feh	feh ~/media/wallpapers/*
 	sxiv	sxiv -t  ~/media/wallpapers/*
