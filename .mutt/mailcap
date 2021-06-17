@@ -1,7 +1,7 @@
 text/html; "$BROWSER" %s; test=test -n "$DISPLAY"; needsterminal;
-text/plain; /usr/bin/vim -f %s; 
-#text/plain; cat; copiousoutput
-image/*; feh %s 
-application/pdf; "$BROWSER" %s; 
 video/x-youtube; mpv --really-quiet '%s'; needsterminal
 video/*; mpv --really-quiet '%s'; needsterminal
+text/plain; /usr/bin/nvim -f %s; 
+#text/plain; cat; copiousoutput
+application/pdf; "$BROWSER" %s; 
+image/*; feh %s 
