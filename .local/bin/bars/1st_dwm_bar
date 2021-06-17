@@ -13,11 +13,11 @@ TOTALUP=$(ifconfig enp2s0 | grep "TX packets" | awk {'print $6 $7'})
 CPU=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
 WEATHER=$(curl wttr.in/Florina?format="%l:+%m+%p+%w+%t+%c+%C")
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
-VOL=$(amixer get Master | tail -n1 | sed -r 's/.*\[(.*)%\].*/\1/')
-TEMP=`sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}'`"C"
+VOL=$(amixer get Master | awk '$0~/%/{print $4}' | tr -d '[]')
+TEMP=$(sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}')"C"
 UPT=$(uptime --pretty | sed -e 's/up //g' -e 's/ days/d/g' -e 's/ day/d/g' -e 's/ hours/h/g' -e 's/ hour/h/g' -e 's/ minutes/m/g' -e 's/, / /g')
 
 xsetroot -name " $UPT | TEMP: $TEMP | CPU: $CPU | MEM: $MEM | NET: T/UP: $TOTALUP T/DOWN: $TOTALDOWN | VOL: $VOL | $DATE |"
-	sleep 5s
+	sleep 3s
 done &
 COUNT=`curl -su pnotz17:PhxL92VdsLTyqxC https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount> | echo "$COUNT" | grep -oPm1 "(?<=<fullcount>)[^<]+" "`
