@@ -1,3 +1,0 @@
-#!/bin/sh
-notify-send "You've got mail" && aplay /home/$USER/.local/share/sounds/uvegotmail.wav
-
