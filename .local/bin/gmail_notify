@@ -1,0 +1,15 @@
+#!/bin/bash
+
+COUNT=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+COUNT=`echo "$COUNT" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
+
+if [ -z "$COUNT" ]; then
+echo "X"
+else
+  if [ $COUNT != 0 ]; then
+    echo $COUNT
+    notify-send "You've got Mail" && aplay ~/.local/share/sounds/uvegotmail.wav
+  else
+  echo $COUNT
+  fi
+fi
