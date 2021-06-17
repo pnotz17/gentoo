@@ -1,0 +1,4 @@
+#!/bin/bash
+# Set maildirs
+maildirs="$HOME/.mutt/cache/bodies/imaps:USER@gmail.com@imap.gmail.com/INBOX/"
+find $maildirs -type f | wc -l
