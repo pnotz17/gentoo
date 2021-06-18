@@ -108,4 +108,4 @@ git_branch_test_color() {
 
 # Prompt
 setopt prompt_subst
-PROMPT='%F{none}%n@%F{red}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
+PROMPT='%F{none}%n@%F{#FF00FF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
