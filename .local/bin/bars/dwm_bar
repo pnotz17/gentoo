@@ -5,8 +5,6 @@ while true; do
 MAIL=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`;MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1)
 UPTIME=`uptime | sed 's/.*up\s*//' | sed 's/,\s*[0-9]* user.*//' | sed 's/  / /g'`
-PKG=$(checkupdates 2> /dev/null |pacman -Q  |  wc -l)
-PACMAN=$(checkupdates 2> /dev/null | wc -l )
 DISK=$(df -Ph | grep "/dev/sda" | awk {'print $5'})
 MEM=$(free -h --kilo | awk '/^Mem:/ {print $3 "/" $2}')
 LINUX=$(uname -r)
