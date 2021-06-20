@@ -1,0 +1,11 @@
+#!/bin/sh
+exec $(printf "\
+spacefm
+st
+firefox-bin
+geany
+transmission-gtk
+gimp
+slock
+lxappearance
+" | dmenu -p "$@") &

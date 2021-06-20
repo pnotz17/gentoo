@@ -1,0 +1,22 @@
+IMAPStore USER@gmail.com-remote
+Host imap.gmail.com
+Port 993
+User USER@gmail.com
+PassCmd "pass USER@gmail.com" # pass init YOUREMAIL
+AuthMechs LOGIN
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+MaildirStore USER@gmail.com-local
+Subfolders Verbatim
+Path ~/.mutt/mail/
+Inbox ~/.mutt/mail/INBOX
+
+Channel pnotz17@gmail.com
+Expunge Both
+Far :USER@gmail.com-remote:
+Near :USER@gmail.com-local:
+Patterns * !"[Gmail]/All Mail"
+Create Both
+SyncState *
+

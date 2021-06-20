@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+
+import imaplib
+
+obj = imaplib.IMAP4_SSL('xxx.xxx.xxx.xxx', '993')
+obj.login('user', 'password')
+obj.select()
+print len(obj.search(None, 'UnSeen')[1][0].split())

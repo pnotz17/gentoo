@@ -5,6 +5,8 @@ while true; do
 MAIL=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`;MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 IP=$(for i in `ip r`; do echo $i; done | grep -A 1 src | tail -n1)
 UPTIME=`uptime | sed 's/.*up\s*//' | sed 's/,\s*[0-9]* user.*//' | sed 's/  / /g'`
+PKG=$(checkupdates 2> /dev/null |pacman -Q  |  wc -l)
+PACMAN=$(checkupdates 2> /dev/null | wc -l )
 DISK=$(df -Ph | grep "/dev/sda" | awk {'print $5'})
 MEM=$(free -h --kilo | awk '/^Mem:/ {print $3 "/" $2}')
 LINUX=$(uname -r)
@@ -17,6 +19,6 @@ TEMP=$(sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i
 DATE=$(date '+%Y-%m-%d %H:%M:%S')
 BAT=$(acpi -b | awk '{ print $4 " " }' | tr -d ',' | tr -d ' ')
 
-xsetroot -name "$UPTIME | IP: $IP | MAIL: $MAIL | HDD: $DISK | TEMP: $TEMP | CPU: $CPU | MEM: $MEM | T/UP: $UP | T/DOWN: $DOWN | VOL: $VOL | $DATE |"
+xsetroot -name "$UPTIME | IP: $IP | MAIL: $MAIL | TEMP: $TEMP | CPU: $CPU | MEM: $MEM | T/UP: $UP | T/DOWN: $DOWN | VOL: $VOL | $DATE |"
 	sleep 3s
 done &

@@ -1,6 +1,6 @@
 # variables
 export TERM=st-256color
-export EDITOR=vim
+export EDITOR=nvim
 export BROWSER=firefox-bin
 export PATH=$HOME/.local/bin:$PATH
 
@@ -35,19 +35,20 @@ source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 # aliases
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
 alias ew='doas emerge -avuDN --keep-going --with-bdeps=y @world'
-alias pa='doas vim /etc/portage/package.accept_keywords'
+alias pa='doas nnvim /etc/portage/package.accept_keywords'
 alias ds='doas emerge -p --changed-deps --deep @world '
 alias e='doas env-update && source /etc/profile'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
-alias pm='doas vim /etc/portage/package.mask'
+alias pm='doas nvim /etc/portage/package.mask'
 alias c='git commit -m "changes in dotfiles"'
-alias pu='doas vim /etc/portage/package.use'
-alias pe='doas vim /etc/portage/package.env'
-alias pr='doas vim /etc/portage/repos.conf'
+alias pu='doas nvim /etc/portage/package.use'
+alias pe='doas nvim /etc/portage/package.env'
+alias pr='doas nvim /etc/portage/repos.conf'
 alias sf='doas emerge --resume --skipfirst'
 alias rb='doas rm -rf /var/cache/binpkgs/*'
-alias mk='doas vim /etc/portage/make.conf'
+alias mk='doas nvim /etc/portage/make.conf'
 alias rt='doas rm /var/cache/distfiles/*'
+alias list='doas qlist -IRv > pks.txt'
 alias build='doas make clean install'
 alias w='cat /var/lib/portage/world'
 alias pc='doas perl-cleaner --all'
@@ -79,7 +80,7 @@ alias dg='doas geany'
 alias t='doas touch'
 alias ef='emerge -s'
 alias cc='ccache -s'
-alias v='doas nvim'
+alias v='doas nnvim'
 alias ex='tar -xpvf'
 alias co='tar -zcvf'
 alias u='git add -u'
