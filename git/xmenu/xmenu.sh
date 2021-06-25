@@ -4,7 +4,7 @@
 cat <<EOF | xmenu -r | sh &
 File manager	spacefm
 Terminal 	st
-Web browser	firefox-bin	
+Web browser	firefox	
 Accessories
 	feh	feh ~/media/wallpapers/*
 	sxiv	sxiv -t  ~/media/wallpapers/*
@@ -14,6 +14,7 @@ Development
 Graphics
 	gimp	gimp
 Network
+	firefox	firefox
 	mutt	st -e mutt
 	transmission	transmission-gtk
 Multimedia

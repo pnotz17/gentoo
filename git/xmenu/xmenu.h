@@ -1,13 +1,29 @@
 #define PROGNAME "xmenu"
 
+/* Actions for the main loop */
+#define ACTION_NOP    0
+#define ACTION_CLEAR  1<<0      /* clear text */
+#define ACTION_SELECT 1<<1      /* select item */
+#define ACTION_MAP    1<<2      /* remap menu windows */
+#define ACTION_DRAW   1<<3      /* redraw menu windows */
+#define ACTION_WARP   1<<4      /* warp the pointer */
+
 /* enum for keyboard menu navigation */
 enum { ITEMPREV, ITEMNEXT, ITEMFIRST, ITEMLAST };
+
+/* enum for text alignment */
+enum {LeftAlignment, CenterAlignment, RightAlignment};
 
 /* macros */
 #define LEN(x)              (sizeof (x) / sizeof (x[0]))
 #define MAX(x,y)            ((x)>(y)?(x):(y))
 #define MIN(x,y)            ((x)<(y)?(x):(y))
 #define BETWEEN(x, a, b)    ((a) <= (x) && (x) <= (b))
+#define GETNUM(n, s) { \
+	unsigned long __TMP__; \
+	if ((__TMP__ = strtoul((s), NULL, 10)) < INT_MAX) \
+		(n) = __TMP__; \
+	}
 
 /* color enum */
 enum {ColorFG, ColorBG, ColorLast};
@@ -34,6 +50,7 @@ struct Config {
 	int triangle_height;
 	int iconpadding;
 	int horzpadding;
+	int alignment;
 
 	/* the values below are set by options */
 	int monitor;
@@ -64,6 +81,7 @@ struct Item {
 	char *file;             /* filename of the icon */
 	int y;                  /* item y position relative to menu */
 	int h;                  /* item height */
+	int textw;              /* text width */
 	struct Item *prev;      /* previous item */
 	struct Item *next;      /* next item */
 	struct Menu *submenu;   /* submenu spawned by clicking on item */
@@ -85,6 +103,8 @@ struct Menu {
 	int x, y, w, h;         /* menu geometry */
 	int hasicon;            /* whether the menu has item with icons */
 	int drawn;              /* whether the menu was already drawn */
+	int maxtextw;           /* maximum text width */
 	unsigned level;         /* menu level relative to root */
 	Window win;             /* menu window to map on the screen */
+	XIC xic;                /* input context */
 };

@@ -1,0 +1,44 @@
+#!/bin/sh
+
+CLIP="\
+$(xclip -selection primary -o)
+$(xclip -selection clipboard -o)
+$(xclip -selection secondary -o)
+$(xclip -selection buffer-cut -o)"
+CLIP="$(echo "$CLIP" | sed "/^$/d")"
+
+FOR="$1"
+shift
+
+SEL="$(echo "$CLIP" | dmenu -l 15 -p "Select url for $FOR" $@)" || exit 1
+case "$FOR" in
+	mpv)
+		SELD="$(echo "$SEL" | sed 's/!/ytdl:\/\/ytsearch:/g')"
+		notify-send "📼 Playing clipboard content" "$SELD"
+		mpv "$SELD"
+		;;
+
+	ytdl)
+		SELD="$(echo "$SEL" | sed 's/!/ytdl:\/\/ytsearch:/g')"
+
+		file="ytclipdl.$$"
+		youtube-dl -f 250,251,249 --no-playlist "$SELD" --output "$file"
+
+		artist="$(echo -n | dmenu -p "Give artist")"
+		title="$(echo -n | dmenu -p "Give title")"
+		album="$(echo -n | dmenu -p "Give album")"
+		year="$(echo -n | dmenu -p "Give year")"
+		trackno="$(echo -n | dmenu -p "Give track number")"
+
+		_fn="$(echo -n | dmenu -p "Give file name")"
+		[ "$_fn" = "" ] && _fn="$artist - $title"
+		fn="$HOME/music/$_fn.opus"
+		mv "$file" "$fn"
+		echo ">>> FN: $fn"
+
+		retag "$fn" ARTIST="$artist" TITLE="$title" ALBUM="$album" YEAR="$year" TRACKNO="$trackno"
+		;;
+
+	*)
+		$FOR "$SEL"
+esac

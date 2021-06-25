@@ -101,6 +101,7 @@ Items can be selected using the arrow keys,
 Tab (with and without Shift),
 Home, End,
 Enter and Esc, and 1-9 keys.
+Items can also be selected by typing the first several characters in it.
 .TP
 .BR Home
 Select the first item in the menu.
@@ -108,11 +109,19 @@ Select the first item in the menu.
 .BR End
 Select the last item in the menu.
 .TP
-.BR Down ", " Tab
+.BR Down
 Cycle through the items in the regular direction.
 .TP
-.BR Up ", " Shift-Tab
+.BR Tab
+Cycle through the items in the regular direction.
+When the type\-to\-select feature is active, cycle through matching items instead.
+.TP
+.BR Up
 Cycle through the items in the reverse direction.
+.TP
+.BR Shift-Tab
+Cycle through the items in the reverse direction.
+When the type\-to\-select feature is active, cycle through matching items instead.
 .TP
 .BR Right ", " Enter
 Select the highlighted item.
@@ -122,6 +131,10 @@ Go to the menu above.
 .TP
 .B Esc
 Go to the menu above or exit xmenu.
+.PP
+.B xmenu
+features the type\-to\-select selecting style,
+where typing a string will select the first item matching it.
 .PP
 Additional key bindings can be set at compile time by changing the
 .B config.h
@@ -168,7 +181,15 @@ The size in pixels of the border around the menu.
 .TP
 .B xmenu.separatorWidth
 The size in pixels of the item separator.
-
+.TP
+.B xmenu.alignment
+If set to
+.BR "\(dqleft\(dq" ,
+.BR "\(dqcenter\(dq" ,
+or
+.BR "\(dqright\(dq" ,
+text is aligned to the left, center, or right of the menu, respectively.
+By default, text is aligned to the left.
 .SH EXAMPLES
 The following script illustrates the use of
 .BR xmenu .
@@ -179,7 +200,7 @@ creating a command to be run by the shell.
 .EX
 #!/bin/sh
 
-cat <<EOF | xmenu | sh &
+xmenu <<EOF | sh &
 Applications
 	IMG:./web.png	Web Browser	firefox
 	IMG:./gimp.png	Image editor	gimp

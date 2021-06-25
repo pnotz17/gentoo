@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <locale.h>
 #include <time.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
@@ -23,11 +24,14 @@ static int screen;
 static Visual *visual;
 static Window rootwin;
 static Colormap colormap;
+static XrmDatabase xdb;
+static char *xrm;
 static struct DC dc;
 static struct Monitor mon;
 static Atom utf8string;
 static Atom wmdelete;
 static Atom netatom[NetLast];
+static XIM xim;
 
 /* flags */
 static int iflag = 0;   /* whether to disable icons */
@@ -85,6 +89,85 @@ parseposition(char *optarg)
 
 error:
 	errx(1, "improper position: %s", optarg);
+}
+
+/* get configuration from X resources */
+static void
+getresources(void)
+{
+	char *type;
+	XrmValue xval;
+
+	if (xrm == NULL || xdb == NULL)
+		return;
+
+	if (XrmGetResource(xdb, "xmenu.borderWidth", "*", &type, &xval) == True)
+		GETNUM(config.border_pixels, xval.addr)
+	if (XrmGetResource(xdb, "xmenu.separatorWidth", "*", &type, &xval) == True)
+		GETNUM(config.separator_pixels, xval.addr)
+	if (XrmGetResource(xdb, "xmenu.height", "*", &type, &xval) == True)
+		GETNUM(config.height_pixels, xval.addr)
+	if (XrmGetResource(xdb, "xmenu.width", "*", &type, &xval) == True)
+		GETNUM(config.width_pixels, xval.addr)
+	if (XrmGetResource(xdb, "xmenu.gap", "*", &type, &xval) == True)
+		GETNUM(config.gap_pixels, xval.addr)
+	if (XrmGetResource(xdb, "xmenu.background", "*", &type, &xval) == True)
+		config.background_color = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.foreground", "*", &type, &xval) == True)
+		config.foreground_color = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.selbackground", "*", &type, &xval) == True)
+		config.selbackground_color = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.selforeground", "*", &type, &xval) == True)
+		config.selforeground_color = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.separator", "*", &type, &xval) == True)
+		config.separator_color = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.border", "*", &type, &xval) == True)
+		config.border_color = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.font", "*", &type, &xval) == True)
+		config.font = xval.addr;
+	if (XrmGetResource(xdb, "xmenu.alignment", "*", &type, &xval) == True) {
+		if (strcasecmp(xval.addr, "center") == 0)
+			config.alignment = CenterAlignment;
+		else if (strcasecmp(xval.addr, "left") == 0)
+			config.alignment = LeftAlignment;
+		else if (strcasecmp(xval.addr, "right") == 0)
+			config.alignment = RightAlignment;
+	}
+}
+
+/* get configuration from command-line options */
+static char *
+getoptions(int argc, char *argv[])
+{
+	int ch;
+
+	while ((ch = getopt(argc, argv, "ip:rw")) != -1) {
+		switch (ch) {
+		case 'i':
+			iflag = 1;
+			break;
+		case 'p':
+			pflag = 1;
+			parseposition(optarg);
+			break;
+		case 'r':
+			rflag = 1;
+			break;
+		case 'w':
+			wflag = 1;
+			break;
+		default:
+			usage();
+			break;
+		}
+	}
+	argc -= optind;
+	argv += optind;
+	if (argc > 1)
+		usage();
+	else if (argc == 1)
+		return *argv;
+	return PROGNAME;
 }
 
 /* parse font string */
@@ -181,55 +264,6 @@ initmonitor(void)
 		config.posx += mon.x;
 		config.posy += mon.y;
 	}
-}
-
-/* read xrdb for configuration options */
-static void
-initresources(void)
-{
-	long n;
-	char *type;
-	char *xrm;
-	XrmDatabase xdb;
-	XrmValue xval;
-
-	XrmInitialize();
-	if ((xrm = XResourceManagerString(dpy)) == NULL)
-		return;
-
-	xdb = XrmGetStringDatabase(xrm);
-
-	if (XrmGetResource(xdb, "xmenu.borderWidth", "*", &type, &xval) == True)
-		if ((n = strtol(xval.addr, NULL, 10)) > 0)
-			config.border_pixels = n;
-	if (XrmGetResource(xdb, "xmenu.separatorWidth", "*", &type, &xval) == True)
-		if ((n = strtol(xval.addr, NULL, 10)) > 0)
-			config.separator_pixels = n;
-	if (XrmGetResource(xdb, "xmenu.height", "*", &type, &xval) == True)
-		if ((n = strtol(xval.addr, NULL, 10)) > 0)
-			config.height_pixels = n;
-	if (XrmGetResource(xdb, "xmenu.width", "*", &type, &xval) == True)
-		if ((n = strtol(xval.addr, NULL, 10)) > 0)
-			config.width_pixels = n;
-	if (XrmGetResource(xdb, "xmenu.gap", "*", &type, &xval) == True)
-		if ((n = strtol(xval.addr, NULL, 10)) > 0)
-			config.gap_pixels = n;
-	if (XrmGetResource(xdb, "xmenu.background", "*", &type, &xval) == True)
-		config.background_color = strdup(xval.addr);
-	if (XrmGetResource(xdb, "xmenu.foreground", "*", &type, &xval) == True)
-		config.foreground_color = strdup(xval.addr);
-	if (XrmGetResource(xdb, "xmenu.selbackground", "*", &type, &xval) == True)
-		config.selbackground_color = strdup(xval.addr);
-	if (XrmGetResource(xdb, "xmenu.selforeground", "*", &type, &xval) == True)
-		config.selforeground_color = strdup(xval.addr);
-	if (XrmGetResource(xdb, "xmenu.separator", "*", &type, &xval) == True)
-		config.separator_color = strdup(xval.addr);
-	if (XrmGetResource(xdb, "xmenu.border", "*", &type, &xval) == True)
-		config.border_color = strdup(xval.addr);
-	if (XrmGetResource(xdb, "xmenu.font", "*", &type, &xval) == True)
-		config.font = strdup(xval.addr);
-
-	XrmDestroyDatabase(xdb);
 }
 
 /* init draw context */
@@ -340,6 +374,11 @@ allocmenu(struct Menu *parent, struct Item *list, unsigned level)
 	                          CWBorderPixel | CWEventMask | CWSaveUnder,
 	                          &swa);
 
+	menu->xic = XCreateIC(xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing,
+	                      XNClientWindow, menu->win, XNFocusWindow, menu->win, NULL);
+	if (menu->xic == NULL)
+		errx(1, "XCreateIC: could not obtain input method");
+
 	return menu;
 }
 
@@ -392,6 +431,10 @@ buildmenutree(unsigned level, const char *label, const char *output, char *file)
 		/* find last item in the previous menu */
 		for (item = prevmenu->list; item->next != NULL; item = item->next)
 			;
+
+		/* a separator is no valid root for a submenu */
+		if (!item->label)
+			errx(1, "a separator is no valid root for a submenu");
 
 		prevmenu = menu;
 		menu->caller = item;
@@ -583,29 +626,26 @@ static void
 setupitems(struct Menu *menu)
 {
 	struct Item *item;
+	int itemwidth;
 
 	menu->w = config.width_pixels;
+	menu->maxtextw = 0;
 	for (item = menu->list; item != NULL; item = item->next) {
-		int itemwidth;
-		int textwidth;
-
 		item->y = menu->h;
-
 		if (item->label == NULL)   /* height for separator item */
 			item->h = config.separator_pixels;
 		else
 			item->h = config.height_pixels;
 		menu->h += item->h;
-
 		if (item->label)
-			textwidth = drawtext(NULL, NULL, 0, 0, 0, item->label);
+			item->textw = drawtext(NULL, NULL, 0, 0, 0, item->label);
 		else
-			textwidth = 0;
+			item->textw = 0;
 
 		/*
 		 * set menu width
 		 *
-		 * the item width depends on the size of its label (textwidth),
+		 * the item width depends on the size of its label (item->textw),
 		 * and it is only used to calculate the width of the menu (which
 		 * is equal to the width of the largest item).
 		 *
@@ -614,9 +654,10 @@ setupitems(struct Menu *menu)
 		 * if the iflag is set (icons are disabled) then the horizontal
 		 * padding appears 3 times: before the label and around the triangle.
 		 */
-		itemwidth = textwidth + config.triangle_width + config.horzpadding * 3;
+		itemwidth = item->textw + config.triangle_width + config.horzpadding * 3;
 		itemwidth += (iflag || !menu->hasicon) ? 0 : config.iconsize + config.horzpadding;
 		menu->w = MAX(menu->w, itemwidth);
+		menu->maxtextw = MAX(menu->maxtextw, item->textw);
 	}
 }
 
@@ -680,8 +721,10 @@ setupmenu(struct Menu *menu, XClassHint *classh)
 	/* set window title (used if wflag is on) */
 	if (menu->parent == NULL) {
 		title = classh->res_name;
-	} else {
+	} else if (menu->caller->output) {
 		title = menu->caller->output;
+	} else {
+		title = "\0";
 	}
 	XStringListToTextProperty(&title, 1, &wintitle);
 
@@ -737,6 +780,32 @@ grabkeyboard(void)
 		nanosleep(&ts, NULL);
 	}
 	errx(1, "could not grab keyboard");
+}
+
+/* try to grab focus, we may have to wait for another process to ungrab */
+static void
+grabfocus(Window win)
+{
+	struct timespec ts = { .tv_sec = 0, .tv_nsec = 10000000  };
+	Window focuswin;
+	int i, revertwin;
+
+	for (i = 0; i < 100; ++i) {
+		XGetInputFocus(dpy, &focuswin, &revertwin);
+		if (focuswin == win)
+			return;
+		XSetInputFocus(dpy, win, RevertToParent, CurrentTime);
+		nanosleep(&ts, NULL);
+	}
+	errx(1, "cannot grab focus");
+}
+
+/* ungrab pointer and keyboard */
+static void
+ungrab(void)
+{
+	XUngrabPointer(dpy, CurrentTime);
+	XUngrabKeyboard(dpy, CurrentTime);
 }
 
 /* load and scale icon */
@@ -811,12 +880,12 @@ loadicon(const char *file)
 static void
 drawitems(struct Menu *menu)
 {
+	XftDraw *dsel, *dunsel;
 	struct Item *item;
+	int textx;
+	int x, y;
 
 	for (item = menu->list; item != NULL; item = item->next) {
-		XftDraw *dsel, *dunsel;
-		int x, y;
-
 		item->unsel = XCreatePixmap(dpy, menu->win, menu->w, item->h,
 		                          DefaultDepth(dpy, screen));
 
@@ -831,21 +900,30 @@ drawitems(struct Menu *menu)
 
 			item->sel = item->unsel;
 		} else {
-
 			item->sel = XCreatePixmap(dpy, menu->win, menu->w, item->h,
 			                          DefaultDepth(dpy, screen));
 			XSetForeground(dpy, dc.gc, dc.selected[ColorBG].pixel);
 			XFillRectangle(dpy, item->sel, dc.gc, 0, 0, menu->w, item->h);
 
 			/* draw text */
-			x = config.horzpadding;
-			x += (iflag || !menu->hasicon) ? 0 : config.horzpadding + config.iconsize;
+			textx = config.horzpadding;
+			textx += (iflag || !menu->hasicon) ? 0 : config.horzpadding + config.iconsize;
+			switch (config.alignment) {
+			case CenterAlignment:
+				textx += (menu->maxtextw - item->textw) / 2;
+				break;
+			case RightAlignment:
+				textx += menu->maxtextw - item->textw;
+				break;
+			default:
+				break;
+			}
 			dsel = XftDrawCreate(dpy, item->sel, visual, colormap);
 			dunsel = XftDrawCreate(dpy, item->unsel, visual, colormap);
 			XSetForeground(dpy, dc.gc, dc.selected[ColorFG].pixel);
-			drawtext(dsel, &dc.selected[ColorFG], x, 0, item->h, item->label);
+			drawtext(dsel, &dc.selected[ColorFG], textx, 0, item->h, item->label);
 			XSetForeground(dpy, dc.gc, dc.normal[ColorFG].pixel);
-			drawtext(dunsel, &dc.normal[ColorFG], x, 0, item->h, item->label);
+			drawtext(dunsel, &dc.normal[ColorFG], textx, 0, item->h, item->label);
 			XftDrawDestroy(dsel);
 			XftDrawDestroy(dunsel);
 
@@ -969,6 +1047,7 @@ mapmenu(struct Menu *currmenu)
 	}
 
 	prevmenu = currmenu;
+	grabfocus(currmenu->win);
 }
 
 /* get menu of given window */
@@ -1056,71 +1135,198 @@ itemcycle(struct Menu *currmenu, int direction)
 	return item;
 }
 
+/* check if button is used to scroll */
+static int
+isscrollbutton(unsigned int button)
+{
+	if (button == Button4 || button == Button5)
+		return 1;
+	return 0;
+}
+
 /* check if button is used to open a item on click */
 static int
 isclickbutton(unsigned int button)
 {
-	if (button == Button1)
+	if (button == Button1 || button == Button2)
 		return 1;
 	if (!rflag && button == Button3)
 		return 1;
 	return 0;
 }
 
+/* warp pointer to center of selected item */
+static void
+warppointer(struct Menu *menu, struct Item *item)
+{
+	if (menu == NULL || item == NULL)
+		return;
+	if (menu->selected) {
+		XWarpPointer(dpy, None, menu->win, 0, 0, 0, 0, menu->w / 2, item->y + item->h / 2);
+	}
+}
+
+/* append buf into text */
+static int
+append(char *text, char *buf, size_t textsize, size_t buflen)
+{
+	size_t textlen;
+
+	textlen = strlen(text);
+	if (iscntrl(*buf))
+		return 0;
+	if (textlen + buflen > textsize - 1)
+		return 0;
+	if (buflen < 1)
+		return 0;
+	memcpy(text + textlen, buf, buflen);
+	text[textlen + buflen] = '\0';
+	return 1;
+}
+
+/* get item in menu matching text from given direction (or from beginning, if dir = 0) */
+static struct Item *
+matchitem(struct Menu *menu, char *text, int dir)
+{
+	struct Item *item, *lastitem;
+	char *s;
+	size_t textlen;
+
+	for (lastitem = menu->list; lastitem && lastitem->next; lastitem = lastitem->next)
+		;
+	textlen = strlen(text);
+	if (dir < 0) {
+		if (menu->selected && menu->selected->prev)
+			item = menu->selected->prev;
+		else
+			item = lastitem;
+	} else if (dir > 0) {
+		if (menu->selected && menu->selected->next)
+			item = menu->selected->next;
+		else
+			item = menu->list;
+	} else {
+		item = menu->list;
+	}
+	/* find next item from selected item */
+	for ( ; item; item = (dir < 0) ? item->prev : item->next)
+		for (s = item->label; s && *s; s++)
+			if (strncasecmp(s, text, textlen) == 0)
+				return item;
+	/* if not found, try to find from the beginning/end of list */
+	if (dir > 0) {
+		for (item = menu->list ; item; item = item->next) {
+			for (s = item->label; s && *s; s++) {
+				if (strncasecmp(s, text, textlen) == 0) {
+					return item;
+				}
+			}
+		}
+	} else {
+		for (item = lastitem ; item; item = item->prev) {
+			for (s = item->label; s && *s; s++) {
+				if (strncasecmp(s, text, textlen) == 0) {
+					return item;
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
+/* check keysyms defined on config.h */
+static KeySym
+normalizeksym(KeySym ksym)
+{
+	if (ksym == KSYMFIRST)
+		return XK_Home;
+	if (ksym == KSYMLAST)
+		return XK_End;
+	if (ksym == KSYMUP)
+		return XK_Up;
+	if (ksym == KSYMDOWN)
+		return XK_Down;
+	if (ksym == KSYMLEFT)
+		return XK_Left;
+	if (ksym == KSYMRIGHT)
+		return XK_Right;
+	return ksym;
+}
+
 /* run event loop */
 static void
 run(struct Menu *currmenu)
 {
+	char text[BUFSIZ];
+	char buf[32];
 	struct Menu *menu;
 	struct Item *item;
 	struct Item *previtem = NULL;
-	struct Item *lastitem;
+	struct Item *lastitem, *select;
 	KeySym ksym;
+	Status status;
 	XEvent ev;
+	int warped = 0;
+	int action;
+	int len;
+	int i;
 
+	text[0] = '\0';
 	mapmenu(currmenu);
-
 	while (!XNextEvent(dpy, &ev)) {
+		if (XFilterEvent(&ev, None))
+			continue;
+		action = ACTION_NOP;
 		switch(ev.type) {
 		case Expose:
 			if (ev.xexpose.count == 0)
-				drawmenus(currmenu);
+				action = ACTION_DRAW;
 			break;
 		case MotionNotify:
-			menu = getmenu(currmenu, ev.xbutton.window);
-			item = getitem(menu, ev.xbutton.y);
-			if (menu == NULL || item == NULL || previtem == item)
-				break;
-			previtem = item;
-			menu->selected = item;
-			if (item->submenu != NULL) {
-				currmenu = item->submenu;
-				currmenu->selected = NULL;
-			} else {
-				currmenu = menu;
+			if (!warped) {
+				menu = getmenu(currmenu, ev.xbutton.window);
+				item = getitem(menu, ev.xbutton.y);
+				if (menu == NULL || item == NULL || previtem == item)
+					break;
+				previtem = item;
+				select = menu->selected = item;
+				if (item->submenu != NULL) {
+					currmenu = item->submenu;
+					select = NULL;
+				} else {
+					currmenu = menu;
+				}
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_MAP | ACTION_DRAW;
 			}
-			mapmenu(currmenu);
-			drawmenus(currmenu);
+			warped = 0;
 			break;
 		case ButtonRelease:
-			if (!isclickbutton(ev.xbutton.button))
-				break;
-			menu = getmenu(currmenu, ev.xbutton.window);
-			item = getitem(menu, ev.xbutton.y);
-			if (menu == NULL || item == NULL)
-				break;
-selectitem:
-			if (item->label == NULL)
-				break;  /* ignore separators */
-			if (item->submenu != NULL) {
-				currmenu = item->submenu;
-			} else {
-				printf("%s\n", item->output);
-				return;
+			if (isscrollbutton(ev.xbutton.button)) {
+				if (ev.xbutton.button == Button4)
+					select = itemcycle(currmenu, ITEMPREV);
+				else
+					select = itemcycle(currmenu, ITEMNEXT);
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW | ACTION_WARP;
+			} else if (isclickbutton(ev.xbutton.button)) {
+				menu = getmenu(currmenu, ev.xbutton.window);
+				item = getitem(menu, ev.xbutton.y);
+				if (menu == NULL || item == NULL)
+					break;
+enteritem:
+				if (item->label == NULL)
+					break;  /* ignore separators */
+				if (item->submenu != NULL) {
+					currmenu = item->submenu;
+				} else {
+					printf("%s\n", item->output);
+					return;
+				}
+				select = currmenu->list;
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_MAP | ACTION_DRAW;
+				if (ev.xbutton.button == Button2) {
+					action |= ACTION_WARP;
+				}
 			}
-			mapmenu(currmenu);
-			currmenu->selected = currmenu->list;
-			drawmenus(currmenu);
 			break;
 		case ButtonPress:
 			menu = getmenu(currmenu, ev.xbutton.window);
@@ -1128,7 +1334,16 @@ selectitem:
 				return;
 			break;
 		case KeyPress:
-			ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
+			len = XmbLookupString(currmenu->xic, &ev.xkey, buf, sizeof buf, &ksym, &status);
+			switch(status) {
+			default:                /* XLookupNone, XBufferOverflow */
+				continue;
+			case XLookupChars:
+				goto append;
+			case XLookupKeySym:     /* FALLTHROUGH */
+			case XLookupBoth:
+				break;
+			}
 
 			/* esc closes xmenu when current menu is the root menu */
 			if (ksym == XK_Escape && currmenu->parent == NULL)
@@ -1139,40 +1354,83 @@ selectitem:
 				ksym = XK_ISO_Left_Tab;
 
 			/* cycle through menu */
-			item = NULL;
-			if (ksym == XK_Home || ksym == KSYMFIRST) {
-				item = itemcycle(currmenu, ITEMFIRST);
-			} else if (ksym == XK_End || ksym == KSYMLAST) {
-				item = itemcycle(currmenu, ITEMLAST);
-			} else if (ksym == XK_ISO_Left_Tab || ksym == XK_Up || ksym == KSYMUP) {
-				item = itemcycle(currmenu, ITEMPREV);
-			} else if (ksym == XK_Tab || ksym == XK_Down || ksym == KSYMDOWN) {
-				item = itemcycle(currmenu, ITEMNEXT);
-			} else if (ksym >= XK_1 && ksym <= XK_9){
+			select = NULL;
+			ksym = normalizeksym(ksym);
+			switch (ksym) {
+			case XK_Home:
+				select = itemcycle(currmenu, ITEMFIRST);
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
+				break;
+			case XK_End:
+				select = itemcycle(currmenu, ITEMLAST);
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
+				break;
+			case XK_ISO_Left_Tab:
+				if (*text) {
+					select = matchitem(currmenu, text, -1);
+					action = ACTION_SELECT | ACTION_DRAW;
+					break;
+				}
+				/* FALLTHROUGH */
+			case XK_Up:
+				select = itemcycle(currmenu, ITEMPREV);
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
+				break;
+			case XK_Tab:
+				if (*text) {
+					select = matchitem(currmenu, text, 1);
+					action = ACTION_SELECT | ACTION_DRAW;
+					break;
+				}
+				/* FALLTHROUGH */
+			case XK_Down:
+				select = itemcycle(currmenu, ITEMNEXT);
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
+				break;
+			case XK_1: case XK_2: case XK_3: case XK_4: case XK_5: case XK_6: case XK_7: case XK_8: case XK_9:
 				item = itemcycle(currmenu, ITEMFIRST);
 				lastitem = itemcycle(currmenu, ITEMLAST);
 				for (int i = ksym - XK_1; i > 0 && item != lastitem; i--) {
 					currmenu->selected = item;
 					item = itemcycle(currmenu, ITEMNEXT);
 				}
-			} else if ((ksym == XK_Return || ksym == XK_Right || ksym == KSYMRIGHT) &&
-			            currmenu->selected != NULL) {
-				item = currmenu->selected;
-				goto selectitem;
-			} else if ((ksym == XK_Escape || ksym == XK_Left || ksym == KSYMLEFT) &&
-			           currmenu->parent != NULL) {
-				item = currmenu->parent->selected;
-				currmenu = currmenu->parent;
-				mapmenu(currmenu);
-			} else
+				select = item;
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
 				break;
-			currmenu->selected = item;
-			drawmenus(currmenu);
+			case XK_Return: case XK_Right:
+				if (currmenu->selected) {
+					item = currmenu->selected;
+					goto enteritem;
+				}
+				break;
+			case XK_Escape: case XK_Left:
+				if (currmenu->parent) {
+					select = currmenu->parent->selected;
+					currmenu = currmenu->parent;
+					action = ACTION_CLEAR | ACTION_MAP | ACTION_SELECT | ACTION_DRAW;
+				}
+				break;
+			case XK_BackSpace: case XK_Clear: case XK_Delete:
+				action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
+				break;
+			default:
+append:
+				if (*buf == '\0' || iscntrl(*buf))
+					break;
+				for (i = 0; i < 2; i++) {
+					append(text, buf, sizeof text, len);
+					if ((select = matchitem(currmenu, text, 0)))
+						break;
+					text[0] = '\0';
+				}
+				action = ACTION_SELECT | ACTION_DRAW;
+				break;
+			}
 			break;
 		case LeaveNotify:
 			previtem = NULL;
-			currmenu->selected = NULL;
-			drawmenus(currmenu);
+			select = NULL;
+			action = ACTION_CLEAR | ACTION_SELECT | ACTION_DRAW;
 			break;
 		case ConfigureNotify:
 			menu = getmenu(currmenu, ev.xconfigure.window);
@@ -1189,8 +1447,20 @@ selectitem:
 			if (menu->parent == NULL)
 				return;     /* closing the root menu closes the program */
 			currmenu = menu->parent;
-			mapmenu(currmenu);
+			action = ACTION_MAP;
 			break;
+		}
+		if (action & ACTION_CLEAR)
+			text[0] = '\0';
+		if (action & ACTION_SELECT)
+			currmenu->selected = select;
+		if (action & ACTION_MAP)
+			mapmenu(currmenu);
+		if (action & ACTION_DRAW)
+			drawmenus(currmenu);
+		if (action & ACTION_WARP) {
+			warppointer(currmenu, select);
+			warped = 1;
 		}
 	}
 }
@@ -1223,14 +1493,11 @@ cleanmenu(struct Menu *menu)
 	free(menu);
 }
 
-/* cleanup X and exit */
+/* cleanup draw context */
 static void
-cleanup(void)
+cleandc(void)
 {
 	size_t i;
-
-	XUngrabPointer(dpy, CurrentTime);
-	XUngrabKeyboard(dpy, CurrentTime);
 
 	XftColorFree(dpy, visual, colormap, &dc.normal[ColorBG]);
 	XftColorFree(dpy, visual, colormap, &dc.normal[ColorFG]);
@@ -1238,12 +1505,9 @@ cleanup(void)
 	XftColorFree(dpy, visual, colormap, &dc.selected[ColorFG]);
 	XftColorFree(dpy, visual, colormap, &dc.separator);
 	XftColorFree(dpy, visual, colormap, &dc.border);
-
 	for (i = 0; i < dc.nfonts; i++)
 		XftFontClose(dpy, dc.fonts[i]);
-
 	XFreeGC(dpy, dc.gc);
-	XCloseDisplay(dpy);
 }
 
 /* xmenu: generate menu from stdin and print selected entry to stdout */
@@ -1252,41 +1516,26 @@ main(int argc, char *argv[])
 {
 	struct Menu *rootmenu;
 	XClassHint classh;
-	int ch;
-
-	while ((ch = getopt(argc, argv, "ip:rw")) != -1) {
-		switch (ch) {
-		case 'i':
-			iflag = 1;
-			break;
-		case 'p':
-			pflag = 1;
-			parseposition(optarg);
-			break;
-		case 'r':
-			rflag = 1;
-			break;
-		case 'w':
-			wflag = 1;
-			break;
-		default:
-			usage();
-			break;
-		}
-	}
-	argc -= optind;
-	argv += optind;
-
-	if (argc > 1)
-		usage();
 
 	/* open connection to server and set X variables */
+	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
+		warnx("warning: no locale support");
 	if ((dpy = XOpenDisplay(NULL)) == NULL)
 		errx(1, "could not open display");
 	screen = DefaultScreen(dpy);
 	visual = DefaultVisual(dpy, screen);
 	rootwin = RootWindow(dpy, screen);
 	colormap = DefaultColormap(dpy, screen);
+	XrmInitialize();
+	if ((xrm = XResourceManagerString(dpy)) != NULL)
+		xdb = XrmGetStringDatabase(xrm);
+	if ((xim = XOpenIM(dpy, NULL, NULL, NULL)) == NULL)
+		errx(1, "XOpenIM: could not open input device");
+
+	/* process configuration and window class */
+	getresources();
+	classh.res_class = PROGNAME;
+	classh.res_name = getoptions(argc, argv);
 
 	/* imlib2 stuff */
 	if (!iflag) {
@@ -1299,17 +1548,9 @@ main(int argc, char *argv[])
 
 	/* initializers */
 	initmonitor();
-	initresources();
 	initdc();
 	initiconsize();
 	initatoms();
-
-	/* set window class */
-	classh.res_class = PROGNAME;
-	if (argc == 1)
-		classh.res_name = *argv;
-	else
-		classh.res_name = PROGNAME;
 
 	/* generate menus and set them up */
 	rootmenu = parsestdin();
@@ -1326,9 +1567,12 @@ main(int argc, char *argv[])
 	/* run event loop */
 	run(rootmenu);
 
-	/* freeing stuff */
+	/* clean stuff */
+	ungrab();
 	cleanmenu(rootmenu);
-	cleanup();
+	cleandc();
+	XrmDestroyDatabase(xdb);
+	XCloseDisplay(dpy);
 
 	return 0;
 }
