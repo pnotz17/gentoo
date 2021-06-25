@@ -4,9 +4,9 @@
 cat <<EOF | xmenu -r | sh &
 File manager	spacefm
 Terminal 	st
-Web browser	firefox	
+Web browser	firefox-bin	
 Accessories
-	feh	feh ~/media/wallpapers/*
+	feh	feh ~/media/backrounds/*
 	sxiv	sxiv -t  ~/media/wallpapers/*
 	vim	st -e nvim
 Development
@@ -19,7 +19,6 @@ Network
 	transmission	transmission-gtk
 Multimedia
 	alsa mixer	st -e alsamixer
-	mpv	mpv
 Office
 Settings 
 	Customize Look & Feel	lxappearance
