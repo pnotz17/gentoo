@@ -5,9 +5,9 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "monospace:pixelsize=20";
+static char *font = "Monospace:pixelsize=18";
 static char *font2[] = {
-	"EmojiOne:pixelsize=20:antialias=true:autohint=true",
+	"EmojiOne:pixelsize=18:antialias=true:autohint=true",
 };
 
 static int borderpx = 2;
