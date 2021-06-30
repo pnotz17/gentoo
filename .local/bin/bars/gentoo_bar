@@ -5,19 +5,15 @@ function get_uptime {
 	printf "%s $upt"
 }
 
-function get_time {
-	date +'%Y-%m-%d %R'
-}
-
 function get_mail {
-	MAIL=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
-	MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-echo  "MAIL: $MAIL"
+	mail=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
+	echo  "BOX: $mail"
 }
 
 function get_cputemp {
-	cputemp=`sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}'`"C"
-	echo "CORE: $cputemp"
+cputemp=`sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}'`"C"
+echo "CORE: $cputemp"
 }
 
 function get_cpuload {
@@ -69,6 +65,10 @@ function get_down {
 	RBPS=`expr $R2 - $R1`
 	RKBPS=`expr $RBPS / 1024`
 	echo   "DO: $RKBPS kb"
+}
+
+function get_time {
+	date +'%Y-%m-%d %R'
 }
 
 while true; do
