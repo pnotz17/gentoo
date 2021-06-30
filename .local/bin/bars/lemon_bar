@@ -1,6 +1,6 @@
 #!/bin/sh
 whiteColor="#E6E6FA"
-blueColor="#1E90FF"
+blueColor="#ACAC23"
 peachColor="#FFC0CB"
 greenColor="#00FF00"
 yellowColor="#FFA500"
@@ -10,25 +10,25 @@ orangeColor="#FF7D00"
 redColor="#FF0000"
 tealColor="#00FFEF"
 
-cur (){
+currentws (){
     var=$(xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}')
 	echo "[$var]"
 }
 
-tot (){
+totalws (){
     var=$(xprop -root _NET_NUMBER_OF_DESKTOPS | awk '{print $3}')
 	echo "[$var]"
 }
 
  updates() {
 	updates=$(checkupdates 2> /dev/null | wc -l )  
-	echo "%{F$blueColor}PCM: $updates %{F-}"
+	echo "%{F$blueColor}PACMAN: $updates %{F-}"
 }
 
 mail() {
-	mail=`curl -su USERNAME:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	mail=`curl -su pnotz17:PhxL92VdsLTyqxC https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-	echo "%{F$peachColor}INB: $mail %{F-}"
+	echo "%{F$whiteColor}MAIL: $mail %{F-}"
 }
 
 weather() {
@@ -52,7 +52,7 @@ ram() {
 }
 
 alsa() {
-    volume="$(amixer get Master | tail -n1 | sed -r 's/.*\[(.*)%\].*/\1/')" 
+    volume=$(amixer sget Master | sed '5!d;s_]..*__g;s_.*\[__')
 	echo "%{F$whiteColor}VOL: $volume %{F-}"
 }
 
@@ -80,7 +80,7 @@ clock() {
 }
 
 while true; do
-	 echo -e "%{l} $(cur) $(tot)%{c}%{r}  $(updates) |  $(mail) |  $(cpufrequency) |  $(ram) |  $(upspeed) |  $(downspeed) |  $(alsa) |  $(clock) |"
+	 echo -e "%{l} $(currentws) $(totalws)%{c}%{r}  $(updates) |  $(mail) | $(cpufrequency) |  $(ram) |  $(upspeed) |  $(downspeed) |  $(alsa) |  $(clock) |"
 	sleep 1
 done &
 

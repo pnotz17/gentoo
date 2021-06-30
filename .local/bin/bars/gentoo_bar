@@ -10,9 +10,9 @@ function get_time {
 }
 
 function get_mail {
-	mail=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
-	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-	echo  "BOX: $mail"
+MAIL=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
+echo  "MAIL: $MAIL"
 }
 
 function get_cputemp {
