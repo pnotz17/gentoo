@@ -36,6 +36,7 @@ source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
 alias ew='doas emerge -avuDN --keep-going --with-bdeps=y @world'
 alias pa='doas nnvim /etc/portage/package.accept_keywords'
+alias cu='du -k --one-file-system -h --max-depth=1 /usr'
 alias ds='doas emerge -p --changed-deps --deep @world '
 alias e='doas env-update && source /etc/profile'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
@@ -111,3 +112,4 @@ git_branch_test_color() {
 # Prompt
 setopt prompt_subst
 PROMPT='%F{none}%n@%F{#FF00FF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
+neofetch
