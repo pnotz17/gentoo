@@ -10,8 +10,8 @@ function get_time {
 }
 
 function get_mail {
-MAIL=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
-MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
+	MAIL=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 echo  "MAIL: $MAIL"
 }
 
