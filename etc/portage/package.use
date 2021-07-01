@@ -1,6 +1,5 @@
 net-p2p/transmission gtk
 media-libs/libglvnd X
-app-text/xmlto text
 media-video/mpv cli
 x11-libs/cairo X
 x11-libs/pango X
