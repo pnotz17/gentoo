@@ -1,21 +1,9 @@
 " Vim Settings
-filetype off                            " required 
-set nocompatible                        " be iMproved, required 
-syntax on				" enable syntax highlighting
 set t_Co=256				" enable 256 colors, true colors
-set ruler               		" enable line and column number of the cursor on right side of statusline
-set number relativenumber		" enable “Hybrid” line numbers
-set path+=**                            " enable  searche current directory recursively.
-set incsearch 				" enable incremental search 
-set ignorecase                          " enable case-insensitive searching
-set hidden                              " enable multiple buffers open
+syntax on				" enable syntax highlighting
+set ruler               		" show line and column number of the cursor on right side of statusline
 set showmatch           		" highlight matching parentheses / brackets [{()}]
-set cursorline				" highlight the current line
-set cursorcolumn			" highlight the current column
-set wildmenu                            " Display all matches when tab complete.
-set nobackup                            " No auto backups
-set noswapfile                          " No swap
-
+set incsearch 				"  highlight the first string matched in a search
 
 " Theme
 " put colorscheme files in ~/.vim/colors/
@@ -43,7 +31,7 @@ map <C-l> <C-w>l
 map <C-n> :NERDTreeToggle<CR>
 
 " Recompile Suckless Programs Automatically
-autocmd BufWritePost *config.h !doas make clean install %
+:au! BufWritePost *config.h ! doas make clean install %
 
 " Location of viminfo
 set viminfo+=n~/.vim/viminfo

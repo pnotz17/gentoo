@@ -1,80 +1,85 @@
 #!/bin/sh
 
-linux() {
-	linux=$(uname -r)
-	echo  "🏛️ $linux"
+UPTIME() {
+    UPTIME=$(uptime | sed 's/.*up \([^,]*\), .*/\1/')
+    echo "⬆️ $UPTIME"
+}
+
+LINUX() {
+	LINUX=$(uname -r)
+	echo  "🏰️ $LINUX"
 }
  
-disk1() {
-	disk1=$(df -Ph | grep "/dev/sda2" | awk {'print $5'})
-	echo  "💾️ $disk1"
+DISK() {
+	DISK=$(df -Ph | grep "/dev/sdd" | awk {'print $5'})
+	echo  "💽️ $DISK"
 }
 
-mail() {
-	mail=`curl -su USER:PASSWD https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
-	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-	echo  "📬️ $mail"
+MAIL() {
+	COUNT=`curl -su USER:PASS https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	COUNT=`echo "$COUNT" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
+	echo  "📨 $COUNT"
 }
 
-updates() {
-	updates=$(checkupdates 2> /dev/null | wc -l )  
-	echo "⁉️️ $updates"
+UPDATES() {
+	PACMAN=$(checkupdates 2> /dev/null | wc -l )  
+	echo "⁉️️ $PACMAN"
 }
 
-pkgs() {
-	pkgs=$(pacman -Q  |  wc -l)
-	echo "📦 $pkgs"
+PKGS() {
+	PKGCOUNT=$(pacman -Q  |  wc -l)
+	echo "📦 $PKGCOUNT"
 }
 
-weather() {
-	weather=$(curl 'https://wttr.in/YOURCITY,YOURCOUNTRY?format=%t')
-	echo "🌈 $weather"
+WEATHER() {
+	FORECAST=$(curl 'https://wttr.in/YOURCITY,YOURCOUNTRY?format=%t')
+	echo "🌈 $FORECAST"
 }
 
-cputemp() {
-	cputemp=$(sensors | grep Core | awk '{print substr($3, 2, length($3)-5)}' | tr "\\n" " " | sed 's/ /°C  /g' | sed 's/  $//')
-	echo "🔥 $cputemp"
+CPUTEMP() {
+	TEMP=`sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}'`"C"
+	echo "🔥 $TEMP"
 }
 
-cpufrequency() {
-	cpu=$(awk '{u=$2+$4; t=$2+$4+$5;if (NR==1){u1=u; t1=t;} else printf("%d%%", ($2+$4-u1) * 100 / (t-t1) "%");}' <(grep 'cpu ' /proc/stat) <(sleep 0.5; grep 'cpu ' /proc/stat))
-	echo "🖥️ $cpu"%
+CPUFREQUENCY() {
+	CPU=$(awk '{u=$2+$4; t=$2+$4+$5;if (NR==1){u1=u; t1=t;} else printf("%d%%", ($2+$4-u1) * 100 / (t-t1) "%");}' <(grep 'cpu ' /proc/stat) <(sleep 0.5; grep 'cpu ' /proc/stat))
+	echo "🖥️ $CPU"%
 }
 
-ram() {
-	mem=$(free | awk '/^Mem/ { printf("%.2f%\n", $3/$2 * 100.0) }')
-	echo "💻 $mem"
+RAM() {
+	USED=$(free | awk '/^Mem/ { printf("%.2f%\n", $3/$2 * 100.0) }')
+	echo "💻 $USED"
 }
 
-clock() {
-	time=$(date +"%b %d, %R")
-	echo "📆 $time"
+CLOCK() {
+	TIME=$(date +"%b %d, %R")
+	echo "📆 $TIME"
 }
 
-alsa() {
-	mono=$(amixer -M sget Master | grep Mono: | awk '{ print $2 }')
-	if [ -z "$mono" ]; then
-		muted=$(amixer -M sget Master | awk 'FNR == 6 { print $7 }' | sed 's/[][]//g')
-		vol=$(amixer -M sget Master | awk 'FNR == 6 { print $5 }' | sed 's/[][]//g; s/%//g')
+ALSA() {
+	MONO=$(amixer -M sget Master | grep Mono: | awk '{ print $2 }')
+	if [ -z "$MONO" ]; then
+		MUTED=$(amixer -M sget Master | awk 'FNR == 6 { print $7 }' | sed 's/[][]//g')
+		VOL=$(amixer -M sget Master | awk 'FNR == 6 { print $5 }' | sed 's/[][]//g; s/%//g')
 	else
-		muted=$(amixer -M sget Master | awk 'FNR == 5 { print $6 }' | sed 's/[][]//g')
-		vol=$(amixer -M sget Master | awk 'FNR == 5 { print $4 }' | sed 's/[][]//g; s/%//g')
+		MUTED=$(amixer -M sget Master | awk 'FNR == 5 { print $6 }' | sed 's/[][]//g')
+		VOL=$(amixer -M sget Master | awk 'FNR == 5 { print $4 }' | sed 's/[][]//g; s/%//g')
 	fi
 
-	if [ "$muted" = "off" ]; then
-		echo "🔇 muted"
+	if [ "$MUTED" = "off" ]; then
+		echo "🔇 MUTED"
 	else
-		if [ "$vol" -ge 65 ]; then
-			echo "🔊 $vol%"
-		elif [ "$vol" -ge 40 ]; then
-			echo "🔉 $vol%"
-		elif [ "$vol" -ge 0 ]; then
-			echo "🔈 $vol%"	
+		if [ "$VOL" -ge 65 ]; then
+			echo "🔊 $VOL%"
+		elif [ "$VOL" -ge 40 ]; then
+			echo "🔉 $VOL%"
+		elif [ "$VOL" -ge 0 ]; then
+			echo "🔈 $VOL%"	
 		fi
 	fi
 }
 
-network() {
+NETWORK() {
 	conntype=$(ip route | awk '/default/ { print substr($5,1,1) }')
 	if [ -z "$conntype" ]; then
 	echo "‼️"
@@ -86,7 +91,7 @@ network() {
 	printf "%s%s\n" "$icon"
 }
 
-upspeed() {
+UPSPEED() {
 	T1=`cat /sys/class/net/enp2s0/statistics/tx_bytes`
 	sleep 1
 	T2=`cat /sys/class/net/enp2s0/statistics/tx_bytes`
@@ -95,7 +100,7 @@ upspeed() {
 	printf  "🔺 $TKBPS kb"
 }
 
-downspeed() {
+DOWNSPEED() {
 	R1=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
 	sleep 1
 	R2=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
@@ -105,7 +110,7 @@ downspeed() {
 }
 
 while true; do
-	xsetroot -name "|  $(mail)  |  $(updates)  |  $(disk1)  |  $(cpufrequency)  |  $(ram)  |  $(alsa)  |  $(upspeed)  |  $(downspeed)  |  $(clock)  |"
+	xsetroot -name "|  $(UPDATES)  |  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |"
 	sleep 2
 done &
 
