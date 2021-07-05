@@ -1,15 +1,15 @@
-static const char *fonts[]          = { "Monospace:size=10","FiraCode Nerd Font:style=Light:size=10","EmojiOne:style=Regular:size=10:antialias=true:autohint=true",};
+static const char *fonts[]          = { "FiraCode Nerd Font:style=Light:size=10","EmojiOne:style=Regular:size=10:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#000000";	/* bar backround color */
 static const char normfgcolor[]       = "#FFFFFF";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#000000";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
 static const char unselbordercolor[]  = "#FF00FF";	/* unfocused window border color*/
 static const char selbordercolor[]    = "#000000";	/* focused window border color*/
-static const unsigned int borderpx    = 1;                /* border pixel of windows */
-static const unsigned int gappx       = 1;                /* gaps between windows */
-static const unsigned int snap        = 32;               /* snap pixel */
-static const int showbar              = 1;                /* 0 means no bar */
-static const int topbar               = 1;                /* 0 means bottom bar */
+static const unsigned int borderpx    = 1;              /* border pixel of windows */
+static const unsigned int gappx       = 1;              /* gaps between windows */
+static const unsigned int snap        = 32;             /* snap pixel */
+static const int showbar              = 1;              /* 0 means no bar */
+static const int topbar               = 1;              /* 0 means bottom bar */
 static const unsigned int baralpha    = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3] = {
