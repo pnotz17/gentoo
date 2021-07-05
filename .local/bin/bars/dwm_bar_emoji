@@ -11,7 +11,7 @@ LINUX() {
 }
  
 DISK() {
-	DISK=$(df -Ph | grep "/dev/sdd" | awk {'print $5'})
+	DISK=$(df -Ph | grep "/dev/sda" | awk {'print $5'})
 	echo  "💽️ $DISK"
 }
 

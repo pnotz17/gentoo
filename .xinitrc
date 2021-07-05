@@ -10,12 +10,13 @@ if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
  echo "D-Bus per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
 fi
 
-# autostart
-~/.local/bin/bars/gentoo_bar &
-~/.local/bin/xsession_destroyah &
+# scripts 
+~/.local/bin/bars/dwm_bar &
 ~/.fehbg &
-xclickroot -r ~/git/xmenu/xmenu.sh &
+
+# autostart
 dunst & 
+xclickroot -r ~/.local/share/src/xmenu/xmenu.sh &
 
 #dwm start loop
 while true; do

@@ -37,7 +37,7 @@ alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9
 alias ew='doas emerge -avuDN --quiet --alphabetical --keep-going -v --verbose-conflicts --with-bdeps=y @world'
 alias pa='doas vim /etc/portage/package.accept_keywords'
 alias cu='du -k --one-file-system -h --max-depth=1 /usr'
-alias ds='doas emerge -a --changed-deps --deep @world'
+alias ds='doas emerge -aq --changed-deps --deep @world'
 alias e='doas env-update && source /etc/profile'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
 alias pm='doas vim /etc/portage/package.mask'
@@ -94,23 +94,22 @@ alias a='git add'
 alias un='unzip'
 alias d='doas'
 
-# git prompt
-setopt prompt_subst
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' stagedstr 'M' 
-zstyle ':vcs_info:*' unstagedstr 'M' 
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' actionformats '%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats \ '%F{5}[%F{2}%b%F{5}] %F{2}%c%F{3}%u%f'
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
-zstyle ':vcs_info:*' enable git 
-+vi-git-untracked() {
-  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
-  [[ $(git ls-files --other --directory --exclude-standard | sed q | wc -l | tr -d ' ') == 1 ]] ; then
-  hook_com[unstaged]+='%F{1}??%f'
-fi
+# git settings
+git_branch_test_color() {
+  local ref=$(git symbolic-ref --short HEAD 2> /dev/null)
+  if [ -n "${ref}" ]; then
+    if [ -n "$(git status --porcelain)" ]; then
+      local gitstatuscolor='%F{red}**M**'
+    else
+      local gitstatuscolor='%F{green}'
+    fi
+    echo "${gitstatuscolor} (${ref})"
+  else
+    echo ""
+  fi
 }
 
-precmd () { vcs_info }
-PROMPT='%F{5}[%F{2}%n%F{5}] %F{3}%3~ ${vcs_info_msg_0_} %f%# '
-
+# prompt
+setopt prompt_subst
+PROMPT='%F{#FFFFFF}%n@%F{#FF00FF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
+neofetch

@@ -26,7 +26,7 @@ totalws (){
 }
 
 mail() {
-	mail=`curl -su pnotz17:PhxL92VdsLTyqxC https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	mail=`curl -su USER:PASS https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 	echo "%{F$whiteColor}MAIL: $mail %{F-}"
 }
