@@ -2,9 +2,9 @@
 set t_Co=256				" enable 256 colors, true colors
 syntax on				" enable syntax highlighting
 set ruler               		" show line and column number of the cursor on right side of statusline
-set number relativenumber               " show relative and absolute line numbers simultaneously
 set showmatch           		" highlight matching parentheses / brackets [{()}]
 set incsearch 				" highlight the first string matched in a search
+set number relativenumber               " show relative and absolute line numbers simultaneously
 
 " Theme
 " put colorscheme files in ~/.vim/colors/
