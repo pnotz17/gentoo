@@ -1,6 +1,7 @@
-# Static table lookup for hostnames.
-# See hosts(5) for details.
+# This defines the current system and must be set
+127.0.0.1     GENTOOBOX8521.homenetwork GENTOOBOX8521 localhost
+  
+# Optional definition of extra systems on the network
+192.168.0.5   GENTOOBOX8521.homenetwork GENTOOBOX8521
+192.168.0.6   GENTOOBOX8521.homenetwork GENTOOBOX8521
 
-127.0.0.1		BLAH666
-::1				BLAH666
-127.0.1.1		BLAH666.localdomain		BLAH666
