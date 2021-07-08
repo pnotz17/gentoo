@@ -24,6 +24,6 @@
 #       the blkid(8) command.
 
 #LABEL=boot		/boot		ext4		noauto,noatime	1 2
-/dev/sdc1		/		ext4		noatime		0 1
+/dev/sda1		/		ext4		noatime		0 1
 #LABEL=swap		none		swap		sw		0 0
 #/dev/cdrom		/mnt/cdrom	auto		noauto,ro	0 0
