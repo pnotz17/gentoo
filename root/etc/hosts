@@ -1,7 +1,7 @@
 # This defines the current system and must be set
-127.0.0.1     GENTOOBOX8521.homenetwork GENTOOBOX8521 localhost
+127.0.0.1     BLAH666.homenetwork BLAH666 localhost
   
 # Optional definition of extra systems on the network
-192.168.0.5   GENTOOBOX8521.homenetwork GENTOOBOX8521
-192.168.0.6   GENTOOBOX8521.homenetwork GENTOOBOX8521
+192.168.0.5   BLAH666.homenetwork BLAH666
+192.168.0.6   BLAH666.homenetwork BLAH666
 
