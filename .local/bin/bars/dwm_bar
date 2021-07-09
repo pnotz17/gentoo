@@ -20,5 +20,6 @@ DATE=$(date '+%Y-%m-%d %H:%M:%S')
 BAT=$(acpi -b | awk '{ print $4 " " }' | tr -d ',' | tr -d ' ')
 
 xsetroot -name "$UPTIME | IP: $IP | MAIL: $MAIL | TEMP: $TEMP | CPU: $CPU | MEM: $MEM | T/UP: $UP | T/DO: $DOWN | VOL: $VOL | $DATE |"
+#xsetroot -name "^c#FFFF00^$UPTIME | ^c#00FF02^IP: ^c#FF0000^$IP | ^c#00FF02^MAIL: ^c#FF0000^$MAIL | ^c#00FF02^TEMP: ^c#FF0000^$TEMP | ^c#00FF02^CPU: ^c#FF0000^$CPU | ^c#00FF02^MEM: ^c#FF0000^$MEM | ^c#00FF02^T/UP: ^c#FF0000^$UP | ^c#00FF02^T/DO: ^c#FF0000^$DOWN | ^c#00FF02^VOL: ^c#FF0000^$VOL | ^c#FFFF00^$DATE |"
 	sleep 3s
 done &
