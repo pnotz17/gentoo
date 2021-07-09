@@ -1,4 +1,4 @@
 #!/bin/sh
 # Sends a notification when a torrent is completed in transmission
-notify-send "Transmission-gtk" "$TR_TORRENT_NAME has downloaded" && aplay /home/$USER/.local/share/sounds/fatality.wav
+notify-send "Transmission-gtk" "$TR_TORRENT_NAME has downloaded" && aplay /home/$USER/.local/share/sounds/spookyringer.wav
 

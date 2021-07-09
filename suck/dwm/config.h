@@ -12,6 +12,7 @@ static const int showbar              = 1;              /* 0 means no bar */
 static const int topbar               = 1;              /* 0 means bottom bar */
 static const unsigned int baralpha    = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
+
 static const char *colors[][3] = {
 	[SchemeNorm] = { normfgcolor, normbgcolor, unselbordercolor },
 	[SchemeSel]  = { selfgcolor, selbgcolor,  selbordercolor  },
@@ -22,13 +23,12 @@ static const unsigned int alphas[][3] = {
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
 
 static const Rule rules[] = {
 	{ "mpv",     NULL,       NULL,       0,            1,           -1 },
 };
 
-/* layout(s) */
 static const float mfact     = 0.55; 
 static const int nmaster     = 1;    
 static const int resizehints = 0;   
@@ -90,23 +90,15 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_f,	   spawn,	   SHCMD("spacefm") },
 	{ MODKEY|ShiftMask,		XK_m,	   spawn,	   SHCMD("st -e mutt") },
 	{ MODKEY|ControlMask,           XK_r,      quit,           {0} },
-	{ MODKEY|ControlMask,		XK_c,      spawn,          SHCMD("~/.local/bin/dm_calc") },
 	{ MODKEY|ControlMask,		XK_d,      spawn, 	   SHCMD("~/.local/bin/dm_fm") },
 	{ MODKEY|ControlMask,		XK_e,      spawn, 	   SHCMD("~/.local/bin/dm_ed")},
 	{ MODKEY|ControlMask,		XK_p,      spawn,          SHCMD("~/.local/bin/dm_pass") },
 	{ Mod1Mask,			XK_d,      spawn,          SHCMD("~/.local/bin/dm_ytdl") },
 	{ Mod1Mask,			XK_e,      spawn,          SHCMD("~/.local/bin/dm_uni") },
-	{ Mod1Mask,		        XK_b,	   spawn,	   SHCMD("~/.local/bin/dm_book") },
 	{ Mod1Mask,		        XK_q,      spawn, 	   SHCMD("~/.local/bin/dm_power") },
-	{ Mod1Mask,	                XK_h,	   spawn,	   SHCMD("~/.local/bin/dm_hist") },
-	{ Mod1Mask,		        XK_t,	   spawn,	   SHCMD("~/.local/bin/compton_deploy") },
-	{ Mod1Mask,		        XK_y,	   spawn,	   SHCMD("~/.local/bin/dm_yts") },
 	{ Mod1Mask,		        XK_n,	   spawn,	   SHCMD("~/.local/bin/dm_nerd") },
 	{ Mod1Mask, 	                XK_k,	   spawn,	   SHCMD("~/.local/bin/dm_col") },
 	{ MODKEY,			XK_p,	   spawn,          SHCMD("~/.local/bin/dm_path") },
-	{ 0,                            XK_F7,	   spawn,          SHCMD("~/.local/bin/dm_cmd") },
-	{ 0,                            XK_F8,	   spawn,          SHCMD("~/.local/bin/st_cmd") },
-	{ 0,                            XK_F9,	   spawn,          SHCMD("~/.local/bin/dwm_cmd") },
 	{ 0,                            XK_Print,  spawn,          SHCMD("~/.local/bin/dm_ss") },
 	{ 0,                            XK_F10,	   spawn,          SHCMD("amixer -q set Master toggle") },
 	{ 0,                            XK_F11,	   spawn,          SHCMD("amixer set Master Front 1-") },

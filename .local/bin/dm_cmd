@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd ~/suck/dmenu && doas make clean install | xclip -selection clipboard
-notify-send "compiling dmenu"
-

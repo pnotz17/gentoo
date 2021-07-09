@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd ~/suck/dwm && doas make clean install | xclip -selection clipboard
-notify-send "compiling dwm"
-

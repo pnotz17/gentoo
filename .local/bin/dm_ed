@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-: "${DMEDITOR:=st -e vim}"
+: "${DMEDITOR:=st -e nvim}"
 
 declare -A options
 options[dunst]="$HOME/.config/dunst/dunstrc"

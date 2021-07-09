@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cd ~/suck/st && doas make clean install | xclip -selection clipboard
-notify-send "compiling st"
-
