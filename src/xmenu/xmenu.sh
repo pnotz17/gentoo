@@ -6,7 +6,7 @@ File manager	spacefm
 Terminal 	st
 Web browser	firefox-bin	
 Accessories
-	feh	feh ~/media/backrounds/*
+	feh	feh ~/media/wallpapers/*
 	sxiv	sxiv -t  ~/media/wallpapers/*
 	vim	st -e nvim
 Development
