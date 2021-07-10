@@ -89,10 +89,11 @@ alias s='git status'
 alias gc='git clone'
 alias l='doas ln -s'
 alias p='git push'
-alias v='doas vim'
+alias dv='doas vim'
 alias a='git add'
 alias un='unzip'
 alias d='doas'
+alias v='vim'
 
 # git settings
 git_branch_test_color() {
@@ -112,4 +113,3 @@ git_branch_test_color() {
 # prompt
 setopt prompt_subst
 PROMPT='%F{#FFFFFF}%n@%F{#FF00FF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
-neofetch
