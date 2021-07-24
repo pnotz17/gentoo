@@ -1,17 +1,28 @@
 #!/usr/bin/env bash
 
-: "${DMEDITOR:=st -e nvim}"
+: "${DMEDITOR:=st -e vim}"
 
 declare -A options
+options[awesome]="$HOME/.config/awesome/rc.lua"
+options[bspwm]="$HOME/.config/bspwm/bspwmrc"
 options[dunst]="$HOME/.config/dunst/dunstrc"
 options[fontconfig]="$HOME/.config/fontconfig/fonts.conf"
 options[mpv]="$HOME/.config/mpv/mpv.conf"
-options[sxiv]="$HOME/.config/sxiv/exec/key-handler"
-options[picom]="$HOME/.config/picom.conf"
+options[mimi]="$HOME/.config/mimi/mime.conf"
 options[nvim]="$HOME/.config/nvim/init.vim"
-options[dmenu]="$HOME/suck/dmenu/config.h"
+options[qtile]="$HOME/.config/qtile/config.py"
+options[qutebrowser]="$HOME/.config/qutebrowser/config.py"
+options[sxiv]="$HOME/.config/sxiv/exec/key-handler"
+options[xmobar]="$HOME/.config/xmobar/.xmobarrc"
+options[picom]="$HOME/.config/picom.conf"
+options[mutt]="$HOME/.mutt/muttrc"
+options[xmonad]="$HOME/.xmonad/xmonad.hs"
 options[dwm]="$HOME/suck/dwm/config.h"
+options[dmenu]="$HOME/suck/dmenu/config.h"
 options[st]="$HOME/suck/st/config.h"
+options[bashrc]="$HOME/.bashrc"
+options[vimrc]="$HOME/.vimrc"
+options[xdefaults]="$HOME/.Xdefaults"
 options[xinitrc]="$HOME/.xinitrc"
 options[zsh]="$HOME/.zshrc"
 declare -A options_clean

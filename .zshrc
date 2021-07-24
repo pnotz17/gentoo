@@ -33,15 +33,16 @@ source ~/.zsh/.fzf/shell/completion.zsh 2> /dev/null
 source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 
 # aliases
-alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 30)`'"'"' --'
+alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 15)`'"'"' --'
 alias ew='doas emerge -avuDN --quiet --alphabetical --keep-going -v --verbose-conflicts --with-bdeps=y @world'
-alias sc='doas rm -rf ~/.cache/* ~/.local/share/xorg ~/.local/share/recently-used.xbel'
+alias sc='doas rm -r ~/.cache/ ~/.local/share/xorg/ ~/.local/share/recently-used.xbel'
 alias pa='doas vim /etc/portage/package.accept_keywords'
 alias cu='du -k --one-file-system -h --max-depth=1 /usr'
 alias ds='doas emerge -aq --changed-deps --deep @world'
 alias e='doas env-update && source /etc/profile'
+alias pn='doas vim /etc/portage/package.unmask'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
-alias pm='doas vim /etc/portage/package.mask'
+alias pun='doas vim /etc/portage/package.mask'
 alias c='git commit -m "changes in dotfiles"'
 alias pu='doas vim /etc/portage/package.use'
 alias pe='doas vim /etc/portage/package.env'
