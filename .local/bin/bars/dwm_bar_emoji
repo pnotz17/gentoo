@@ -11,7 +11,7 @@ LINUX() {
 }
  
 DISK() {
-	DISK=$(df -Ph | grep "/dev/sda" | awk {'print $5'})
+	DISK=$(df -Ph | grep "/dev/sdd" | awk {'print $5'})
 	echo  "💽️ $DISK"
 }
 
@@ -43,13 +43,13 @@ CPUTEMP() {
 
 CPUFREQUENCY() {
 	CPU=$(awk '{u=$2+$4; t=$2+$4+$5;if (NR==1){u1=u; t1=t;} else printf("%d%%", ($2+$4-u1) * 100 / (t-t1) "%");}' <(grep 'cpu ' /proc/stat) <(sleep 0.5; grep 'cpu ' /proc/stat))
-	echo "🖥️ $CPU"%
+	echo "🖥️ $CPU"
 }
 
 RAM() {
 	USED=$(free | awk '/^Mem/ { printf("%.2f%\n", $3/$2 * 100.0) }')
 	echo "💻 $USED"
-}
+} 
 
 CLOCK() {
 	TIME=$(date +"%b %d, %R")
@@ -110,7 +110,7 @@ DOWNSPEED() {
 }
 
 while true; do
-	xsetroot -name "|  $(UPDATES)  |  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |"
+	xsetroot -name "|  $(MAIL)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |"
 	sleep 2
 done &
 
