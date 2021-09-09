@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 
+#gentoo-artix
 doas ufw --force disable \
 && doas ufw --force reset \
 && doas ufw default deny  \
+&& doas ufw default allow outgoing \
 && doas ufw enable  \
-&& doas systemctl enable ufw.service\
+&& doas rc-update add ufw default \
 && doas ufw --force enable
+
+#arch
+#doas ufw --force disable \
+#&& doas ufw --force reset \
+#&& doas ufw default deny  \
+#&& doas ufw default allow outgoing \
+#&& doas ufw enable  \
+#&& doas systemctl enable ufw.service\
+#&& doas ufw --force enable
