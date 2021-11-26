@@ -1,7 +1,7 @@
 # variables
 export TERM=st-256color
 export EDITOR=vim
-export BROWSER=waterfox
+export BROWSER=firefox-bin
 export PATH=$HOME/.local/bin:$PATH
 
 # history
@@ -34,9 +34,9 @@ source ~/.zsh/.fzf/shell/key-bindings.zsh 2> /dev/null
 
 # aliases
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 15)`'"'"' --'
-alias dm='doas mount /dev/sda2 /hdd1 && doas mount /dev/sdb2 /hdd2 && doas mount /dev/sdc2 /hdd3 && doas mount /dev/sdd2 /hdd4 && doas mount /dev/sdb1 /mnt/arch'
 alias ew='doas emerge -avuDN --quiet --alphabetical --keep-going -v --verbose-conflicts --with-bdeps=y @world'
 alias sc='doas rm -r ~/.cache/ ~/.local/share/xorg/ ~/.local/share/recently-used.xbel'
+alias dm='doas mount /dev/sda2 /hdd1 && doas mount /dev/sdb2 /hdd2'
 alias pa='doas vim /etc/portage/package.accept_keywords'
 alias cu='du -k --one-file-system -h --max-depth=1 /usr'
 alias ds='doas emerge -aq --changed-deps --deep @world'
@@ -115,4 +115,4 @@ git_branch_test_color() {
 
 # prompt
 setopt prompt_subst
-PROMPT='%F{#FFFFFF}%n@%F{#FF00FF}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '
+PROMPT='%F{#FFFFFF}%n@%F{#FF0000}%m:%15<..<%~%<<$(git_branch_test_color)%F{none}%# '

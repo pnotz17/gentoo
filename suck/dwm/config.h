@@ -1,4 +1,4 @@
-static const char *fonts[]            ={"RobotoMono Nerd Font Mono:style=Regular:size=10:antialias=true:autohint=true","EmojiOne:style=Regular:size=10:antialias=true:autohint=true",};
+static const char *fonts[]            ={"FreeMono:style=Medium:size=9:antialias=true:autohint=true","EmojiOne:style=Regular:size=9:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#121213";	/* bar backround color */
 static const char normfgcolor[]       = "#FFFFFF";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#000000";	/* highlighted tag // tasklist // focused window background color*/
@@ -6,7 +6,7 @@ static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist f
 static const char unselbordercolor[]  = "#000000";	/* unfocused window border color*/
 static const char selbordercolor[]    = "#B3AFC2";	/* focused window border color*/
 static const unsigned int borderpx    = 1;              /* border pixel of windows */
-static const unsigned int gappx       = 1;              /* gaps between windows */
+static const unsigned int gappx       = 3;              /* gaps between windows */
 static const unsigned int snap        = 32;             /* snap pixel */
 static const int showbar              = 1;              /* 0 means no bar */
 static const int topbar               = 1;              /* 0 means bottom bar */
