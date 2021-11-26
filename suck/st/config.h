@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "FreeMono:style=Medium:size=13";
+static char *font = "Monospace:style=regular:size=13";
 static char *font2[] = {
 	"EmojiOne:pixelsize=13:antialias=true:autohint=true",
 };
