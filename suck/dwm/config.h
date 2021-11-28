@@ -1,10 +1,10 @@
 static const char *fonts[]            ={"Monospace:style=regular:size=9:antialias=true:autohint=true","EmojiOne:style=Regular:size=9:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#121213";	/* bar backround color */
 static const char normfgcolor[]       = "#BFBFBF";	/* bar foreground color on right & left*/
-static const char selbgcolor[] 	      = "#000000";	/* highlighted tag // tasklist // focused window background color*/
+static const char selbgcolor[] 	      = "#424242";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
 static const char unselbordercolor[]  = "#121213";	/* unfocused window border color*/
-static const char selbordercolor[]    = "#121213";	/* focused window border color*/
+static const char selbordercolor[]    = "#424242";	/* focused window border color*/
 static const unsigned int borderpx    = 1;              /* border pixel of windows */
 static const unsigned int gappx       = 1;              /* gaps between windows */
 static const unsigned int snap        = 32;             /* snap pixel */

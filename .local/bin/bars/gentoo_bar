@@ -68,10 +68,10 @@ function get_down {
 }
 
 function get_time {
-	date +'%b %d, %R'
+	date '+ %Y-%m-%d %H:%M:%S'
 }
 
 while true; do
-	xsetroot -name "{$(get_uptime) } { $(get_cputemp) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
+	xsetroot -name "{$(get_uptime) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
 	sleep 3
 done
