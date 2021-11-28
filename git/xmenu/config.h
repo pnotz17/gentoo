@@ -3,8 +3,8 @@ static struct Config config = {
 	.font ="Sans:style=Regular:size=7:antialias=true:autohint=true",
 
 	/* colors */
-	.background_color = "#000000",
-	.foreground_color = "#808080",
+	.background_color = "#080808",
+	.foreground_color = "#666666",
 	.selbackground_color = "#121213",
 	.selforeground_color = "#FFFFFF",
 	.separator_color = "#CDC7C2",
@@ -12,7 +12,7 @@ static struct Config config = {
 
 	/* sizes in pixels */
 	.width_pixels = 105,        /* minimum width of a menu */
-	.height_pixels = 25,        /* height of a single menu item */
+	.height_pixels = 28,        /* height of a single menu item */
 	.border_pixels = 0,         /* menu border */
 	.separator_pixels = 3,      /* space around separator */
 	.gap_pixels = 0,            /* gap between menus */
