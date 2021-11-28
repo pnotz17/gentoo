@@ -68,7 +68,7 @@ function get_down {
 }
 
 function get_time {
-	date '+ %Y-%m-%d %H:%M:%S'
+	date '+%Y-%m-%d %H:%M:%S'
 }
 
 while true; do
