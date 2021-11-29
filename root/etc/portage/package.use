@@ -1,6 +1,7 @@
-media-libs/freetype harfbuzz
+media-libs/freetype -harfbuzz
 net-p2p/transmission gtk
 media-libs/libglvnd X
 media-video/mpv cli
+app-text/xmlto text
 x11-libs/cairo X
 x11-libs/pango X
