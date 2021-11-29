@@ -6,27 +6,27 @@ function get_uptime {
 }
 
 function get_mail {
-	mail=`curl -su USER:PASS https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	mail=`curl -su user:password https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-	echo  "BOX: $mail"
+	echo  "Sent: $mail"
 }
 
 function get_cputemp {
 cputemp=`sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}'`"C"
-echo "Temp: $cputemp"
+echo "Tmp: $cputemp"
 }
 
 function get_cpuload {
 	grep 'cpu ' /proc/stat |
 	awk '{usage=($2+$4)*100/($2+$4+$5)}
-		END {print "cpu: " int(usage) "%"}'
+		END {print "Cpu: " int(usage) "%"}'
 }
 
 function get_ram {
 	free |
 	sed '2!d' |
 	awk '{usage=$3*100/$2}
-		END {print "ram: " int(usage) "%"}'
+		END {print "Ram: " int(usage) "%"}'
 }
 
 function get_audio {
@@ -43,7 +43,7 @@ function get_audio {
 	)
 
 	if [ $muted = '[on]' ]; then
-		echo "vol: $audio"
+		echo "Alsa: $audio"
 	else
 		echo "MUTED $audio"
 	fi
@@ -55,7 +55,7 @@ function get_up {
 	T2=`cat /sys/class/net/enp2s0/statistics/tx_bytes`
 	TBPS=`expr $T2 - $T1`
 	TKBPS=`expr $TBPS / 1024`
-	echo   "up: $TKBPS kb"
+	echo   "NetOut: $TKBPS kb"
 }
 
 function get_down {
@@ -64,14 +64,14 @@ function get_down {
 	R2=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
 	RBPS=`expr $R2 - $R1`
 	RKBPS=`expr $RBPS / 1024`
-	echo   "down: $RKBPS kb"
+	echo   "NetIn: $RKBPS kb"
 }
 
 function get_time {
-	date '+%Y-%m-%d %H:%M:%S'
+	date +"%b %d, %R"
 }
 
 while true; do
-	xsetroot -name "{$(get_uptime) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
+	xsetroot -name "{$(get_uptime) } { $(get_mail) } { $(get_cputemp) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
 	sleep 3
 done
