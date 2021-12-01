@@ -8,7 +8,7 @@ Web browser	firefox-bin
 Accessories
 	feh	feh ~/multi/wallpapers/*
 	sxiv	sxiv -t  ~/multi/wallpapers/*
-	vim	st -e nvim
+	vim	st -e vim
 Development
 	geany	geany
 Graphics
