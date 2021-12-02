@@ -3,7 +3,7 @@ static struct Config config = {
 	.font ="Sans:style=Regular:size=7:antialias=true:autohint=true",
 
 	/* colors */
-	.background_color = "#080808",
+	.background_color = "#060606",
 	.foreground_color = "#666666",
 	.selbackground_color = "#121213",
 	.selforeground_color = "#FFFFFF",
