@@ -1,7 +1,6 @@
 app-admin/doas
 app-admin/pass
 app-editors/vim
-app-shells/zsh
 dev-util/geany
 dev-vcs/git
 lxde-base/lxappearance
@@ -14,17 +13,15 @@ net-misc/dhcpcd
 net-misc/youtube-dl
 net-p2p/transmission
 sys-apps/lm-sensors
-sys-devel/bc
 sys-process/htop
 www-client/firefox-bin
 x11-apps/xkill
 x11-apps/xrandr
-x11-apps/xset
 x11-apps/xsetroot
 x11-base/xorg-server
 x11-drivers/xf86-video-intel
 x11-libs/libXft
-x11-misc/compton
+x11-misc/picom
 x11-misc/dunst
 x11-misc/spacefm
 x11-misc/xclip
