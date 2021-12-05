@@ -18,17 +18,7 @@ echo  "💾️ $hddfree"
 MAIL() {
 COUNT=`curl -su user:pass https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 COUNT=`echo "$COUNT" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-echo  "📬 $COUNT"
-}
-
-UPDATES() {
-PACMAN=$(checkupdates 2> /dev/null | wc -l )  
-echo "⁉️️ $PACMAN"
-}
-
-PKGS() {
-PKGCOUNT=$(pacman -Q  |  wc -l)
-echo "📦 $PKGCOUNT"
+echo  "📫 $COUNT"
 }
 
 WEATHER() {
@@ -84,7 +74,7 @@ conntype=$(ip route | awk '/default/ { print substr($5,1,1) }')
 if [ -z "$conntype" ]; then
 echo "‼️"
 elif [ "$conntype" = "e" ]; then
-echo "✔️"
+echo "🔒️"
 elif [ "$conntype" = "w" ]; then
 echo "📶"  
 fi
@@ -110,7 +100,7 @@ printf  "⬇️ $RKBPS kb"
 }
 
 while true; do
-	xsetroot -name "|  $(UPTIME)  |  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |"
+	xsetroot -name "|  $(UPTIME)  |  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |  $(NETWORK)  |"
 	sleep 2
 done &
 
