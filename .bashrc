@@ -9,7 +9,6 @@ export BROWSER="firefox-bin"
 export PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 
 #history
-HISTFILE="/home/pnotz17/.local/.bash_history"
 HISTCONTROL=ignoredups:erasedups  
 
 #aliases
@@ -108,5 +107,3 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
-#neofetch
-#pfetch
