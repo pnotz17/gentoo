@@ -1,18 +1,8 @@
 #!/bin/sh
 
-UPTIME() {
-UPTIME=$(uptime | sed 's/.*up \([^,]*\), .*/\1/')
-echo "⏲️ $UPTIME"
-}
-
 LINUX() {
 LINUX=$(uname -r)
-echo  "🏰️ $LINUX"
-}
-
-DISK() {
-hddfree="$(df -Ph /dev/sda1 | awk '$3 ~ /[0-9]+/ {print $4}')"
-echo  "💾️ $hddfree"
+echo  "🏠 $LINUX"
 }
 
 MAIL() {
@@ -24,6 +14,16 @@ echo  "📫 $COUNT"
 WEATHER() {
 FORECAST=$(curl 'https://wttr.in/YOURCITY,YOURCOUNTRY?format=%t')
 echo "🌈 $FORECAST"
+}
+
+UPTIME() {
+UPTIME=$(uptime | sed 's/.*up \([^,]*\), .*/\1/')
+echo "⏲️ $UPTIME"
+}
+
+DISK() {
+hddfree="$(df -Ph /dev/sda1 | awk '$3 ~ /[0-9]+/ {print $4}')"
+echo  "💾️ $hddfree"
 }
 
 CPUTEMP() {
@@ -100,7 +100,9 @@ printf  "⬇️ $RKBPS kb"
 }
 
 while true; do
-	xsetroot -name "|  $(UPTIME)  |  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |  $(NETWORK)  |"
+	#xsetroot -name "[  $(UPSPEED)  ] [  $(DOWNSPEED)  ] [  $(CPUTEMP)  ] [  $(CPUFREQUENCY)  ] [  $(RAM)  ] [  $(ALSA)  ] [  $(CLOCK)  ] [  $(NETWORK)  ]"
+	#xsetroot -name "|  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |  $(NETWORK)  |"
+	xsetroot -name "/  $(UPSPEED)  /  $(DOWNSPEED)  /  $(CPUTEMP)  /  $(CPUFREQUENCY)  /  $(RAM)  /  $(ALSA)  /  $(CLOCK)  /  $(NETWORK)  /"
 	sleep 2
 done &
 
