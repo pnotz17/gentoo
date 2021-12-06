@@ -11,11 +11,6 @@ COUNT=`echo "$COUNT" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 echo  "📫 $COUNT"
 }
 
-WEATHER() {
-FORECAST=$(curl 'https://wttr.in/YOURCITY,YOURCOUNTRY?format=%t')
-echo "🌈 $FORECAST"
-}
-
 UPTIME() {
 UPTIME=$(uptime | sed 's/.*up \([^,]*\), .*/\1/')
 echo "⏲️ $UPTIME"
@@ -44,6 +39,11 @@ echo "💻 $USED"
 CLOCK() {
 TIME=$(date +"%b %d, %R")
 echo "📆 $TIME"
+}
+
+WEATHER() {
+FORECAST=$(curl 'https://wttr.in/YOURCITY,YOURCOUNTRY?format=%t')
+echo "🌈 $FORECAST"
 }
 
 ALSA() {
@@ -97,6 +97,16 @@ R2=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
 RBPS=`expr $R2 - $R1`
 RKBPS=`expr $RBPS / 1024`
 printf  "⬇️ $RKBPS kb"
+}
+
+TORRENT() {
+torrents=$(transmission-remote -l)
+downloading=$(echo "$torrents" | grep "Downloading\|Up & Down" | wc -l)
+paused=$(echo "$torrents" | grep "Stopped" | wc -l)
+seeding=$(echo "$torrents" | grep "Seeding" | wc -l)
+idle=$(echo "$torrents" | grep "Idle" | wc -l)
+
+echo "📥 $downloading 🛑 $paused 📤 $seeding 🗄️ $idle"
 }
 
 while true; do
