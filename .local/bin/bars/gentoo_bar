@@ -6,7 +6,7 @@ function get_uptime {
 }
 
 function get_mail {
-	mail=`curl -su user:password https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+	mail=`curl -su user:pass https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 	mail=`echo "$mail" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 	echo  "Sent: $mail"
 }
@@ -55,7 +55,7 @@ function get_up {
 	T2=`cat /sys/class/net/enp2s0/statistics/tx_bytes`
 	TBPS=`expr $T2 - $T1`
 	TKBPS=`expr $TBPS / 1024`
-	echo   "NetOut: $TKBPS kb"
+	echo   "Out: $TKBPS kb"
 }
 
 function get_down {
@@ -64,7 +64,7 @@ function get_down {
 	R2=`cat /sys/class/net/enp2s0/statistics/rx_bytes`
 	RBPS=`expr $R2 - $R1`
 	RKBPS=`expr $RBPS / 1024`
-	echo   "NetIn: $RKBPS kb"
+	echo   "In: $RKBPS kb"
 }
 
 function get_time {
@@ -72,6 +72,7 @@ function get_time {
 }
 
 while true; do
-	xsetroot -name "{$(get_uptime) } { $(get_mail) } { $(get_cputemp) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
+	#xsetroot -name "{$(get_uptime) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
+    xsetroot -name "[  $(get_uptime)  ] [  $(get_cputemp)  ] [  $(get_cpuload)  ] [  $(get_ram)  ] [  $(get_up)  ] [  $(get_down)  ] [  $(get_audio)  ] [  $(get_time)  ]"
 	sleep 3
 done
