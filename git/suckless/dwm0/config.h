@@ -1,10 +1,10 @@
-static const char *fonts[]            ={"monospace:size=9","Noto Color Emoji SVG:style=Regular:size=9:antialias=true:autohint=true",};
+static const char *fonts[]            ={"Monospace:size=9","Noto Color Emoji SVG:style=Regular:size=9:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#222222";	/* bar backround color */
 static const char normfgcolor[]       = "#BFBFBF";	/* bar foreground color on right & left*/
-static const char selbgcolor[] 	      = "#005577";	/* highlighted tag // tasklist // focused window background color*/
+static const char selbgcolor[] 	      = "#505050";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
 static const char unselbordercolor[]  = "#121212";	/* unfocused window border color*/
-static const char selbordercolor[]    = "#005577";	/* focused window border color*/
+static const char selbordercolor[]    = "#505050";	/* focused window border color*/
 static const unsigned int borderpx    = 1;              /* border pixel of windows */
 static const unsigned int gappx       = 1;              /* gaps between windows */
 static const unsigned int snap        = 32;             /* snap pixel */
@@ -23,7 +23,7 @@ static const unsigned int alphas[][3] = {
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
 
 static const Rule rules[] = {
 	{ "gimp",     NULL,       NULL,       0,            1,           -1 },

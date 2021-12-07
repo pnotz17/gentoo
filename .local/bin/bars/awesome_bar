@@ -75,5 +75,6 @@ function get_time {
 
 while true; do
 	xsetroot -name "$(get_uptime)  |  $(get_mail)  |  $(get_cputemp)  |  $(get_cpuload)  |  $(get_ram)  |  $(get_up)  |  $(get_down)  |  $(get_audio)  |  $(get_time)  |"
+	#xsetroot -name "{$(get_uptime) } { $(get_cpuload) } { $(get_ram) } { $(get_up) } { $(get_down) } { $(get_audio) } { $(get_time) }"
 	sleep 3
 done
