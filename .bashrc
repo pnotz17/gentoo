@@ -6,6 +6,7 @@
 export TERM="st-256color"                     
 export EDITOR="vim"  
 export BROWSER="firefox-bin"          
+export PATH=$HOME/.local/bin:$PATH
 export PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 
 #history
@@ -16,12 +17,13 @@ alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9
 alias ew='doas emerge -avuDN --quiet --alphabetical --keep-going -v --verbose-conflicts --with-bdeps=y @world'
 alias dm='doas mount /dev/sda2 /hdd1 && doas mount /dev/sdb2 /hdd2 && doas mount /dev/sdc2 /hdd3'
 alias sc='doas rm -r ~/.cache/ ~/.local/share/xorg/ ~/.local/share/recently-used.xbel'
-alias ug='doas LANG=C grub-mkconfig -o /boot/grub/grub.cfg'
+alias ug='doas grub-mkconfig -o /boot/grub/grub.cfg'
 alias pa='doas vim /etc/portage/package.accept_keywords'
 alias cu='du -k --one-file-system -h --max-depth=1 /usr'
 alias ds='doas emerge -aq --changed-deps --deep @world'
 alias pun='doas vim /etc/portage/package.unmask'
 alias e='doas env-update && source /etc/profile'
+alias xr='xmonad --recompile; xmonad --restart'
 alias pn='doas vim /etc/portage/package.unmask'
 alias ap='doas ls /var/db/pkg/* > pkglist.txt'
 alias pm='doas vim /etc/portage/package.mask'

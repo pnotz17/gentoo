@@ -1,0 +1,4 @@
+#!/bin/bash
+
+TIME=$(date +'%^a %^b %d %R')
+echo "$TIME"

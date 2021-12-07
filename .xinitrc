@@ -12,12 +12,12 @@ fi
 
 # autostart
 /usr/local/bin/xclickroot -r ~/git/xmenu/xmenu.sh &
-~/.local/bin/bars/emojibar.sh &
 /usr/bin/feh --bg-fill ~/wallpaper.jpg &
 /usr/bin/dunst ~/.config/dunst/dunstrc &
+#~/.local/bin/bars/emojibar.sh &
 
 # dwm start loop
-while true; do
-    /usr/local/bin/dwm 2> /dev/null
-done
-
+#while true; do
+    #/usr/local/bin/dwm 2> /dev/null
+#done
+exec $HOME/.local/bin/xmonad
