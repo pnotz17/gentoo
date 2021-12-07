@@ -12,7 +12,7 @@ fi
 
 # autostart
 /usr/local/bin/xclickroot -r ~/git/xmenu/xmenu.sh &
-~/.local/bin/bars/emoji_bar &
+~/.local/bin/bars/emojibar.sh &
 /usr/bin/feh --bg-fill ~/wallpaper.jpg &
 /usr/bin/dunst ~/.config/dunst/dunstrc &
 
