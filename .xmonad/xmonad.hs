@@ -141,7 +141,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      spawn "spacefm")
   
   , ((modMask .|. shiftMask, xK_b),
-     spawn "firefox")
+     spawn "firefox-bin")
    
   , ((modMask, xK_p),
      spawn "dmenu_run")
