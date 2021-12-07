@@ -20,4 +20,4 @@ fi
 #while true; do
     #/usr/local/bin/dwm 2> /dev/null
 #done
-exec $HOME/.local/bin/xmonad
+exec xmonad

@@ -168,10 +168,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
      spawn "amixer -q set Master toggle")
 
   , ((0, xK_F11),
-     spawn "amixer -q set Master 5%-")
+     spawn "amixer -q set Master 1%-")
 
   , ((0, xK_F12),
-     spawn "amixer -q set Master 5%+")
+     spawn "amixer -q set Master 1%+")
      
   , ((0, xK_Print),
      spawn  "~/.local/bin/dm_ss")
