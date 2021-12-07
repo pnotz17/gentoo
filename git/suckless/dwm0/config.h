@@ -1,9 +1,9 @@
-static const char *fonts[]            ={"monospace:size=9","Noto Color Emoji:style=Regular:size=9:antialias=true:autohint=true",};
+static const char *fonts[]            ={"monospace:size=9","Noto Color Emoji SVG:style=Regular:size=9:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#222222";	/* bar backround color */
 static const char normfgcolor[]       = "#BFBFBF";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#005577";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
-static const char unselbordercolor[]  = "#121213";	/* unfocused window border color*/
+static const char unselbordercolor[]  = "#121212";	/* unfocused window border color*/
 static const char selbordercolor[]    = "#005577";	/* focused window border color*/
 static const unsigned int borderpx    = 1;              /* border pixel of windows */
 static const unsigned int gappx       = 1;              /* gaps between windows */
