@@ -2,6 +2,7 @@
 
 # x 
 xrandr --output VGA1 --mode 1408x792_60.00 --scale-from 1920x1080 &
+xrdb -merge -I$HOME ~/.Xresources
 xset r rate 400 100
 
 # dbus
