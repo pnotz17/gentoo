@@ -11,7 +11,7 @@ font = "xft:UbuntuMono Nerd Font:style=Regular:pixelsize=13:antialias=true:hinti
        , iconRoot = ".xmonad/xpm/"  
        , commands = [
               Run UnsafeStdinReader
-            , Run Uptime ["-t","<icon=clock_alt.xpm/> <days>:<hours>"] 24000
+            , Run Uptime ["-t","<icon=clock.xpm/> <days>:<hours>"] 24000
             , Run Network "enp2s0" ["--template", "<icon=netup.xpm/> <tx>kB | <icon=netdown.xpm/> <rx>kB", "-L","1000","-H","5000", "--low", "gray", "--normal","green","--high","red"] 7
             , Run DiskU [("/","<icon=hdd.xpm/> <free>")] [] 21
             , Run CoreTemp ["-t","<icon=temp.xpm/> <core0>C | <icon=temp.xpm/> <core1>C","-L", "40", "-H", "60","-l", "#b3afc2", "-n", "#b3afc2", "-h", "red"] 3     
