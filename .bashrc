@@ -104,7 +104,17 @@ source ~/.local/share/blesh/ble.sh
       . /etc/bash_completion
   fi
 
-function parse_git_branch_and_add_brackets {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
+#git prompt
+git_prompt() {
+  BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\(.*\)/\1/')
+
+  if [ ! -z $BRANCH ]; then
+    echo -n "$(tput setaf 3)"
+
+    if [ ! -z "$(git status --short)" ]; then
+      echo " $(tput setaf 1)✗"
+    fi
+  fi
 }
-PS1="\u@\e[31m\]\h:\w\[\033[0;36m\]\$(parse_git_branch_and_add_brackets) \[\033[0m\]\$ "
+
+PS1="\u@\e[31m\]\h:\w\[\033[0;36m\]\$(git_prompt) \[\033[0m\]\$ "
