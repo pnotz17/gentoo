@@ -21,9 +21,9 @@ Multimedia
 	alsa mixer	st -e alsamixer
 Office
 Settings 
-	Customize Look & Feel	lxappearance
+	customize Look & Feel	lxappearance
 System 
-	htop	st -e htop
+	top	st -e top
 Kill	xkill
 
 Leave
