@@ -15,7 +15,7 @@ fi
 /usr/local/bin/xclickroot -r ~/git/xmenu/xmenu.sh &
 /usr/bin/feh --bg-fill ~/wallpaper.jpg &
 /usr/bin/dunst ~/.config/dunst/dunstrc &
-#~/.local/bin/bars/emojibar.sh &
+#~/.local/bin/bar/emojibar.sh &
 
 # dwm start loop
 #while true; do
