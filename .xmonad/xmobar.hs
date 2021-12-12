@@ -2,7 +2,7 @@ Config {
 font = "xft:UbuntuMono Nerd Font:style=Regular:pixelsize=13:antialias=true:hinting=true",additionalFonts = [ "xft:FontAwesome:pixelsize=13" ]
        , borderColor = "black"
        , border = TopB
-       , bgColor = "#0D0D0D"
+       , bgColor = "black"
        , fgColor = "#b3afc2"
        , alpha = 221
        , position = TopW L 100 23
@@ -24,11 +24,11 @@ font = "xft:UbuntuMono Nerd Font:style=Regular:pixelsize=13:antialias=true:hinti
             , Run Com "sh" ["-c", "checkupdates | wc -l"] "checkupdates" 21
             , Run Com "echo" ["<icon=pacman.xpm/> "] "pacman" 3600
             , Run Date "<icon=calendar.xpm/> <fc=#b3afc2>%H:%M</fc>" "date" 7     
-            , Run Weather "LGTS" ["-t","<icon=weather.xpm/> <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 24000        
+            , Run Weather "LGKZ" ["-t","<icon=weather.xpm/> <tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 24000        
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "<icon=haskell.xpm/> | %UnsafeStdinReader%} { %LGTS% | %uptime% | %enp2s0% | %disku% | %coretemp% | %cpu% | %memory% | %swap% | %alsa:default:Master% | %date% |"}
+       , template = "<icon=haskell.xpm/> | %UnsafeStdinReader%} { %uptime% | %LGKZ% | %enp2s0% | %disku% | %coretemp% | %cpu% | %memory% | %swap% | %alsa:default:Master% | %date% |"}
 
 
 
