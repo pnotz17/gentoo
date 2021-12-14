@@ -21,13 +21,13 @@ Multimedia
 	alsa mixer	st -e alsamixer
 Office
 Settings 
-	customize Look & Feel	lxappearance
+	Customize Look & Feel	lxappearance
 System 
 	top	st -e top
 Kill	xkill
 
 Leave
-	Exit		pkill -KILL -u pnotz17
+	Exit		pkill -KILL -u $USER
 	Reboot			doas reboot
 	Shutdown		doas poweroff
 EOF
