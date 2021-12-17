@@ -1,4 +1,4 @@
-static const char *fonts[]            ={"CaskaydiaCove Nerd Font:style=Regular:size=9:antialias=true:autohint=true","Noto Color Emoji:style=Regular:size=10:antialias=true:autohint=true",};
+static const char *fonts[]            ={"CaskaydiaCove Nerd Font:style=Regular:size=10:antialias=true:autohint=true","Noto Color Emoji:style=Regular:size=10:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#070707";	/* bar backround color */
 static const char normfgcolor[]       = "#BFBFBF";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#222222";	/* highlighted tag // tasklist // focused window background color*/
