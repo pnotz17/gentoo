@@ -188,7 +188,7 @@ function run_script()
     return {value}
 end
 weatherwidget = wibox.widget.textbox()
-vicious.register(weatherwidget, run_script, '$1', 20)
+vicious.register(weatherwidget, run_script, 'Fc $1', 20)
 
 -- Netup 
 netupwidget = wibox.widget.textbox()
@@ -303,7 +303,7 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-               seperator,
+                seperator,
                 uptimewidget,
                 seperator,
                 fswidget,
@@ -316,11 +316,11 @@ awful.screen.connect_for_each_screen(function(s)
                 seperator,
                 volumewidget,
                 seperator,
+                weatherwidget,
+                seperator,
                 netupwidget,
                 seperator,
                 netdownwidget,
-                seperator,
-                weatherwidget,
                 seperator,
                 datetimewidget,
                 seperator,
