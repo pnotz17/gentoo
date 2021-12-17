@@ -138,7 +138,7 @@ vicious.register(fswidget, vicious.widgets.fs, "Fs ${/ used_p}%", 1800)
 
 -- Temperature 
 local function script_output()
-    local f = io.popen("~/.local/bin/??")
+    local f = io.popen("~/.local/bin/modules/sb_unitemp")
     local out = f:read("*a")
     f:close()
     return { out }
@@ -303,6 +303,8 @@ awful.screen.connect_for_each_screen(function(s)
                 uptimewidget,
                 seperator,
                 fswidget,
+                seperator,
+                thermalwidget,
                 seperator,
                 cpuwidget,
                 seperator,
