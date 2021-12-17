@@ -134,7 +134,7 @@ vicious.register(fswidget, vicious.widgets.fs, "Fs ${/ used_p}%", 1800)
 
 -- Temperature 
 local function script_output()
-    local f = io.popen("~/.local/bin/modules/sb_unitemp")
+    local f = io.popen("~/.config/awesome/tmp")
     local out = f:read("*a")
     f:close()
     return { out }
@@ -166,21 +166,29 @@ function update_volume(widget)
     end
 	widget:set_markup("Vol" .. volume)
 end
-
 update_volume(volumewidget)
 mytimer = timer( { timeout = 0.2 })
 mytimer:connect_signal("timeout", function () update_volume(volumewidget) end)
 mytimer:start()
 
 -- Weather 
-local weatherwidget = wibox.widget.textbox()
-weather_t = awful.tooltip({ objects = { weatherwidget },})
+--local weatherwidget = wibox.widget.textbox()
+--weather_t = awful.tooltip({ objects = { weatherwidget },})
 
-vicious.register(weatherwidget, vicious.widgets.weather,
-function (widget, args)
-weather_t:set_text("City: " .. args["{city}"] .."\nWind: " .. args["{windkmh}"] .. "km/h " .. args["{wind}"] .. "\nSky: " .. args["{sky}"] .. "\nHumidity: " .. args["{humid}"] .. "%")
-return "Weather " .. args["{tempc}"] .. "C"
-end, 300, "LGTS")
+--vicious.register(weatherwidget, vicious.widgets.weather,
+--function (widget, args)
+--weather_t:set_text("City: " .. args["{city}"] .."\nWind: " .. args["{windkmh}"] .. "km/h " .. args["{wind}"] .. "\nSky: " .. args["{sky}"] .. "\nHumidity: " .. args["{humid}"] .. "%")
+--return "Weather " .. args["{tempc}"] .. "C"
+--end, 300, "LGKZ")
+
+function run_script()
+    local filedescriptor = io.popen("~/.config/awesome/weather")
+    local value = filedescriptor:read()
+   filedescriptor:close()
+    return {value}
+end
+weatherwidget = wibox.widget.textbox()
+vicious.register(weatherwidget, run_script, '$1', 20)
 
 -- Netup 
 netupwidget = wibox.widget.textbox()
@@ -312,8 +320,8 @@ awful.screen.connect_for_each_screen(function(s)
                 seperator,
                 netdownwidget,
                 seperator,
-                --weatherwidget,
-                --seperator,
+                weatherwidget,
+                seperator,
                 datetimewidget,
                 seperator,
                 --wibox.widget.systray(),
