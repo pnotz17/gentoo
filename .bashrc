@@ -69,6 +69,7 @@ alias co='tar -cvJf'
 alias u='git add -u'
 alias s='git status'
 alias gc='git clone'
+alias gp='git pull'
 alias vv='doas vim'
 alias a='git add *'
 alias p='git push'
@@ -112,5 +113,5 @@ git_prompt() {
   fi
 }
 
-PS1="[\u@]\e[31m\]\h:\w\[\033[0;36m\]\$(git_prompt) \[\033[0m\]\$ "
+PS1="[\u@]\e[94m\]\h:\w\[\033[0;36m\]\$(git_prompt) \[\033[0m\]\$ "
 #PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
