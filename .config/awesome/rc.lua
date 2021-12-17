@@ -128,10 +128,6 @@ end
 mailwidget = wibox.widget.textbox()
 vicious.register(mailwidget, run_script, '$1', 20)
  
--- Pacman 
-pacwidget = wibox.widget.textbox()
-vicious.register(pacwidget,vicious.widgets.pkg,"Rep $1",600,"Arch")
-
 -- Filesystem 
 fswidget = wibox.widget.textbox()
 vicious.register(fswidget, vicious.widgets.fs, "Fs ${/ used_p}%", 1800)
@@ -157,22 +153,22 @@ vicious.register(memwidget, vicious.widgets.mem, "Mem $1%")
 -- Volume 
 volumewidget = wibox.widget.textbox()
 function update_volume(widget)
-	local fd = io.popen("amixer sget Master")
-	local status = fd:read("*all")
-	fd:close()
-	local volume = string.match(status, "(%d?%d?%d)%%")
-	volume = string.format("% 3d", volume)
-	status = string.match(status, "%[(o[^%]]*)%]")
-	if string.find(status, "on", 1, true) then
-	volume = volume .. "%"
-	else
-	volume = " Muted "
-end
+    local fd = io.popen("amixer sget Master")
+    local status = fd:read("*all")
+    fd:close()
+    local volume = string.match(status, "(%d?%d?%d)%%")
+    volume = string.format("% 3d", volume)
+    status = string.match(status, "%[(o[^%]]*)%]")
+    if string.find(status, "on", 1, true) then
+        volume = volume .. "%"
+    else
+        volume = volume .. "Muted"
+    end
 	widget:set_markup("Vol" .. volume)
 end
 
 update_volume(volumewidget)
-mytimer = timer({ timeout = 0.2 })
+mytimer = timer( { timeout = 0.2 })
 mytimer:connect_signal("timeout", function () update_volume(volumewidget) end)
 mytimer:start()
 
@@ -299,7 +295,7 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-                seperator,
+               seperator,
                 uptimewidget,
                 seperator,
                 fswidget,
@@ -315,6 +311,8 @@ awful.screen.connect_for_each_screen(function(s)
                 netupwidget,
                 seperator,
                 netdownwidget,
+                seperator,
+                weatherwidget,
                 seperator,
                 datetimewidget,
                 seperator,
@@ -436,8 +434,8 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
 
--- My Keys
-	awful.key({ modkey, "Shift" }, "g", 
+    -- Custom keys
+    	awful.key({ modkey, "Shift" }, "g", 
 		function () awful.util.spawn("geany") 
     end),
 	awful.key({ modkey, "Shift" }, "f", 
