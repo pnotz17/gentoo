@@ -1,21 +1,22 @@
-static const char *fonts[]            ={"Monospace:size=9","Noto Color Emoji SVG:style=Regular:size=9:antialias=true:autohint=true",};
-static const char normbgcolor[]       = "#222222";	/* bar backround color */
+static const char *fonts[]            ={"FiraCode Nerd Font:style=Regular:size=10:antialias=true:autohint=true","Noto Color Emoji:style=Regular:size=10:antialias=true:autohint=true",};
+static const char normbgcolor[]       = "#121213";	/* bar backround color */
 static const char normfgcolor[]       = "#BFBFBF";	/* bar foreground color on right & left*/
-static const char selbgcolor[] 	      = "#505050";	/* highlighted tag // tasklist // focused window background color*/
+static const char selbgcolor[] 	      = "#222222";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
-static const char unselbordercolor[]  = "#121212";	/* unfocused window border color*/
-static const char selbordercolor[]    = "#505050";	/* focused window border color*/
+static const char unselbordercolor[]  = "#121213";	/* unfocused window border color*/
+static const char selbordercolor[]    = "#B3AFC2";	/* focused window border color*/
 static const unsigned int borderpx    = 1;              /* border pixel of windows */
 static const unsigned int gappx       = 1;              /* gaps between windows */
 static const unsigned int snap        = 32;             /* snap pixel */
 static const int showbar              = 1;              /* 0 means no bar */
 static const int topbar               = 1;              /* 0 means bottom bar */
-static const unsigned int baralpha    = 255;
-static const unsigned int borderalpha = 255;
+static const unsigned int baralpha    = 0xd0;
+static const unsigned int borderalpha = OPAQUE;
 
 static const char *colors[][3] = {
 	[SchemeNorm] = { normfgcolor, normbgcolor, unselbordercolor },
 	[SchemeSel]  = { selfgcolor, selbgcolor,  selbordercolor  },
+
 };
 
 static const unsigned int alphas[][3] = {
@@ -26,7 +27,7 @@ static const unsigned int alphas[][3] = {
 static const char *tags[] = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
 
 static const Rule rules[] = {
-	{ "gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "mpv",     NULL,       NULL,       0,            1,           -1 },
 };
 
 static const float mfact     = 0.55; 
@@ -108,6 +109,7 @@ static Key keys[] = {
 static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          SHCMD("st") },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
