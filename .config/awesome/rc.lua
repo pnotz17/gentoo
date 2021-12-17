@@ -507,6 +507,13 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
+         
+	awful.key({ modkey, 'Control' }, 't',
+        function(c)
+            awful.titlebar.toggle(c)
+        end,
+        {description = 'toggle title bar', group = 'client'}),
+        
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
