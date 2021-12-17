@@ -1,4 +1,4 @@
 #!/bin/sh
 
-weather=$(curl 'https://wttr.in/florina,greece?format=%t')
+weather=$(curl 'https://wttr.in/CITY,COUNTRY?format=%t')
 echo "$weather"
