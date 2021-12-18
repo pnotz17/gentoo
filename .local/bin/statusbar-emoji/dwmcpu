@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+#=========================================================================
+# Author: Gaetan (gaetan@ictpourtous.com) - Twitter: @GaetanICT
+# Creation: Sun 22 Aug 2021 12:23:56
+# Last modified: Sun 22 Aug 2021 12:24:01
+# Version: 1.0
+#
+# Description: print the current CPU usage
+#=========================================================================
+
+read cpu a b c previdle rest < /proc/stat
+prevtotal=$((a+b+c+previdle))
+sleep 0.5
+read cpu a b c idle rest < /proc/stat
+total=$((a+b+c+idle))
+cpu=$((100*( (total-prevtotal) - (idle-previdle) ) / (total-prevtotal) ))
+icon="🖥"
+printf "%s %s\\n" "$icon" "$cpu%"

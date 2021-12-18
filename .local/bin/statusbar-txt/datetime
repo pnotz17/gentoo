@@ -1,0 +1,3 @@
+#!/bin/bash
+datetime=$(date +"%b %d, %R")
+echo "$datetime"

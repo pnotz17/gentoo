@@ -1,0 +1,4 @@
+#!/bin/sh
+pkgs=$(pacman -Q  |  wc -l)
+echo "$pkgs"
+

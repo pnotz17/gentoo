@@ -6,7 +6,7 @@ echo  "🏠 $LINUX"
 }
 
 MAIL() {
-COUNT=`curl -su user:pass https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
+COUNT=`curl -su USER:PASS https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
 COUNT=`echo "$COUNT" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
 echo  "📫 $COUNT"
 }
@@ -110,8 +110,8 @@ echo "📥 $downloading 🛑 $paused 📤 $seeding 🗄️ $idle"
 }
 
 while true; do
-	xsetroot -name "[  $(UPTIME)  ] [  $(UPSPEED)  ] [  $(DOWNSPEED)  ] [  $(DISK)  ] [  $(CPUTEMP)  ] [  $(CPUFREQUENCY)  ] [  $(RAM)  ] [  $(ALSA)  ] [  $(CLOCK)  ] [  $(NETWORK)  ]"
-	#xsetroot -name "|  $(MAIL)  |  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |  $(NETWORK)  |"
+	#xsetroot -name "[  $(UPTIME)  ] [  $(UPSPEED)  ] [  $(DOWNSPEED)  ] [  $(DISK)  ] [  $(CPUTEMP)  ] [  $(CPUFREQUENCY)  ] [  $(RAM)  ] [  $(ALSA)  ] [  $(CLOCK)  ] [  $(NETWORK)  ]"
+	xsetroot -name "|  $(DISK)  |  $(CPUTEMP)  |  $(CPUFREQUENCY)  |  $(RAM)  |  $(ALSA)  |  $(UPSPEED)  |  $(DOWNSPEED)  |  $(CLOCK)  |  $(NETWORK)  |"
 	#xsetroot -name "/   $(UPSPEED)   /   $(DOWNSPEED)   /   $(CPUTEMP)   /   $(CPUFREQUENCY)   /   $(RAM)   /   $(ALSA)   /   $(CLOCK)  /   $(NETWORK)   /"
 	sleep 2
 done &

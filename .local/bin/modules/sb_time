@@ -1,4 +1,0 @@
-#!/bin/bash
-
-TIME=$(date +"%b %d, %R")
-echo "  $TIME"
