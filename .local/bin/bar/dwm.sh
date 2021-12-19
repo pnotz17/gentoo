@@ -27,7 +27,7 @@ HDDUSED=$(df -h --total | tail -1 | awk {'printf $3'})
 HDDPERCENTAGE=$(df -h --total | tail -1 | awk {'printf $5'})
 FULLUPT=$(uptime | awk '{printf("%d:%02d:%02d:%02d",($1/60/60/24),($1/60/60%24),($1/60%60),($1%60))}' /proc/uptime)
 
-xsetroot -name "$UPTIME :: Fs $USAGE :: Tmp $TEMP :: Cpu $CPU :: Mem $MEM :: Vol $VOL :: Tx/Up $NETUP :: Tx/Down $NETDOWN :: Fc $WEATHER :: $DATE ::"
+xsetroot -name "$UPTIME :: Fc $WEATHER :: Fs $USAGE :: Tmp $TEMP :: Cpu $CPU :: Mem $MEM :: Vol $VOL :: Tx/Up $NETUP :: Tx/Down $NETDOWN :: $DATE ::"
 #xsetroot -name "^c#FFFFFF^$UPTIME ^c#FFFFFF^| ^c#FFFFFF^Ip: ^c#FF0000^$IP ^c#FFFFFF^| ^c#FFFFFF^Mail: ^c#FF0000^$MAIL ^c#FFFFFF^| ^c#FFFFFF^Temp: ^c#FF0000^$TEMP ^c#FFFFFF^| ^c#FFFFFF^Cpu: ^c#FF0000^$CPU ^c#FFFFFF^| ^c#FFFFFF^Mem: ^c#FF0000^$MEM ^c#FFFFFF^| ^c#FFFFFF^Tx/up: ^c#FF0000^$UP ^c#FFFFFF^| ^c#FFFFFF^Tx/do: ^c#FF0000^$DOWN ^c#FFFFFF^| ^c#FFFFFF^Vol: ^c#FF0000^$VOL ^c#FFFFFF^| ^c#FFFFFF^$DATE ^c#FFFFFF^|"
 	sleep 3s
 done &
