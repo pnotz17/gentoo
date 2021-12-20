@@ -1,0 +1,38 @@
+#!/bin/bash
+
+bind_applications() {
+
+	local COMMANDS=""
+
+	for COMMAND in alacritty gnome-terminal st terminator xterm; do
+		[ $(command -v ${COMMAND}) ] && COMMANDS+="\t${COMMAND}\n"
+	done
+
+	[ -n $COMMANDS ] && COMMANDS="Applications\n$COMMANDS"
+	echo $COMMANDS
+}
+
+bind_stuff() {
+
+	local COMMANDS=""
+
+	COMMANDS+="\tOption 2.1\n"
+	COMMANDS+="\tOption 2.2\n"
+
+	[ -n "$COMMANDS" ] && COMMANDS="Other options\n$COMMANDS"
+	echo $COMMANDS
+}
+
+ALLCOMMANDS=""
+ALLCOMMANDS+=$(bind_applications)
+ALLCOMMANDS+=$(bind_stuff)
+
+CHOICE=$(echo -e ${ALLCOMMANDS%%\\\n} | xmenu)
+
+eval $CHOICE
+
+static const char *rootmenu[] = { "/path/to/rootmenu", NULL };
+
+static Button buttons[] = {
+    { ClkRootWin,    0,    Button3,     spawn,      {.v = rootmenu } },
+};
