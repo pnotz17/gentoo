@@ -26,7 +26,8 @@ static const unsigned int alphas[][3] = {
 static const char *tags[] = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
 
 static const Rule rules[] = {
-	{ "mpv",     NULL,       NULL,       0,            1,           -1 },
+	{ "mpv",      NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
 };
 
 static const float mfact     = 0.55; 
