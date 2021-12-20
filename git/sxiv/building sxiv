@@ -1,0 +1,4 @@
+git clone https://github.com/muennich/sxiv.git
+cd sxiv
+make HAVE_LIBEXIF=0
+sudo make install
