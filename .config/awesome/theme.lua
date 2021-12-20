@@ -7,7 +7,6 @@ local default_titlebar_path = default_theme_path .. "/titlebar/"
 
 -- Theme fonts and colors
 theme = {}
---theme.font          = "CaskaydiaCove Nerd Font 9"
 theme.font          = "DaddyTimeMono Nerd Font 10"
 
 theme.bg_normal     = "#0A0A0A"
