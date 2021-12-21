@@ -15,8 +15,8 @@ HISTCONTROL=ignoredups:erasedups
 #aliases
 alias pw='bash -c '"'"'echo `tr -dc $([ $# -gt 1 ] && echo $2 || echo "A-Za-z0-9") < /dev/urandom | head -c $([ $# -gt 0 ] && echo $1 || echo 15)`'"'"' --'
 alias ew='doas emerge -avuDN --quiet --alphabetical --keep-going -v --verbose-conflicts --with-bdeps=y @world'
-alias dm='doas mount /dev/sda2 /hdd1 && doas mount /dev/sdb2 /hdd2 && doas mount /dev/sdc2 /hdd3'
 alias sc='doas rm -r ~/.cache/ ~/.local/share/xorg/ ~/.local/share/recently-used.xbel'
+alias dm='doas mount /dev/sda2 /hdd1 && doas mount /dev/sdb2 /hdd2'
 alias pa='doas vim /etc/portage/package.accept_keywords'
 alias cu='du -k --one-file-system -h --max-depth=1 /usr'
 alias ds='doas emerge -aq --changed-deps --deep @world'

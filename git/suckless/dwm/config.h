@@ -27,6 +27,7 @@ static const char *tags[] = { "01", "02", "03", "04", "05", "06", "07", "08", "0
 
 static const Rule rules[] = {
 	{ "mpv",      NULL,       NULL,       0,            1,           -1 },
+	{ "Spacefm",  NULL,       NULL,       1 << 0,       0,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
 };
 
