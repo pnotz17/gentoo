@@ -17,12 +17,12 @@ Applications
 	alsa mixer	st -e alsamixer
 System 
 	Customize Look & Feel	lxappearance
-	top	st -e top
+	Top	st -e top
 Leave
-	kill	xkill
-	Exit		pkill -KILL -u $USER
-	Reboot			doas reboot
-	Shutdown		doas poweroff
+	Kill	xkill
+	Exit	pkill -KILL -u $USER
+	Reboot	doas reboot
+	Shutdown	doas poweroff
 EOF
 
 
