@@ -10,19 +10,17 @@ Applications
 	sxiv	sxiv -t  ~/multi/wallpapers/*
 	vim	st -e vim
 	geany	geany
-	gimp	gimp
-	waterfox	waterfox
 	mutt	st -e mutt
 	transmission	transmission-gtk
-	alsa mixer	st -e alsamixer
 System 
-	Look & Feel	lxappearance
-	Resources	st -e top
+	alsamixer	st -e alsamixer
+	look & feel	lxappearance
+	top	st -e top
 Leave
-	Kill	xkill
-	Exit	pkill -KILL -u $USER
-	Reboot	doas reboot
-	Shutdown	doas poweroff
+	kill	xkill
+	exit	pkill -KILL -u $USER
+	reboot	doas reboot
+	shutdown	doas poweroff
 EOF
 
 
