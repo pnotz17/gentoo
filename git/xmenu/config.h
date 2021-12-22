@@ -10,9 +10,9 @@ static struct Config config = {
 	.separator_color = "#CDC7C2",
 	.border_color = "#E6E6E6",
 
-	/* sizes in pixels */
-	.width_pixels = 105,        /* minimum width of a menu */
-	.height_pixels = 28,        /* height of a single menu item */
+/* sizes in pixels */
+	.width_pixels = 130,        /* minimum width of a menu */
+	.height_pixels = 25,        /* height of a single menu item */
 	.border_pixels = 0,         /* menu border */
 	.separator_pixels = 3,      /* space around separator */
 	.gap_pixels = 0,            /* gap between menus */
