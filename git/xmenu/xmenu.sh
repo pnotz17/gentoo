@@ -16,8 +16,8 @@ Applications
 	transmission	transmission-gtk
 	alsa mixer	st -e alsamixer
 System 
-	Customize Look & Feel	lxappearance
-	Top	st -e top
+	Look & Feel	lxappearance
+	Resources	st -e top
 Leave
 	Kill	xkill
 	Exit	pkill -KILL -u $USER
