@@ -13,12 +13,12 @@ Applications
 	mutt	st -e mutt
 	transmission	transmission-gtk
 System 
-	alsamixer	st -e alsamixer
 	look & feel	lxappearance
 	top	st -e top
-Leave
+	alsamixer	st -e alsamixer
+Exit
 	kill	xkill
-	exit	pkill -KILL -u $USER
+	killx	pkill -KILL -u $USER
 	reboot	doas reboot
 	shutdown	doas poweroff
 EOF

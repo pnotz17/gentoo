@@ -1,10 +1,9 @@
 static struct Config config = {
-	/* font, separate different fonts with comma */
-	.font ="Sans:style=Regular:size=8:antialias=true:autohint=true",
+	.font = "Sans:size=8",
 
 	/* colors */
 	.background_color = "#060606",
-	.foreground_color = "#BFBFBF",
+	.foreground_color = "#A1A1A1",
 	.selbackground_color = "#121213",
 	.selforeground_color = "#FFFFFF",
 	.separator_color = "#CDC7C2",
