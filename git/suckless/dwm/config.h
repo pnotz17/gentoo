@@ -1,5 +1,5 @@
 static const char *fonts[]            ={"DaddyTimeMono Nerd Font:style=Book:size=10:antialias=true:autohint=true","Noto Color Emoji:style=Regular:size=10:antialias=true:autohint=true",};
-static const char normbgcolor[]       = "#121213";	/* bar backround color */
+static const char normbgcolor[]       = "#0a0a0a";	/* bar backround color */
 static const char normfgcolor[]       = "#A5A5A5";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#222222";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
