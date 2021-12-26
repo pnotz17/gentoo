@@ -1,6 +1,6 @@
 dwm - dynamic window manager
 ============================
-dwm is an extremely fast, small, and dynamic window manager for X patched with alpha fullgaps hide_vacant_tags movestack status2d
+dwm is an extremely fast, small, and dynamic window manager for X patched with alpha fullgaps movestack status2d
 
 
 Requirements

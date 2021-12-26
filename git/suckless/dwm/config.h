@@ -1,6 +1,6 @@
 static const char *fonts[]            ={"DaddyTimeMono Nerd Font:style=Book:size=10:antialias=true:autohint=true","Noto Color Emoji:style=Regular:size=10:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#121213";	/* bar backround color */
-static const char normfgcolor[]       = "#BFBFBF";	/* bar foreground color on right & left*/
+static const char normfgcolor[]       = "#A5A5A5";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#222222";	/* highlighted tag // tasklist // focused window background color*/
 static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
 static const char unselbordercolor[]  = "#121213";	/* unfocused window border color*/
@@ -23,11 +23,10 @@ static const unsigned int alphas[][3] = {
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
-static const char *tags[] = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
+static const char *tags[] = {"01","02","03","04","05","06","07","08","09" };
 
 static const Rule rules[] = {
 	{ "mpv",      NULL,       NULL,       0,            1,           -1 },
-	{ "Spacefm",  NULL,       NULL,       1 << 0,       0,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 1,       0,           -1 },
 };
 
