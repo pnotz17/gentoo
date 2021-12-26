@@ -1,10 +1,10 @@
 static const char *fonts[]            ={"DaddyTimeMono Nerd Font:style=Book:size=10:antialias=true:autohint=true","Noto Color Emoji:style=Regular:size=10:antialias=true:autohint=true",};
 static const char normbgcolor[]       = "#0a0a0a";	/* bar backround color */
-static const char normfgcolor[]       = "#A5A5A5";	/* bar foreground color on right & left*/
+static const char normfgcolor[]       = "#a5a5a5";	/* bar foreground color on right & left*/
 static const char selbgcolor[] 	      = "#222222";	/* highlighted tag // tasklist // focused window background color*/
-static const char selfgcolor[] 	      = "#FFFFFF";	/* focused tag and tasklist foreground color*/
+static const char selfgcolor[] 	      = "#ffffff";	/* focused tag and tasklist foreground color*/
 static const char unselbordercolor[]  = "#121213";	/* unfocused window border color*/
-static const char selbordercolor[]    = "#B3AFC2";	/* focused window border color*/
+static const char selbordercolor[]    = "#b3afc2";	/* focused window border color*/
 static const unsigned int borderpx    = 1;              /* border pixel of windows */
 static const unsigned int gappx       = 1;              /* gaps between windows */
 static const unsigned int snap        = 32;             /* snap pixel */

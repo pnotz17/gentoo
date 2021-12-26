@@ -88,8 +88,11 @@ shopt -s histappend
 shopt -s expand_aliases 
 shopt -s checkwinsize 
 
-#ignore upper and lowercase when TAB completion
+#ignore upper and lowercase with TAB
 bind "set completion-ignore-case on"
+
+#bash-line editor
+source ~/.local/share/blesh/ble.sh
 
 #git prompt
 git_prompt() {
