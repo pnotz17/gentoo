@@ -91,17 +91,6 @@ shopt -s checkwinsize
 #ignore upper and lowercase when TAB completion
 bind "set completion-ignore-case on"
 
-#If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
-#syntax highlighting, autosuggestions, menu-completion, abbreviations with Bash Line Editor
-source ~/.local/share/blesh/ble.sh     
-
-#enable bash completion in interactive shells
-  if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-      . /etc/bash_completion
-  fi
-
 #git prompt
 git_prompt() {
   BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\(.*\)/\1/')
