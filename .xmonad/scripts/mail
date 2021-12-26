@@ -1,5 +1,0 @@
-#!/bin/sh
-
-MAIL=`curl -su user:pass https://mail.google.com/mail/feed/atom || echo "<fullcount>unknown number of</fullcount>"`
-MAIL=`echo "$MAIL" | grep -oPm1 "(?<=<fullcount>)[^<]+" `
-echo "$MAIL"
