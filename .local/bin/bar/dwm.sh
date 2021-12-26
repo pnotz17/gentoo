@@ -15,8 +15,8 @@ RAM=$(free -h --kilo | awk '/^Mem:/ {print $3 "/" $2}')
 MEM=$(free | awk '/^Mem/ { printf("%.2f%\n", $3/$2 * 100.0) }')
 NETDOWN=$(R1=`cat /sys/class/net/enp2s0/statistics/rx_bytes`;sleep 1;R2=`cat /sys/class/net/enp2s0/statistics/rx_bytes`;RBPS=`expr $R2 - $R1`;RKBPS=`expr $RBPS / 1024`;printf "$RKBPS kb")
 NETUP=$(T1=`cat /sys/class/net/enp2s0/statistics/tx_bytes`;sleep 1;T2=`cat /sys/class/net/enp2s0/statistics/tx_bytes`;TBPS=`expr $T2 - $T1`;TKBPS=`expr $TBPS / 1024`;printf "$TKBPS kb")
-FORECAST=$(curl wttr.in/Florina?format="%l:+%m+%p+%w+%t+%c+%C")
-WEATHER=$(curl wttr.in/Florina,greece?format=%t)
+FORECAST=$(curl wttr.in/YOURCITY?format="%l:+%m+%p+%w+%t+%c+%C")
+WEATHER=$(curl wttr.in/YOURCITY,YOURCOUNTRY?format=%t)
 VOL=$(amixer get Master | awk '$0~/%/{print $4}' | tr -d '[]')
 DATE=$(date "+%b %d, %R")
 DATEALT=$(date '+%Y-%m-%d %H:%M:%S')
@@ -30,7 +30,7 @@ UPT=$(uptime --pretty | sed -e 's/up //g' -e 's/ days/d/g' -e 's/ day/d/g' -e 's
 UP=`uptime | sed 's/.*up\s*//' | sed 's/,\s*[0-9]* user.*//' | sed 's/  / /g'`
 SWAP=$(free -m | awk '/Swap/{printf("%.2f%"), $3/$2*100}')
 
-xsetroot -name "$UP :: Fc $WEATHER :: Fs $USAGE :: Tmp $TEMP :: Cpu $CPU :: Mem $MEM :: Vol $VOL :: Tx/Up $NETUP :: Tx/Down $NETDOWN :: $DATE ::"
+xsetroot -name ":: On $UP :: Fs $USAGE :: Tm $TEMP :: Cpu $CPU :: Mem $MEM :: Vol $VOL :: Tx/Up $NETUP :: Tx/Down $NETDOWN :: $DATE ::"
 #xsetroot -name "^c#FFFFFF^$UPTIME ^c#FFFFFF^| ^c#FFFFFF^Ip: ^c#FF0000^$IP ^c#FFFFFF^| ^c#FFFFFF^Mail: ^c#FF0000^$MAIL ^c#FFFFFF^| ^c#FFFFFF^Temp: ^c#FF0000^$TEMP ^c#FFFFFF^| ^c#FFFFFF^Cpu: ^c#FF0000^$CPU ^c#FFFFFF^| ^c#FFFFFF^Mem: ^c#FF0000^$MEM ^c#FFFFFF^| ^c#FFFFFF^Tx/up: ^c#FF0000^$UP ^c#FFFFFF^| ^c#FFFFFF^Tx/do: ^c#FF0000^$DOWN ^c#FFFFFF^| ^c#FFFFFF^Vol: ^c#FF0000^$VOL ^c#FFFFFF^| ^c#FFFFFF^$DATE ^c#FFFFFF^|"
 	sleep 3s
 done &
