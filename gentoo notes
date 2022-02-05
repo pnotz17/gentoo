@@ -1,0 +1,165 @@
+#Quick Install
+mount /dev/sda1 /mnt/gentoo
+cd /mnt/gentoo
+wget
+tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
+mount --types proc /proc /mnt/gentoo/proc && mount --rbind /sys /mnt/gentoo/sys && mount --rbind /dev /mnt/gentoo/dev 
+test -L /dev/shm && rm /dev/shm && mkdir /dev/shm &&  mount --types tmpfs --options nosuid,nodev,noexec shm /dev/shm 
+cp /etc/resolv.conf /mnt/gentoo/etc
+mkdir --parents /mnt/gentoo/etc/portage/repos.conf &&  cp /mnt/gentoo/usr/share/portage/config/repos.conf /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
+cat /mnt/gentoo/etc/portage/repos.conf/gentoo.conf
+chroot /mnt/gentoo /bin/bash
+date
+source /etc/profile
+emerge --sync
+eselect news read
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+eselect locale list
+eselect locale set 4
+source /etc/profile
+echo "Europe/Athens" > /etc/timezone && emerge --config sys-libs/timezone-data
+emerge -avuDNq @world
+env-update && source /etc/profile
+emerge -n sys-boot/grub:2 net-misc/dhcpcd app-editors/vim app-admin/doas x11-base/xorg-server x11-apps/xrandr x11-apps/xkill x11-apps/xsetroot x11-drivers/xf86-video-intel x11-libs/libXft media-sound/alsa-utils x11-misc/xclip app-admin/pass mail-client/mutt media-gfx/feh media-gfx/scrot sys-apps/lm-sensors dev-vcs/git dev-util/geany lxde-base/lxappearance media-video/mpv net-misc/youtube-dl net-p2p/transmission x11-misc/dunst x11-misc/spacefm x11-misc/picom www-client/firefox-bin 
+cd /usr/src/linux 
+lspci -nnk | grep "Kernel driver in use:"
+make olddefconfig
+make localyesconfig
+make menuconfig
+make -j3 && make install
+grub-install /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+rc-update add dhcpcd default && rc-update add dbus default
+passwd
+useradd -mG users,wheel,audio,video,portage -s /bin/bash pnotz17 
+passwd pnotz17
+reboot
+
+#chrooting
+env -i /usr/bin/chroot /mnt/gentoo/  /bin/bash && source /etc/profile
+
+#Kernel
+rm -r /usr/src/linux-3.X.Y
+rm -r /lib/modules/3.X.Y
+rm /boot/vmlinuz-3.X.Y
+rm /boot/System.map-3.X.Y
+rm /boot/config-3.X.Y
+rm /boot/initramfs-X.Y.Z
+
+#emerge -p system
+[list packages to be installed]
+#emerge system
+
+#emerge -up world
+[list packages]
+
+#emerge -u world
+cat /etc/resolv.conf && ping -c1 google.com && ping -c1 8.8.8.8 && ifconfig && route -n
+ping -c 3 www.gentoo.org
+dhcpcd -HD enp2s0
+ping -c1 8.8.8.8
+touch /etc/udev/rules.d/70-persistent-net.rules
+
+#Misc Commands
+make && make modules_install && make install
+eselect profile set 3
+echo "hostname="Gentoolinux771"" > /etc/conf.d/hostname
+eselect locale set 4
+cd /usr/src/linux
+make oldconfig
+emerge mirrorselect
+mirrorselect -i -o >> /etc/portage/make.conf
+mount /dev/sdd1 /boot
+emerge --sync
+emerge --ask sys-kernel/genkernel
+genkernel all
+emerge --ask sys-kernel/gentoo-kernel-bin
+emerge --ask sys-kernel/gentoo-sources genkernel
+emerge --ask sys-apps/pciutils
+ls -l /usr/src/linux
+cd /usr/src/linux 
+make menuconfig
+lspci | grep -i audio
+lspci | grep -i ethernet
+lspci | grep -i usb
+lspci | grep -i VGA
+make && make modules_install && make install
+genkernel --install --kernel-config=/usr/src/linux/.config initramfs
+cat /var/lib/portage/world
+ls /boot/initramfs*
+emerge --verbose sys-boot/grub:2
+blkid -s UUID -o value /dev/sdd4
+ln -s net.lo net.enp2s0
+rc-update add net.enp2s0
+nano /etc/conf.d/net
+nano /etc/conf.d/hostname
+ifconfig
+emerge -q -autounmask-continue sys-kernel/gentoo-sources genkernel
+grub-mkconfig -o /boot/grub/grub.cfg
+/etc/dhcpcd.conf nohook resolv.conf	
+useradd -m -G users,wheel,audio -s /bin/bash pnotz17 
+head /var/log/dmesg
+cat /var/log/dmesg > file.txt
+cat /lib/udev/rules.d/50-udev-default.rules | sed  -n "21{s/0620/0660/;p}" > /etc/udev/rules.d/mytty.rules
+udevadm control --reload
+udevadm trigger 
+usermod -aG tty user
+usermod -aG video user
+add xx11-no-root to package.use
+emerge --sync && egencache --repo=gentoo --update && eix-update && emerge -auNDv @world --complete-graph --with-bdeps=y --keep-going --verbose-conflicts --backtrack=30
+emerge binutils--ask --verbose --oneshot
+/var/db/repos/gentoo/scripts/bootstrap.sh
+emerge -1v sys-libs/glibc 
+eselect gcc list shows only:
+mirrorselect -s3 -b10 -o -D >> /etc/make.conf 
+cp -L /etc/resolv.conf /mnt/gentoo/etc/ 
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+/etc/init.d/dbus start
+rc-update add dbus default
+rc-update add dhcpcd default
+rc-service dhcpcd start 
+blkid
+ifconfig eth0 up
+lspci
+lsmod
+true >| /etc/udev/rules.d/80-net-name-slot.rules
+ls - l /etc/init.d
+lspci -k
+cat /proc/net/dev 
+ifconfig -a
+dmesg|grep eth
+lspci | grep -i eth
+or boot the Linux kernel with 'net.ifnames=0' to get back the old naming scheme (eth0, eth1, ...)
+d /etc/init.d
+ln -sv net.lo net.enp2s4 (my card)
+rc-update add net.enp2s4 default 
+emerge -uDav world etc-update 
+rc-update add net.eth0 default
+cd /etc/init.d
+ln -s net.lo net.eth0
+rc-update add net.eth0 default
+cp -L /etc/resolv.conf /mnt/gentoo/etc/
+mount -t proc none /mnt/gentoo/proc
+mount --rbind /sys /mnt/gentoo/sys
+mount --rbind /dev /mnt/gentoo/dev
+chroot /mnt/gentoo /bin/bash
+env-update
+source /etc/profile
+export PS1="(chroot) $PS1" 
+ifconfig -a
+rc-status
+ls -la /etc/init.d | grep "\->" 
+rc-update|grep dhcp 
+ping 8.8.8.8 
+route -n
+ifconfig -a > ifconfig.txt
+route -n > route.txt
+ping 192.168.1.1
+ping 216.58.198.174
+dmesg > dmesg.txt
+rc-update -v show
+dhcpcd eno1
+ip addr
+
+
+
