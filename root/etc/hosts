@@ -1,3 +1,4 @@
 # This defines the current system and must be set
 127.0.0.1     Gentoo.homenetwork Gentoo localhost
-  
+::1				localhost
+127.0.1.1		gentoo77.localdomain		gentoo77

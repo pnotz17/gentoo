@@ -25,3 +25,4 @@ x11-misc/picom
 x11-misc/dunst
 x11-misc/spacefm
 x11-misc/xclip
+sys-devel/bc
