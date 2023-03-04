@@ -1,8 +1,9 @@
 #!/bin/sh
 
 # x 
-xrandr --output VGA1 --mode 1408x792_60.00 --scale-from 1920x1080 &
-xrdb -merge -I$HOME ~/.Xresources
+#xrandr --output VGA1 --mode 1408x792_60.00 --scale-from 1920x1080 &
+xrandr -s 1920x1080i &
+xrdb -merge ~/.Xresources
 xset r rate 400 100
 
 # dbus
@@ -15,10 +16,10 @@ fi
 /usr/local/bin/xclickroot -r ~/git/xmenu/xmenu.sh &
 /usr/bin/feh --bg-fill ~/wallpaper.jpg &
 /usr/bin/dunst ~/.config/dunst/dunstrc &
-#~/.local/bin/bar/emojibar.sh &
+~/.local/bin/bar/dwm.sh &
 
 # dwm start loop
-#while true; do
-    #/usr/local/bin/dwm 2> /dev/null
-#done
-exec xmonad
+while true; do
+    /usr/local/bin/dwm 2> /dev/null
+done
+#exec xmonad

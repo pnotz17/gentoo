@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   id="svg2169"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docbase="/home/martino/.icons/ALLBLACK/true-scalable/actions"
+   sodipodi:docname="view-refresh.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:modified="true">
+  <defs
+     id="defs2171">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 64 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="128 : 64 : 1"
+       inkscape:persp3d-origin="64 : 42.666667 : 1"
+       id="perspective16" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient8017">
+      <stop
+         style="stop-color:#e6e6e6;stop-opacity:1;"
+         offset="0"
+         id="stop8019" />
+      <stop
+         style="stop-color:#e6e6e6;stop-opacity:0;"
+         offset="1"
+         id="stop8021" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient5113">
+      <stop
+         style="stop-color:white;stop-opacity:1;"
+         offset="0"
+         id="stop5115" />
+      <stop
+         style="stop-color:white;stop-opacity:0;"
+         offset="1"
+         id="stop5117" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5113"
+       id="linearGradient5315"
+       x1="30.376583"
+       y1="11.133182"
+       x2="11.726276"
+       y2="41.418934"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-2.3049834,0,0,2.29434,120.83016,-6.9414824)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8017"
+       id="linearGradient8023"
+       x1="36.955502"
+       y1="4.9397035"
+       x2="53.871891"
+       y2="68.072525"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3562287,0,0,1.3562287,1.4811887,-34.963916)" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#57595c"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="45.539356"
+     inkscape:cy="59.332375"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     width="128px"
+     height="128px"
+     showgrid="true"
+     inkscape:window-width="1440"
+     inkscape:window-height="854"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata2174">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:#4d4d4d;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stroke-linejoin:round"
+       d="M 62.476618,7.1798525 L 62.476618,22.097119 C 35.418493,22.296079 14.559345,44.30086 14.559345,71.359718 C 14.559345,98.552067 36.827426,120.82015 64.019784,120.82015 C 91.212141,120.82015 113.44065,98.552067 113.44065,71.359718 L 95.476623,71.359718 C 95.476623,88.823842 81.483908,102.81655 64.019784,102.81655 C 46.555659,102.81655 32.562944,88.823842 32.562944,71.359718 C 32.562943,53.971126 45.088496,40.189006 62.476618,40.061151 L 62.476618,58.183456 L 101.72842,28.902878 L 62.476618,7.1798525 z"
+       id="path4118" />
+  </g>
+</svg>
