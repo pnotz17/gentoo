@@ -1,4 +1,5 @@
 #!/bin/bash
+#Install xdg-utils
 
 while true; do
     open=$(ls -1a --group-directories-first --file-type | dmenu  -c -g 1 -p 'Navigate:' "$@")

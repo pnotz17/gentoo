@@ -1,47 +1,29 @@
 [global]
-    alignment            = left
-    allow_markup         = no
-    bounce_freq          = 0
-    dmenu                = dmenu -p dunst:
-    follow               = mouse
-    font                 = Monospace 11 
-    format               = "%s %b"
-    geometry             = "350x5-0+20"
-    history_length       = 20
-    horizontal_padding   = 8
-    icon_position        = off
-    idle_threshold       = 0
-    ignore_newline       = no
-    indicate_hidden      = no
-    line_height          = 0
-    monitor              = 0
-    padding              = 8
-    separator_color      = frame
-    separator_height     = 0
-    show_age_threshold   = -1
-    show_indicators      = no
-    shrink               = no
-    sort                 = yes
-    startup_notification = false
-    sticky_history       = yes
-    transparency         = 21
-    word_wrap            = yes
-
-[frame]
-    width = 1
-    color = "#333333"
+    monitor = 0
+    width = 300
+    height = 300
+    offset = 10x50
+    padding = 8
+    horizontal_padding = 8
+    frame_width = 1
+    frame_color = "#AAAAAA"
+    alignment = center
+    transparency = 0
+    font = FreeMono 12
+    format = "<b>%s</b>\n%b"
 
 [urgency_low]
-    background = "#0F0F0F"
-    foreground = "#bbbbbb"
-    timeout    = 10
+    background = "#111111"
+    foreground = "#8F8F8F"
+    timeout = 3
 
 [urgency_normal]
-    background = "#080808"
-    foreground = "#ffffff"
-    timeout    = 10
+    background = "#060606"
+    foreground = "#BEBECF"
+    timeout = 5
 
 [urgency_critical]
-    background = "#900000"
-    foreground = "#ffffff"
-    timeout    = 0
+    background = "#FF0000"
+    foreground = "#000000"
+    frame_color = "#FF0000"
+    timeout = 13
